@@ -3,5 +3,49 @@
 	height: 100vh;
 	display: flex;
 	align-items: center;
-	padding: 10px 150px;
+	padding: 10px 200px;
+	background-color: #e4f5ff;
+
+	.main {
+		width: 40%;
+		height: 400px;
+		display: flex;
+		flex-direction: column;
+		gap: 50px;
+
+		h1 {
+			font-size: 2rem;
+			font-weight: 400;
+		}
+
+		.signin {
+			font-weight: 500;
+			color: white;
+         text-transform: none;
+		}
+
+		.note {
+			width: 100%;
+			font-size: 1rem;
+			text-align: center;
+
+			span {
+				cursor: pointer;
+				font-weight: 500;
+				color: var(--primary);
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
+	& > img {
+		position: absolute;
+		bottom: 0px;
+		right: 0px;
+		transform-origin: bottom right;
+		transform: scale(0.9);
+	}
 }

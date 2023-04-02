@@ -1,7 +1,8 @@
 const ENDPOINT = {
-	ON_BOARDING: "onboarding",
+	ON_BOARDING: "/onboarding",
 	HOME: "/",
-   AUTHENTICATION: 'authentication'
+	AUTHENTICATION: "/authentication",
+	REGISTER: "/register",
 };
 
 export default ENDPOINT;
