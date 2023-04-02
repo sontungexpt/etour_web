@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styles from "./HomePage.module.scss";
+import styles from "./AuthenticationPage.module.scss";
 import { useEffect } from "react";
 import ENDPOINT from "../../constant/endponint";
 import useAuthenticationState from "../../hooks/useAuthenticationState";
