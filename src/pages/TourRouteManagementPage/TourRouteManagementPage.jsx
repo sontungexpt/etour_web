@@ -24,9 +24,15 @@ import styles from "./TourRouteManagementPage.module.scss";
 import CenteredModal from "../../components/CenteredModal/CenteredModal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import RouteList from "../../components/RouteList/RouteList";
+import useCreateRoute from "../../hooks/useCreateRoute";
 
 export default function TourRouteManagementPage() {
 	const navigate = useNavigate();
+	const {
+		createRoute,
+		data: createdData,
+		error: createdError,
+	} = useCreateRoute();
 
 	const searchRef = useRef();
 	const [searchValue, setSearchValue] = usePersistentState(
@@ -38,6 +44,7 @@ export default function TourRouteManagementPage() {
 	const [reservationFee, setReservationFee] = useState(0);
 	const [description, setDescription] = useState("");
 	const [type, setType] = useState("");
+	const [route, setRoute] = useState([]);
 
 	const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
@@ -51,6 +58,27 @@ export default function TourRouteManagementPage() {
 			toast(`An error occur when retrieve tourist route: ${error.message}`);
 		}
 	}, [isError]);
+
+	useEffect(() => {
+		if (createdError)
+			toast.error(`Fail to create tourist route: ${createdError.message}`);
+	}, [createdError]);
+
+	useEffect(() => {
+		if (createdData) toast.success("Successfully create route");
+	}, [createdData]);
+
+	function handleSubmit() {
+		setIsOpenCreateBox(false);
+		const data = {
+			name: routeName,
+			description,
+			reservationFee,
+			type,
+			route: route.map(({ content }) => content),
+		};
+		createRoute(data);
+	}
 
 	return (
 		<>
@@ -180,28 +208,29 @@ export default function TourRouteManagementPage() {
 								value={type}
 								onChange={(e) => setType(e.target.value)}
 							>
-								<MenuItem value={"normal"}>Normal</MenuItem>
-								<MenuItem value={"promotion"}>Promotion</MenuItem>
+								<MenuItem value={"country"}>Country</MenuItem>
+								<MenuItem value={"foreign"}>Foreign</MenuItem>
 							</Select>
 							<FormHelperText>
-								Chuyến du lịch thông thường : Với giá vé thông thường
-								(chung cho du khách trong hay ngoài nước). Khi trả vé,
-								ngoài khoản lệ phí hoàn vé trễ (nếu có), du khách được
-								hoàn trả 100% giá vé đã mua.
+								Tuyến đi trong nước: du khách phải mua vé 24 giờ trước
+								khi khởi hành. Nếu trả vé 4 giờ trước khi khởi hành, du
+								khách không phải chịu khoảng lệ phí hoàn vé trễ, ngược
+								lại, du khách phải đóng thêm khoảng lệ phí hoàn vé trễ
+								là 100 000 đồng
 							</FormHelperText>
 							<FormHelperText>
-								Chuyến du lịch có khuyến mãi : Với giá vé khuyến mãi
-								thấp hơn mức giá thông thường (chung cho du khách trong
-								hay ngoài nước). Khi trả vé, ngoài khoản lệ phí hoàn vé
-								trễ (nếu có), du khách được hoàn trả 80% giá vé khuyến
-								mãi đã mua
+								Tuyến quốc tế: du khách phải mua vé 7 ngày trước khi
+								khởi hành. Nếu trả vé 3 ngày trước khi khởi hành, du
+								khách sẽ không phải chịu thêm khoảng lệ phí hoàn vé trễ,
+								ngược lại, du khách sẽ phải chịu thêm khoảng lệ phí
+								tương đương 50USD
 							</FormHelperText>
 						</FormControl>
 						<h2>Tourist route</h2>
 					</div>
-					<RouteList />
+					<RouteList list={route} onChange={setRoute} />
 					<Button
-						onClick={() => setSearchValue(searchRef.current.value)}
+						onClick={handleSubmit}
 						variant="contained"
 						sx={{
 							backgroundColor: COLORS.primary,

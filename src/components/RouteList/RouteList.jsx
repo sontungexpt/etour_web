@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import TRASH from "../../assets/trash.svg";
@@ -32,20 +32,13 @@ const getListStyle = (isDraggingOver) =>
 		  }
 		: {};
 
-const defaultValue = [
-	{
-		id: 1,
-		content: "",
-	},
-	{
-		id: 2,
-		content: "",
-	},
-];
-
 export default function RouteList({ list, onChange }) {
-	const [items, setItems] = useState(getItems(2));
+	const [items, setItems] = useState(list || getItems(2));
 	const ref = useRef();
+
+	useEffect(() => {
+		onChange(items);
+	}, [items]);
 
 	function onDragEnd(result) {
 		if (!result.destination) {
@@ -59,7 +52,6 @@ export default function RouteList({ list, onChange }) {
 		);
 
 		setItems(value);
-		onChange?.(value);
 	}
 
 	function handleChangeItemValue(index, value) {
@@ -70,7 +62,7 @@ export default function RouteList({ list, onChange }) {
 
 	function handleDeleteItem(index) {
 		if (items.length <= 2) {
-			toast.warn("Number of route must be greater than or equal 2", );
+			toast.warn("Number of route must be greater than or equal 2");
 			return;
 		}
 		const listItem = [...items];
@@ -79,10 +71,8 @@ export default function RouteList({ list, onChange }) {
 	}
 
 	function handleAddItem() {
-		setItems([...items, { id: items.length + 1, content: "" }]);
+		setItems([...items, { id: `item-${items.length + 1}`, content: "" }]);
 	}
-
-	console.log({ b: ref?.current?.getBoundingClientRect() });
 
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>

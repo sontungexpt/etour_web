@@ -2,7 +2,7 @@ import { useState } from "react";
 import useSocket from "./useSocket";
 
 export default function useCreateRoute() {
-	const [data, setData] = useState([]);
+	const [data, setData] = useState(null);
 	const [error, setError] = useState(null);
 
 	const socket = useSocket((socket) => {
@@ -17,9 +17,17 @@ export default function useCreateRoute() {
 		});
 	}, []);
 
-	function createRoute({ name, description, type, route }) {
-		socket.emit("create-route", { name, description, type, route });
+	function createRoute({ name, reservationFee, description, type, route }) {
+		setData(null);
+		setError(null);
+		socket.emit("create-route", {
+			name,
+			reservationFee,
+			description,
+			type,
+			route,
+		});
 	}
 
-	return { createRoute, routes: data, error };
+	return { createRoute, data, error };
 }

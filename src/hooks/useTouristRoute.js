@@ -12,13 +12,13 @@ export default function useTouristRoute({ route, keyword }) {
 				setRoutes(data.data);
 			});
 			socket.on("new-route", (data) => {
-				setRoutes((prev) => [...prev, data.data]);
+				setRoutes((prev) => [data.data, ...prev]);
 			});
 			socket.on("error", (error) => {
 				setError(error);
 			});
 		},
-		[route.join(''), keyword]
+		[route.join(""), keyword]
 	);
 
 	return { data: routes, isError: error !== null, error };
