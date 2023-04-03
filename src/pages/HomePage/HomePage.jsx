@@ -11,6 +11,7 @@ import COLORS from "../../constant/color";
 import useStaffInformation from "../../hooks/useStaffInformation";
 import useCompanyInformation from "../../hooks/useCompanyInformation";
 import CHEVRON from "../../assets/chevron.svg";
+import { toast } from "react-toastify";
 
 export default function HomePage() {
 	const navigate = useNavigate();
@@ -51,6 +52,12 @@ export default function HomePage() {
 								</ul>
 							</div>
 							<Button
+								onClick={() => {
+									localStorage.removeItem("accessToken");
+									localStorage.removeItem("refresshToken");
+									navigate(ENDPOINT.ON_BOARDING);
+									toast("Sign out successfully");
+								}}
 								variant="contained"
 								sx={{
 									width: "100%",
@@ -83,7 +90,10 @@ export default function HomePage() {
 						</div>
 					</div>
 					<div className={styles.function}>
-						<div className={styles.item}>
+						<div
+							onClick={() => navigate(ENDPOINT.TOURIST_ROUTE)}
+							className={styles.item}
+						>
 							<p>Manage tourist route</p>
 							<img src={CHEVRON} alt="" />
 						</div>

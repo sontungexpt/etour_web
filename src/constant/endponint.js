@@ -3,6 +3,8 @@ const ENDPOINT = {
 	HOME: "/",
 	AUTHENTICATION: "/authentication",
 	REGISTER: "/register",
+	TOURIST_ROUTE: "/tourist-route",
+	TOUR: "/tour",
 };
 
 export default ENDPOINT;
