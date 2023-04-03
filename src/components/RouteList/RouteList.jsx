@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-import CLOSE from "../../assets/trash.svg";
+import TRASH from "../../assets/trash.svg";
 
 import styles from "./RouteList.module.scss";
 import { Button, TextField } from "@mui/material";
+import { toast } from "react-toastify";
 
 const getItems = (count) =>
 	Array.from({ length: count }, (v, k) => k).map((k) => ({
@@ -43,7 +44,7 @@ const defaultValue = [
 ];
 
 export default function RouteList({ list, onChange }) {
-	const [items, setItems] = useState(getItems(5));
+	const [items, setItems] = useState(getItems(2));
 	const ref = useRef();
 
 	function onDragEnd(result) {
@@ -65,6 +66,20 @@ export default function RouteList({ list, onChange }) {
 		const listItem = [...items];
 		listItem[index].content = value;
 		setItems(listItem);
+	}
+
+	function handleDeleteItem(index) {
+		if (items.length <= 2) {
+			toast.warn("Number of route must be greater than or equal 2", );
+			return;
+		}
+		const listItem = [...items];
+		listItem.splice(index, 1);
+		setItems(listItem);
+	}
+
+	function handleAddItem() {
+		setItems([...items, { id: items.length + 1, content: "" }]);
 	}
 
 	console.log({ b: ref?.current?.getBoundingClientRect() });
@@ -99,7 +114,8 @@ export default function RouteList({ list, onChange }) {
 												top:
 													draggableProvided.draggableProps.style
 														.top -
-													ref.current.getBoundingClientRect().y,
+														ref.current?.getBoundingClientRect?.()
+															.y || 0,
 											}}
 										>
 											<div className={styles.control}></div>
@@ -123,11 +139,14 @@ export default function RouteList({ list, onChange }) {
 												/>
 												<div className={styles.delete}>
 													<Button
+														onClick={() =>
+															handleDeleteItem(index)
+														}
 														variant="outlined"
 														fullWidth
 														color="error"
 													>
-														<img src={CLOSE} alt="" />
+														<img src={TRASH} alt="" />
 													</Button>
 												</div>
 											</div>
@@ -138,7 +157,11 @@ export default function RouteList({ list, onChange }) {
 						</div>
 						{droppableProvided.placeholder}
 						<div className={styles.add}>
-							<Button fullWidth variant="outlined">
+							<Button
+								onClick={() => handleAddItem()}
+								fullWidth
+								variant="outlined"
+							>
 								<p>Add new location</p>
 							</Button>
 						</div>

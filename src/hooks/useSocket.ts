@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
 
 import { API } from "../constant/api";
@@ -9,6 +9,7 @@ export default function useSocket(
 	dependencies
 ) {
 	const token = useAccessToken();
+	const [socket, setSocket] = useState<Socket>();
 
 	useEffect(() => {
 		let socket: Socket;
@@ -22,6 +23,7 @@ export default function useSocket(
 			});
 
 			socket.on("connect", () => {
+				setSocket(socket);
 				onConnect?.call?.(null, socket);
 			});
 		}
@@ -30,4 +32,6 @@ export default function useSocket(
 			socket?.close();
 		};
 	}, [token, ...dependencies]);
+
+	return socket;
 }

@@ -6,15 +6,13 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 function App() {
-	const [count, setCount] = useState(0);
-
 	return (
 		<Provider store={store}>
 			<RouterProvider router={router} />
 			<ToastContainer
 				position="top-center"
 				autoClose={4000}
-				hideProgressBar
+				hideProgressBar={false}
 				newestOnTop={false}
 				closeOnClick
 				rtl={false}
