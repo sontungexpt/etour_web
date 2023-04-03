@@ -7,7 +7,6 @@ import { useEffect } from "react";
 export default function useAuthenticationNavigate() {
 	const navigate = useNavigate();
 	const authenticationState = useAuthenticationState();
-	const location = useLocation();
 
 	useEffect(() => {
 		if (authenticationState == AUTHENTICATION_STATE.UNAUTHENTICATED)
