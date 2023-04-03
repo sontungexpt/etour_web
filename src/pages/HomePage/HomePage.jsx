@@ -2,13 +2,16 @@ import { useNavigate } from "react-router-dom";
 import styles from "./HomePage.module.scss";
 import { useEffect } from "react";
 import ENDPOINT from "../../constant/endponint";
+import useAuthenticationState from "../../hooks/useAuthenticationState";
+import AUTHENTICATION_STATE from "../../constant/authenticationState";
 
 export default function HomePage() {
 	const navigate = useNavigate();
+	const authenticationState = useAuthenticationState();
 
 	useEffect(() => {
-		const accessToken = localStorage.getItem("accessToken");
-		if (!accessToken) navigate(ENDPOINT.ON_BOARDING);
+		if (authenticationState == AUTHENTICATION_STATE.UNAUTHENTICATED)
+			navigate(ENDPOINT.AUTHENTICATION);
 	}, []);
 
 	return <div className={styles.container}></div>;
