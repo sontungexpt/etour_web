@@ -1,7 +1,6 @@
-import { useMemo, useState, useRef, useEffect } from "react";
-import { io, Socket } from "socket.io-client";
+import { useEffect } from "react";
+import { Socket, io } from "socket.io-client";
 
-import usePersistentState from "./usePersistentState";
 import { API } from "../constant/api";
 import useAccessToken from "./useAccessToken";
 
@@ -11,7 +10,7 @@ export default function useSocket(onConnect: (socket: Socket) => void) {
 	useEffect(() => {
 		let socket: Socket;
 		if (token) {
-			socket = io(`${API.base}?token=${token}`, {
+			socket = io(`${API.base}`, {
 				path: "/socket",
 				query: {
 					type: "staff",
