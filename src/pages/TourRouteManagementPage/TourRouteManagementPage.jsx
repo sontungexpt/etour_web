@@ -1,22 +1,17 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-import AUTHENTICATION_STATE from "../../constant/authenticationState";
-import ENDPOINT from "../../constant/endponint";
-import { selectBasicInformation } from "../../features/staffSlice";
-import useAuthenticationState from "../../hooks/useAuthenticationState";
-import { Button } from "@mui/material";
-import COLORS from "../../constant/color";
-import useStaffInformation from "../../hooks/useStaffInformation";
-import useCompanyInformation from "../../hooks/useCompanyInformation";
+import { Button, Chip } from "@mui/material";
 import CHEVRON from "../../assets/chevron-down.svg";
+import CLOSE from "../../assets/close.svg";
 import SEARCH from "../../assets/search.svg";
 import ROUTE from "../../assets/taxi.svg";
-import CLOSE from "../../assets/close.svg";
+import COLORS from "../../constant/color";
 
-import styles from "./TourRouteManagementPage.module.scss";
+import { toast } from "react-toastify";
 import usePersistentState from "../../hooks/usePersistentState";
 import useTouristRoute from "../../hooks/useTouristRoute";
+import styles from "./TourRouteManagementPage.module.scss";
 
 export default function TourRouteManagementPage() {
 	const navigate = useNavigate();
@@ -26,16 +21,38 @@ export default function TourRouteManagementPage() {
 		"tour-route-search",
 		""
 	);
-	const routes = useTouristRoute();
-	console.log({ routes });
+	const { data, isError, error } = useTouristRoute({
+		route: [],
+		keyword: searchValue,
+	});
+
+	useEffect(() => {
+		if (isError) {
+			toast(`An error occur when retrieve tourist route: ${error.message}`);
+		}
+	}, [isError]);
 
 	return (
 		<div className={styles.container}>
 			<h1>Manage tourist route</h1>
+			<Button
+				variant="outlined"
+				sx={{
+					borderRadius: "8px",
+					padding: "8px",
+					width: "100%",
+				}}
+			>
+				<p className={styles.create}>Create new tourist route</p>
+			</Button>
 			<div className={styles.command}>
 				<div className={styles.search}>
 					<input
 						ref={searchRef}
+						onKeyDown={(e) => {
+							if (e.key === "Enter")
+								setSearchValue(searchRef.current.value);
+						}}
 						type="text"
 						placeholder="Find tour by name..."
 					/>
@@ -58,7 +75,7 @@ export default function TourRouteManagementPage() {
 							<img src={SEARCH} alt="" />
 							<p>{searchValue}</p>
 							<img
-								className={styles.clickable}
+								className={styles.close}
 								onClick={() => {
 									searchRef.current.value = "";
 									setSearchValue("");
@@ -75,18 +92,31 @@ export default function TourRouteManagementPage() {
 					</div>
 				</div>
 			</div>
-
 			<div className={styles.data}>
-				<Button
-					variant="outlined"
-					sx={{
-						borderRadius: "8px",
-						padding: "8px",
-						width: "100%",
-					}}
-				>
-					<p className={styles.create}>Create new tourist route</p>
-				</Button>
+				<div className={styles.table}>
+					<div className={styles.line}>
+						<p>Name</p>
+						<p>Route</p>
+						<p>Reservation fee</p>
+						<p>Customers</p>
+					</div>
+					{data?.map(({ name, reservationFee, route, _id }, index) => (
+						<>
+							<hr />
+							<div
+								onClick={() => {
+									navigate(_id);
+								}}
+								className={styles.line}
+							>
+								<p>{name}</p>
+								<p>{route.join(" - ")}</p>
+								<p>{reservationFee}</p>
+								<p>{Math.floor(Math.random(100))}</p>
+							</div>
+						</>
+					))}
+				</div>
 			</div>
 		</div>
 	);

@@ -1,22 +1,25 @@
 import { useState } from "react";
 import useSocket from "./useSocket";
 
-export default function useTouristRoute() {
+export default function useTouristRoute({ route, keyword }) {
 	const [routes, setRoutes] = useState([]);
 	const [error, setError] = useState(null);
 
-	useSocket((socket) => {
-		socket.emit("view-route");
-		socket.on("route", (data) => {
-			setRoutes(data.data);
-		});
-		socket.on("new-route", (data) => {
-			setRoutes((prev) => [...prev, data.data]);
-		});
-		socket.on("error", (error) => {
-			setError(error);
-		});
-	});
+	useSocket(
+		(socket) => {
+			socket.emit("filter-route", { route, keyword });
+			socket.on("retrieve-tourist-route", (data) => {
+				setRoutes(data.data);
+			});
+			socket.on("new-route", (data) => {
+				setRoutes((prev) => [...prev, data.data]);
+			});
+			socket.on("error", (error) => {
+				setError(error);
+			});
+		},
+		[route.join(''), keyword]
+	);
 
 	return { data: routes, isError: error !== null, error };
 }
