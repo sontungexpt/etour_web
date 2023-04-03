@@ -21,6 +21,16 @@
 	color: black;
 }
 
+*::-webkit-scrollbar {
+	width: 7px;
+	height: 2px;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: #00a3ffa6;
+	border-radius: 9999px;
+}
+
 * {
 	padding: 0;
 	margin: 0;

@@ -1,0 +1,57 @@
+.container {
+	display: grid;
+	position: relative;
+	// transition: background-color 0.3s;
+
+	.item {
+		display: flex;
+		user-select: none;
+		margin: 5px 0;
+		// position: relative !important;
+      left: 0 !important;
+
+		.content {
+         width: 100%;
+			height: max-content;
+			display: flex;
+			align-items: stretch;
+			border-radius: 5px;
+         overflow: hidden;
+			padding: 1px;
+			transition: background-color 0.3s;
+
+			.delete {
+				transition: 0.3s;
+				display: flex;
+				width: 0px;
+				min-height: 100%;
+				margin-left: 0px;
+			}
+
+			&:hover {
+				.delete {
+					margin-left: 15px;
+					width: 80px;
+				}
+			}
+		}
+
+		.control {
+			width: 15px;
+         margin: 5px 0;
+         margin-right: 10px;
+			min-height: 100%;
+         border-radius: 5px;
+			background-color: rgb(53, 166, 247);
+		}
+	}
+	.add {
+		margin: 15px 0;
+		cursor: pointer;
+		width: 100%;
+		p {
+			text-transform: none;
+			color: inherit;
+		}
+	}
+}
