@@ -31,7 +31,7 @@ export default function useSocket(
 		return () => {
 			socket?.close();
 		};
-	}, [token, ...dependencies]);
+	}, [token, ...(dependencies || [])]);
 
 	return socket;
 }
