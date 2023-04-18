@@ -5,6 +5,8 @@ import HomePage from "../pages/HomePage/HomePage";
 import AuthenticationPage from "../pages/AuthenticationPage/AuthenticationPage";
 import TourRouteManagementPage from "../pages/TourRouteManagementPage/TourRouteManagementPage";
 import BasePage from "../pages/BasePage/BasePage";
+import TourManagementPage from "../pages/TourManagementPage/TourManagementPage";
+import DetailRoutePage from "../pages/DetailRoutePage/DetailRoutePage";
 
 export default createHashRouter([
 	{
@@ -26,6 +28,14 @@ export default createHashRouter([
 			{
 				path: ENDPOINT.TOURIST_ROUTE,
 				element: <TourRouteManagementPage />,
+			},
+			{
+				path: `${ENDPOINT.TOURIST_ROUTE}/:id`,
+				element: <DetailRoutePage />,
+			},
+			{
+				path: ENDPOINT.TOUR,
+				element: <TourManagementPage />,
 			},
 		],
 	},

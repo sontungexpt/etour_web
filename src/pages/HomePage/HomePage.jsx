@@ -1,17 +1,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import AUTHENTICATION_STATE from "../../constant/authenticationState";
-import ENDPOINT from "../../constant/endponint";
-import { selectBasicInformation } from "../../features/staffSlice";
-import useAuthenticationState from "../../hooks/useAuthenticationState";
-import styles from "./HomePage.module.scss";
 import { Button } from "@mui/material";
-import COLORS from "../../constant/color";
-import useStaffInformation from "../../hooks/useStaffInformation";
-import useCompanyInformation from "../../hooks/useCompanyInformation";
-import CHEVRON from "../../assets/chevron.svg";
 import { toast } from "react-toastify";
+import CHEVRON from "../../assets/chevron.svg";
+import AUTHENTICATION_STATE from "../../constant/authenticationState";
+import COLORS from "../../constant/color";
+import ENDPOINT from "../../constant/endponint";
+import useAuthenticationState from "../../hooks/useAuthenticationState";
+import useCompanyInformation from "../../hooks/useCompanyInformation";
+import useStaffInformation from "../../hooks/useStaffInformation";
+import styles from "./HomePage.module.scss";
 
 export default function HomePage() {
 	const navigate = useNavigate();
@@ -95,6 +94,13 @@ export default function HomePage() {
 							className={styles.item}
 						>
 							<p>Manage tourist route</p>
+							<img src={CHEVRON} alt="" />
+						</div>
+						<div
+							onClick={() => navigate(ENDPOINT.TOUR)}
+							className={styles.item}
+						>
+							<p>Manage tour</p>
 							<img src={CHEVRON} alt="" />
 						</div>
 					</div>
