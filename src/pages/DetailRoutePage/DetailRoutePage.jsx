@@ -10,6 +10,10 @@ import {
 	Select,
 	TextField,
 } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 import CHEVRON from "../../assets/chevron-down.svg";
 import CLOSE from "../../assets/close.svg";
 import SEARCH from "../../assets/search.svg";
@@ -24,6 +28,7 @@ import usePersistentState from "../../hooks/usePersistentState";
 import useTouristRoute from "../../hooks/useTouristRoute";
 import styles from "./DetailRoutePage.module.scss";
 import useTourByRouteId from "../../hooks/useTourByRouteId";
+import useRouteById from "../../hooks/useRouteById";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
@@ -35,10 +40,20 @@ export default function DetailRoutePage() {
 
 	const { id } = useParams();
 	const {
+		data: routeInformation,
+		isError: isRouteInformationError,
+		error: routeInformationError,
+	} = useRouteById(id);
+
+	const {
 		data: tours,
-		isRetrieveTourError,
-		retrieveTourError,
+		isError: isRetrieveTourError,
+		error: retrieveTourError,
 	} = useTourByRouteId(id);
+
+	useEffect(() => {
+		console.log({ tours, routeInformation });
+	}, [id, tours, !routeInformation]);
 
 	const searchRef = useRef();
 	const [searchValue, setSearchValue] = usePersistentState(
@@ -89,7 +104,15 @@ export default function DetailRoutePage() {
 	return (
 		<>
 			<div className={styles.container}>
-				<h1>Manage tourist route</h1>
+				<div>
+					<h1>{routeInformation?.name}</h1>
+					<p>{routeInformation?.description}</p>
+					<p>
+						Reservation fee:{" "}
+						<span>{routeInformation?.reservationFee}</span>
+					</p>
+					<p>Route: {routeInformation?.route?.join(" - ")} </p>
+				</div>
 				<Button
 					onClick={() => setIsOpenCreateBox(true)}
 					variant="outlined"
@@ -99,9 +122,9 @@ export default function DetailRoutePage() {
 						width: "100%",
 					}}
 				>
-					<p className={styles.create}>Create new tourist route</p>
+					<p className={styles.create}>Create new tour</p>
 				</Button>
-				<div className={styles.command}>
+				{/* <div className={styles.command}>
 					<div className={styles.search}>
 						<input
 							ref={searchRef}
@@ -137,7 +160,6 @@ export default function DetailRoutePage() {
 										setSearchValue("");
 									}}
 									src={CLOSE}
-									alt=""
 								/>
 							</div>
 						) : null}
@@ -147,16 +169,16 @@ export default function DetailRoutePage() {
 							<img className={styles.clickable} src={CHEVRON} alt="" />
 						</div>
 					</div>
-				</div>
+				</div> */}
 				<div className={styles.data}>
 					<div className={styles.table}>
 						<div className={styles.line}>
-							<p>Name</p>
-							<p>Route</p>
-							<p>Reservation fee</p>
+							<p>From</p>
+							<p>To</p>
+							<p>Type</p>
 							<p>Customers</p>
 						</div>
-						{data?.map(({ name, reservationFee, route, _id }, index) => (
+						{tours?.map?.(({ from, to, type }, index) => (
 							<div key={index}>
 								<hr />
 								<div
@@ -165,44 +187,39 @@ export default function DetailRoutePage() {
 									}}
 									className={styles.line}
 								>
-									<p>{name}</p>
-									<p>{route.join(" - ")}</p>
-									<p>{reservationFee}</p>
-									<p>{Math.floor(Math.random(100))}</p>
+									<p>
+										{new Intl.DateTimeFormat("en-GB", {
+											dateStyle: "full",
+											timeStyle: "short",
+											timeZone: "Australia/Sydney",
+										}).format(new Date(from))}
+									</p>
+									<p>
+										{new Intl.DateTimeFormat("en-GB", {
+											dateStyle: "full",
+											timeStyle: "short",
+											timeZone: "Australia/Sydney",
+										}).format(new Date(to))}
+									</p>
+									<p>{type}</p>
+									<p>{0}</p>
 								</div>
 							</div>
 						))}
 					</div>
-				</div>{" "}
+				</div>
 			</div>
 			<CenteredModal
 				isOpen={isOpenCreateBox}
 				onClose={() => setIsOpenCreateBox(false)}
 			>
 				<div className={styles.createBox}>
-					<h1>Create new route</h1>
+					<h1>Create new tour</h1>
 					<div className={styles.form}>
-						<TextField
-							value={routeName}
-							onChange={(e) => setRouteName(e.target.value)}
-							label="Route name"
-							variant="standard"
-						/>
-						<TextField
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-							label="Description"
-							multiline
-							variant="standard"
-						/>
-						<TextField
-							error={!Number.isInteger(parseInt(reservationFee))}
-							value={reservationFee}
-							onChange={(e) => setReservationFee(e.target.value)}
-							label="Reservation fee"
-							helperText="Reservation fee must be a integer"
-							variant="standard"
-						/>
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
+							<DatePicker label="From" />
+							<DatePicker label="To" />
+						</LocalizationProvider>
 						<FormControl sx={{ mt: 2, minWidth: 120 }}>
 							<InputLabel id="demo-simple-select-helper-label">
 								Type
@@ -214,27 +231,13 @@ export default function DetailRoutePage() {
 								value={type}
 								onChange={(e) => setType(e.target.value)}
 							>
-								<MenuItem value={"country"}>Country</MenuItem>
-								<MenuItem value={"foreign"}>Foreign</MenuItem>
+								<MenuItem value={"country"}>Normal</MenuItem>
+								<MenuItem value={"foreign"}>Promotion</MenuItem>
 							</Select>
-							<FormHelperText>
-								Tuyến đi trong nước: du khách phải mua vé 24 giờ trước
-								khi khởi hành. Nếu trả vé 4 giờ trước khi khởi hành, du
-								khách không phải chịu khoảng lệ phí hoàn vé trễ, ngược
-								lại, du khách phải đóng thêm khoảng lệ phí hoàn vé trễ
-								là 100 000 đồng
-							</FormHelperText>
-							<FormHelperText>
-								Tuyến quốc tế: du khách phải mua vé 7 ngày trước khi
-								khởi hành. Nếu trả vé 3 ngày trước khi khởi hành, du
-								khách sẽ không phải chịu thêm khoảng lệ phí hoàn vé trễ,
-								ngược lại, du khách sẽ phải chịu thêm khoảng lệ phí
-								tương đương 50USD
-							</FormHelperText>
+							<FormHelperText>Normal nè</FormHelperText>
+							<FormHelperText>Promotion nè</FormHelperText>
 						</FormControl>
-						<h2>Tourist route</h2>
 					</div>
-					<RouteList list={route} onChange={setRoute} />
 					<Button
 						onClick={handleSubmit}
 						variant="contained"

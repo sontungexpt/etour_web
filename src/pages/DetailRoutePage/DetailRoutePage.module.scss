@@ -8,9 +8,18 @@
 
 	background-color: #fff;
 
-	h1 {
-		font-weight: 400;
-		font-size: 2rem;
+	& > div:nth-child(1) {
+		display: grid;
+		gap: 20px;
+
+		h1 {
+			font-weight: 400;
+			font-size: 2rem;
+		}
+
+		& > p > span {
+			font-weight: bold;
+		}
 	}
 
 	.command {
