@@ -94,6 +94,16 @@
 		}
 	}
 
+	.imagePreview {
+		display: flex;
+		flex-wrap: wrap;
+
+		img {
+			width: 200px;
+			object-fit: contain;
+		}
+	}
+
 	.data {
 		display: grid;
 		gap: 30px;

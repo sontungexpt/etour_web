@@ -26,6 +26,8 @@ import CenteredModal from "../../components/CenteredModal/CenteredModal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import RouteList from "../../components/RouteList/RouteList";
 import useCreateRoute from "../../hooks/useCreateRoute";
+import { API, API_ENDPOINT } from "../../constant/api";
+import axios from "axios";
 
 export default function TourRouteManagementPage() {
 	const navigate = useNavigate();
@@ -70,15 +72,34 @@ export default function TourRouteManagementPage() {
 		if (createdData) toast.success("Successfully create route");
 	}, [createdData]);
 
-	function handleSubmit() {
+	async function handleSubmit() {
 		setIsOpenCreateBox(false);
+
+		const imageIDs = await Promise.all(
+			Array(images.length)
+				.fill("")
+				.map(async (_, i) => {
+					const image = images[i];
+					const formData = new FormData();
+					formData.append("image", image);
+					const response = await axios.post(API_ENDPOINT.IMAGE, formData, {
+						headers: {
+							"Content-Type": "multipart/form-data",
+						},
+					});
+					return response.data.data.imageId;
+				})
+		);
+
 		const data = {
 			name: routeName,
 			description,
 			reservationFee,
 			type,
+			images: imageIDs,
 			route: route.map(({ content }) => content),
 		};
+
 		createRoute(data);
 	}
 

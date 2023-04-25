@@ -4,4 +4,5 @@ export const API = {
 
 export const API_ENDPOINT = {
 	LOGIN: `${API.base}/company/login/basic`,
+	IMAGE: `${API.base}/images`,
 };

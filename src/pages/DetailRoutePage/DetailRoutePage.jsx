@@ -23,6 +23,7 @@ import useRouteById from "../../hooks/useRouteById";
 import useTourByRouteId from "../../hooks/useTourByRouteId";
 import useTouristRoute from "../../hooks/useTouristRoute";
 import styles from "./DetailRoutePage.module.scss";
+import { API_ENDPOINT } from "../../constant/api";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
@@ -106,6 +107,11 @@ export default function DetailRoutePage() {
 					</p>
 					<p>Route: {routeInformation?.route?.join(" - ")} </p>
 				</div>
+				<div className={styles.imagePreview}>
+					{routeInformation?.images?.map((image) => (
+						<img src={`${API_ENDPOINT.IMAGE}/${image}`} />
+					))}
+				</div>
 				<Button
 					onClick={() => setIsOpenCreateBox(true)}
 					variant="outlined"
@@ -117,47 +123,6 @@ export default function DetailRoutePage() {
 				>
 					<p className={styles.create}>Create new tour</p>
 				</Button>
-				{/* <div className={styles.command}>
-					<div className={styles.search}>
-						<input
-							ref={searchRef}
-							onKeyDown={(e) => {
-								if (e.key === "Enter")
-									setSearchValue(searchRef.current.value);
-							}}
-							type="text"
-							placeholder="Find tour by name..."
-						/>
-						<Button
-							onClick={() => setSearchValue(searchRef.current.value)}
-							variant="contained"
-							sx={}
-						>
-							<p>Search</p>
-						</Button>
-					</div>
-					<div className={styles.filter}>
-						{searchValue ? (
-							<div className={styles.item}>
-								<img src={SEARCH} alt="" />
-								<p>{searchValue}</p>
-								<img
-									className={styles.close}
-									onClick={() => {
-										searchRef.current.value = "";
-										setSearchValue("");
-									}}
-									src={CLOSE}
-								/>
-							</div>
-						) : null}
-						<div className={styles.item}>
-							<img src={ROUTE} alt="" />
-							<p>Filter route</p>
-							<img className={styles.clickable} src={CHEVRON} alt="" />
-						</div>
-					</div>
-				</div> */}
 				<div className={styles.data}>
 					<div className={styles.table}>
 						<div className={styles.line}>

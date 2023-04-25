@@ -17,7 +17,14 @@ export default function useCreateRoute() {
 		});
 	}, []);
 
-	function createRoute({ name, reservationFee, description, type, route }) {
+	function createRoute({
+		name,
+		reservationFee,
+		description,
+		type,
+		images,
+		route,
+	}) {
 		setData(null);
 		setError(null);
 		socket.emit("create-route", {
@@ -25,6 +32,7 @@ export default function useCreateRoute() {
 			reservationFee,
 			description,
 			type,
+			images,
 			route,
 		});
 	}
