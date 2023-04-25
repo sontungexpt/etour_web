@@ -6,6 +6,7 @@ import {
 	Chip,
 	FormControl,
 	FormHelperText,
+	Input,
 	InputLabel,
 	MenuItem,
 	Select,
@@ -43,6 +44,7 @@ export default function TourRouteManagementPage() {
 	const [routeName, setRouteName] = useState("");
 	const [reservationFee, setReservationFee] = useState(0);
 	const [description, setDescription] = useState("");
+	const [images, setImages] = useState([]);
 	const [type, setType] = useState("");
 	const [route, setRoute] = useState([]);
 
@@ -188,6 +190,18 @@ export default function TourRouteManagementPage() {
 							label="Description"
 							multiline
 							variant="standard"
+						/>
+						<div className={styles.imagePreview}>
+							{Array(images.length)
+								.fill("")
+								.map?.((_, i) => (
+									<img src={URL.createObjectURL(images[i])} />
+								))}
+						</div>
+						<Input
+							type="file"
+							inputProps={{ multiple: true }}
+							onChange={(e) => setImages(e.target.files)}
 						/>
 						<TextField
 							error={!Number.isInteger(parseInt(reservationFee))}

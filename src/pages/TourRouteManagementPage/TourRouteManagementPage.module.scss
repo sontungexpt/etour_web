@@ -163,6 +163,7 @@
 		gap: 20px;
 
 		textarea {
+			font-family: monospace;
 			height: 100px;
 		}
 
@@ -176,5 +177,16 @@
 	}
 
 	.routeBox {
+	}
+
+	.imagePreview {
+		width: 100%;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+
+		img {
+			width: 100%;
+			object-fit: contain;
+		}
 	}
 }
