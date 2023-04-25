@@ -163,7 +163,7 @@ export default function TourManagementPage() {
 							</div>
 						))}
 					</div>
-				</div>{" "}
+				</div>
 			</div>
 			<CenteredModal
 				isOpen={isOpenCreateBox}
@@ -204,23 +204,11 @@ export default function TourManagementPage() {
 								value={type}
 								onChange={(e) => setType(e.target.value)}
 							>
-								<MenuItem value={"country"}>Country</MenuItem>
-								<MenuItem value={"foreign"}>Foreign</MenuItem>
+								<MenuItem value={"country"}>Normal</MenuItem>
+								<MenuItem value={"foreign"}>Promotion</MenuItem>
 							</Select>
-							<FormHelperText>
-								Tuyến đi trong nước: du khách phải mua vé 24 giờ trước
-								khi khởi hành. Nếu trả vé 4 giờ trước khi khởi hành, du
-								khách không phải chịu khoảng lệ phí hoàn vé trễ, ngược
-								lại, du khách phải đóng thêm khoảng lệ phí hoàn vé trễ
-								là 100 000 đồng
-							</FormHelperText>
-							<FormHelperText>
-								Tuyến quốc tế: du khách phải mua vé 7 ngày trước khi
-								khởi hành. Nếu trả vé 3 ngày trước khi khởi hành, du
-								khách sẽ không phải chịu thêm khoảng lệ phí hoàn vé trễ,
-								ngược lại, du khách sẽ phải chịu thêm khoảng lệ phí
-								tương đương 50USD
-							</FormHelperText>
+							<FormHelperText>Normal nè</FormHelperText>
+							<FormHelperText>Promotion nè</FormHelperText>
 						</FormControl>
 						<h2>Tourist route</h2>
 					</div>

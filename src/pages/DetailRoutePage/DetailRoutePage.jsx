@@ -8,35 +8,29 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
-	TextField,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import CHEVRON from "../../assets/chevron-down.svg";
-import CLOSE from "../../assets/close.svg";
-import SEARCH from "../../assets/search.svg";
-import ROUTE from "../../assets/taxi.svg";
 import COLORS from "../../constant/color";
 
 import { toast } from "react-toastify";
 import CenteredModal from "../../components/CenteredModal/CenteredModal";
-import RouteList from "../../components/RouteList/RouteList";
-import useCreateRoute from "../../hooks/useCreateRoute";
+import useCreateTour from "../../hooks/useCreateTour";
 import usePersistentState from "../../hooks/usePersistentState";
+import useRouteById from "../../hooks/useRouteById";
+import useTourByRouteId from "../../hooks/useTourByRouteId";
 import useTouristRoute from "../../hooks/useTouristRoute";
 import styles from "./DetailRoutePage.module.scss";
-import useTourByRouteId from "../../hooks/useTourByRouteId";
-import useRouteById from "../../hooks/useRouteById";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
 	const {
-		createRoute,
+		createTour,
 		data: createdData,
 		error: createdError,
-	} = useCreateRoute();
+	} = useCreateTour();
 
 	const { id } = useParams();
 	const {
@@ -61,11 +55,9 @@ export default function DetailRoutePage() {
 		""
 	);
 
-	const [routeName, setRouteName] = useState("");
-	const [reservationFee, setReservationFee] = useState(0);
-	const [description, setDescription] = useState("");
-	const [type, setType] = useState("");
-	const [route, setRoute] = useState([]);
+	const [from, setFrom] = useState(new Date());
+	const [to, setTo] = useState(new Date());
+	const [type, setType] = useState("normal");
 
 	const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
@@ -86,19 +78,20 @@ export default function DetailRoutePage() {
 	}, [createdError]);
 
 	useEffect(() => {
-		if (createdData) toast.success("Successfully create route");
+		if (createdData) {
+			toast.success(`Successfully create tour`);
+		}
 	}, [createdData]);
 
 	function handleSubmit() {
 		setIsOpenCreateBox(false);
 		const data = {
-			name: routeName,
-			description,
-			reservationFee,
+			from,
+			to,
 			type,
-			route: route.map(({ content }) => content),
+			touristRoute: id,
 		};
-		createRoute(data);
+		createTour(data);
 	}
 
 	return (
@@ -138,12 +131,7 @@ export default function DetailRoutePage() {
 						<Button
 							onClick={() => setSearchValue(searchRef.current.value)}
 							variant="contained"
-							sx={{
-								backgroundColor: COLORS.primary,
-								borderRadius: "8px",
-								height: "40px",
-								width: "200px",
-							}}
+							sx={}
 						>
 							<p>Search</p>
 						</Button>
@@ -217,8 +205,14 @@ export default function DetailRoutePage() {
 					<h1>Create new tour</h1>
 					<div className={styles.form}>
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
-							<DatePicker label="From" />
-							<DatePicker label="To" />
+							<DatePicker
+								label="From"
+								onChange={(d) => setFrom(new Date(d.$d))}
+							/>
+							<DatePicker
+								label="To"
+								onChange={(d) => setFrom(new Date(d.$d))}
+							/>
 						</LocalizationProvider>
 						<FormControl sx={{ mt: 2, minWidth: 120 }}>
 							<InputLabel id="demo-simple-select-helper-label">
@@ -231,8 +225,8 @@ export default function DetailRoutePage() {
 								value={type}
 								onChange={(e) => setType(e.target.value)}
 							>
-								<MenuItem value={"country"}>Normal</MenuItem>
-								<MenuItem value={"foreign"}>Promotion</MenuItem>
+								<MenuItem value={"normal"}>Normal</MenuItem>
+								<MenuItem value={"promotion"}>Promotion</MenuItem>
 							</Select>
 							<FormHelperText>Normal nè</FormHelperText>
 							<FormHelperText>Promotion nè</FormHelperText>

@@ -12,6 +12,7 @@ export default function useTourByRouteId(id) {
 				setRoutes(data.data);
 			});
 			socket.on("tour", (data) => {
+				console.log({ data });
 				setRoutes((prev) => [data.data, ...prev]);
 			});
 			socket.on("error", (error) => {
