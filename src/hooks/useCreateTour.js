@@ -14,15 +14,10 @@ export default function useCreateTour() {
 		});
 	}, []);
 
-	function createTour({ from, to, type, touristRoute }) {
+	function createTour(data) {
 		setData(null);
 		setError(null);
-		socket.emit("create-tour", {
-			from,
-			to,
-			type,
-			touristRoute,
-		});
+		socket.emit("create-tour", data);
 	}
 
 	return { createTour, data, error };

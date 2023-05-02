@@ -8,6 +8,7 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
+	TextField,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -56,6 +57,8 @@ export default function DetailRoutePage() {
 		""
 	);
 
+	const [tourName, setTourName] = useState("");
+	const [description, setDescription] = useState("");
 	const [from, setFrom] = useState(new Date());
 	const [to, setTo] = useState(new Date());
 	const [type, setType] = useState("normal");
@@ -87,6 +90,8 @@ export default function DetailRoutePage() {
 	function handleSubmit() {
 		setIsOpenCreateBox(false);
 		const data = {
+			name: tourName,
+			description,
 			from,
 			to,
 			type,
@@ -126,12 +131,12 @@ export default function DetailRoutePage() {
 				<div className={styles.data}>
 					<div className={styles.table}>
 						<div className={styles.line}>
+							<p>Name</p>
 							<p>From</p>
-							<p>To</p>
 							<p>Type</p>
 							<p>Customers</p>
 						</div>
-						{tours?.map?.(({ from, to, type }, index) => (
+						{tours?.map?.(({ from, name, type }, index) => (
 							<div key={index}>
 								<hr />
 								<div
@@ -140,19 +145,13 @@ export default function DetailRoutePage() {
 									}}
 									className={styles.line}
 								>
+									<p>{name}</p>
 									<p>
 										{new Intl.DateTimeFormat("en-GB", {
 											dateStyle: "full",
 											timeStyle: "short",
-											timeZone: "Australia/Sydney",
+											timeZone: "Asia/Ho_Chi_Minh",
 										}).format(new Date(from))}
-									</p>
-									<p>
-										{new Intl.DateTimeFormat("en-GB", {
-											dateStyle: "full",
-											timeStyle: "short",
-											timeZone: "Australia/Sydney",
-										}).format(new Date(to))}
 									</p>
 									<p>{type}</p>
 									<p>{0}</p>
@@ -169,6 +168,18 @@ export default function DetailRoutePage() {
 				<div className={styles.createBox}>
 					<h1>Create new tour</h1>
 					<div className={styles.form}>
+						<TextField
+							value={tourName}
+							onChange={(e) => setTourName(e.target.value)}
+							label="Tour name"
+							variant="standard"
+						/>
+						<TextField
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
+							label="Description"
+							variant="standard"
+						/>
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<DatePicker
 								label="From"
