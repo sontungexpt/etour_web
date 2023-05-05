@@ -59,6 +59,7 @@ export default function DetailRoutePage() {
 
 	const [tourName, setTourName] = useState("");
 	const [description, setDescription] = useState("");
+	const [price, setPrice] = useState(0);
 	const [from, setFrom] = useState(new Date());
 	const [to, setTo] = useState(new Date());
 	const [type, setType] = useState("normal");
@@ -94,6 +95,7 @@ export default function DetailRoutePage() {
 			description,
 			from,
 			to,
+			price,
 			type,
 			touristRoute: id,
 		};
@@ -172,6 +174,13 @@ export default function DetailRoutePage() {
 							value={tourName}
 							onChange={(e) => setTourName(e.target.value)}
 							label="Tour name"
+							variant="standard"
+						/>
+						<TextField
+							value={price}
+							onChange={(e) => setPrice(parseInt(e.target.value))}
+							type="number"
+							label="Price"
 							variant="standard"
 						/>
 						<TextField
