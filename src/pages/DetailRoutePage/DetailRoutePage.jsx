@@ -196,7 +196,7 @@ export default function DetailRoutePage() {
 							/>
 							<DatePicker
 								label="To"
-								onChange={(d) => setFrom(new Date(d.$d))}
+								onChange={(d) => setTo(new Date(d.$d))}
 							/>
 						</LocalizationProvider>
 						<FormControl sx={{ mt: 2, minWidth: 120 }}>
