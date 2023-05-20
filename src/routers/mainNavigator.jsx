@@ -7,6 +7,7 @@ import TourRouteManagementPage from "../pages/TourRouteManagementPage/TourRouteM
 import BasePage from "../pages/BasePage/BasePage";
 import TourManagementPage from "../pages/TourManagementPage/TourManagementPage";
 import DetailRoutePage from "../pages/DetailRoutePage/DetailRoutePage";
+import VoucherManagementPage from "../pages/VoucherManagementPage/VoucherManagementPage";
 
 export default createHashRouter([
 	{
@@ -36,6 +37,10 @@ export default createHashRouter([
 			{
 				path: ENDPOINT.TOUR,
 				element: <TourManagementPage />,
+			},
+			{
+				path: ENDPOINT.VOUCHER,
+				element: <VoucherManagementPage />,
 			},
 		],
 	},

@@ -5,6 +5,7 @@ const ENDPOINT = {
 	REGISTER: "/register",
 	TOURIST_ROUTE: "/tourist-route",
 	TOUR: "/tour",
+	VOUCHER: "/voucher",
 };
 
 export default ENDPOINT;

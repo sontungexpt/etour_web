@@ -1,5 +1,6 @@
 export const API = {
-	base: "https://etour-server.hoanghy.tech",
+	// base: "https://etour-server.hoanghy.tech",
+	base: "http://localhost",
 };
 
 export const API_ENDPOINT = {

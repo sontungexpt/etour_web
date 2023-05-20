@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
@@ -11,6 +12,7 @@ import useAuthenticationState from "../../hooks/useAuthenticationState";
 import useCompanyInformation from "../../hooks/useCompanyInformation";
 import useStaffInformation from "../../hooks/useStaffInformation";
 import styles from "./HomePage.module.scss";
+import { setBasicInformation } from "../../features/staffSlice";
 
 export default function HomePage() {
 	const navigate = useNavigate();
@@ -101,6 +103,13 @@ export default function HomePage() {
 							className={styles.item}
 						>
 							<p>Manage tour</p>
+							<img src={CHEVRON} alt="" />
+						</div>
+						<div
+							onClick={() => navigate(ENDPOINT.VOUCHER)}
+							className={styles.item}
+						>
+							<p>Manage voucher</p>
 							<img src={CHEVRON} alt="" />
 						</div>
 					</div>

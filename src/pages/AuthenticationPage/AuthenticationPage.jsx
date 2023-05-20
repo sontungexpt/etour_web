@@ -45,6 +45,7 @@ export default function AuthenticationPage() {
 			localStorage.setItem("accessToken", accessToken);
 			localStorage.setItem("refreshToken", refreshToken);
 
+			// localStorage.setItem("staff", JSON.stringify(data.staff));
 			dispatch(setBasicInformation(data.staff));
 
 			navigate(ENDPOINT.HOME);
