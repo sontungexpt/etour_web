@@ -94,16 +94,6 @@
 		}
 	}
 
-	.imagePreview {
-		display: flex;
-		flex-wrap: wrap;
-
-		img {
-			width: 200px;
-			object-fit: contain;
-		}
-	}
-
 	.data {
 		display: grid;
 		gap: 30px;
@@ -194,6 +184,13 @@
 		color: white;
 	}
 
-	.routeBox {
+	.imagePreview {
+		display: flex;
+		flex-wrap: wrap;
+
+		img {
+			width: 200px;
+			object-fit: contain;
+		}
 	}
 }

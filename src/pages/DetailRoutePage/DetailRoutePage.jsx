@@ -5,6 +5,7 @@ import {
 	Button,
 	FormControl,
 	FormHelperText,
+	Input,
 	InputLabel,
 	MenuItem,
 	Select,
@@ -18,13 +19,14 @@ import COLORS from "../../constant/color";
 
 import { toast } from "react-toastify";
 import CenteredModal from "../../components/CenteredModal/CenteredModal";
+import { API_ENDPOINT } from "../../constant/api";
 import useCreateTour from "../../hooks/useCreateTour";
 import usePersistentState from "../../hooks/usePersistentState";
 import useRouteById from "../../hooks/useRouteById";
 import useTourByRouteId from "../../hooks/useTourByRouteId";
 import useTouristRoute from "../../hooks/useTouristRoute";
+
 import styles from "./DetailRoutePage.module.scss";
-import { API_ENDPOINT } from "../../constant/api";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
@@ -63,6 +65,7 @@ export default function DetailRoutePage() {
 	const [from, setFrom] = useState(new Date());
 	const [to, setTo] = useState(new Date());
 	const [type, setType] = useState("normal");
+	const [image, setImage] = useState();
 
 	const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
@@ -88,7 +91,7 @@ export default function DetailRoutePage() {
 		}
 	}, [createdData]);
 
-	function handleSubmit() {
+	async function handleSubmit() {
 		setIsOpenCreateBox(false);
 		const data = {
 			name: tourName,
@@ -98,6 +101,14 @@ export default function DetailRoutePage() {
 			price,
 			type,
 			touristRoute: id,
+			...(image
+				? {
+						image: {
+							originalname: image.name,
+							buffer: await image.arrayBuffer(),
+						},
+				  }
+				: {}),
 		};
 		createTour(data);
 	}
@@ -182,6 +193,14 @@ export default function DetailRoutePage() {
 							type="number"
 							label="Price"
 							variant="standard"
+						/>
+						<div className={styles.imagePreview}>
+							{image ? <img src={URL.createObjectURL(image)} /> : null}
+						</div>
+						<Input
+							type="file"
+							inputProps={{ multiple: false }}
+							onChange={(e) => setImage(e.target.files[0])}
 						/>
 						<TextField
 							value={description}

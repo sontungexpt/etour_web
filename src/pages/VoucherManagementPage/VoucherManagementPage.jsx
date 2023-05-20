@@ -88,7 +88,14 @@ export default function VoucherManagementPage() {
 			usingCondition,
 			expiredAt,
 			type,
-			image: { originalname: image.name, buffer: await image.arrayBuffer() },
+			...(image
+				? {
+						image: {
+							originalname: image.name,
+							buffer: await image.arrayBuffer(),
+						},
+				  }
+				: {}),
 		};
 
 		createVoucher(data);
@@ -224,7 +231,6 @@ export default function VoucherManagementPage() {
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<DatePicker
 								label="Expired at"
-								// value={expiredAt}
 								onChange={(d) => setExpiredAt(new Date(d.$d))}
 							/>
 						</LocalizationProvider>
