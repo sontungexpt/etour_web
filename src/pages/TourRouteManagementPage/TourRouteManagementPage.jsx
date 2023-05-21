@@ -57,6 +57,8 @@ export default function TourRouteManagementPage() {
 		keyword: searchValue,
 	});
 
+	console.log({ images });
+
 	useEffect(() => {
 		if (isError) {
 			toast(`An error occur when retrieve tourist route: ${error.message}`);
@@ -75,28 +77,35 @@ export default function TourRouteManagementPage() {
 	async function handleSubmit() {
 		setIsOpenCreateBox(false);
 
-		const imageIDs = await Promise.all(
-			Array(images.length)
-				.fill("")
-				.map(async (_, i) => {
-					const image = images[i];
-					const formData = new FormData();
-					formData.append("image", image);
-					const response = await axios.post(API_ENDPOINT.IMAGE, formData, {
-						headers: {
-							"Content-Type": "multipart/form-data",
-						},
-					});
-					return response.data.data.imageId;
-				})
-		);
+		// const imageIDs = await Promise.all(
+		// 	Array(images.length)
+		// 		.fill("")
+		// 		.map(async (_, i) => {
+		// 			const image = images[i];
+		// 			const formData = new FormData();
+		// 			formData.append("image", image);
+		// 			const response = await axios.post(API_ENDPOINT.IMAGE, formData, {
+		// 				headers: {
+		// 					"Content-Type": "multipart/form-data",
+		// 				},
+		// 			});
+		// 			return response.data.data.imageId;
+		// 		})
+		// );
 
 		const data = {
 			name: routeName,
 			description,
 			reservationFee,
 			type,
-			images: imageIDs,
+			images: await Promise.all(
+				Array(images.length)
+					.fill("")
+					.map(async (_, index) => ({
+						originalname: images[index].name,
+						buffer: await images[index].arrayBuffer(),
+					}))
+			),
 			route: route.map(({ content }) => content),
 		};
 
