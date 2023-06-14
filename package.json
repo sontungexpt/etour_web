@@ -30,7 +30,8 @@
     "react-toastify": "^9.1.2",
     "redux": "^4.2.1",
     "sass": "^1.60.0",
-    "socket.io-client": "^4.6.1"
+    "socket.io-client": "^4.6.1",
+    "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

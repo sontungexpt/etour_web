@@ -1,0 +1,42 @@
+.container {
+	width: 100%;
+	padding: 10px 0px;
+	background-color: white;
+	transition: 0.3s;
+	border: none;
+	outline: none;
+   border-radius: 15px;
+
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 15px 20px;
+
+	&:hover {
+		background-color: #e0e7fe;
+		border: none;
+	}
+
+	&:active,
+	&:focus {
+		outline: none;
+		border: none;
+	}
+
+	p {
+		color: #3f72af;
+	}
+}
+
+.highlight {
+	background-color: #3f72af;
+
+	p {
+		color: white;
+	}
+
+	&:hover {
+		background-color: #265691;
+		border: none;
+	}
+}
