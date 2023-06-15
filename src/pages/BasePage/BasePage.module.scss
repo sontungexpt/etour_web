@@ -1,32 +1,38 @@
-
 .container {
-   width: 100vw;
-   height: 100vh;
-   display: flex;
-   gap: 30px;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	gap: 30px;
 
-   .drawer {
-      left: 0px;
-      width:400px;
-      height: 100vh;
-      background-color: white;
-      z-index: 10;
-      padding: 20px 40px;
+	.drawer {
+		left: 0px;
+		width: 400px;
+		height: 100vh;
+		background-color: white;
+		z-index: 10;
+		padding: 20px 40px;
 
-      &>img {
-         width: 100px;
-         object-fit: contain;
-      }
+		.logo {
+         border: none;
+         outline: none;
+         background-color: white;
+         padding: 0;
+			img {
+				width: 100px;
+				object-fit: contain;
+			}
+		}
 
-      .navButtonGroup {
-         margin-top: 50px;
-         display: flex;
-         flex-direction: column;
-         gap: 10px;
-      }
-   }
+		.navButtonGroup {
+			margin-top: 50px;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+	}
 
-   .content {
-      overflow: auto;
-   }
+	.content {
+      width: 100%;
+		overflow: auto;
+	}
 }

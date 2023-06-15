@@ -1,9 +1,9 @@
 .container {
-	width: 100vw;
+	width: 100%;
 	min-height: 100vh;
 	display: flex;
 	align-items: center;
-	padding: 80px 150px;
+	padding: 40px 20px;
 
 	background-color: #fff;
 
@@ -30,14 +30,19 @@
 				gap: 40px;
 
 				.box {
-					width: 100%;
+					width: max-content;
 					display: flex;
 					flex-direction: column;
 					align-items: flex-start;
 					padding: 25px 30px;
 					gap: 30px;
-					border: 1px solid #000000;
-					border-radius: 5px;
+					// background-color: #00baf823;
+
+					.functionBox {
+						display: flex;
+						gap: 15px;
+						flex-wrap: wrap;
+					}
 
 					.staffBasicInfo {
 						display: flex;
@@ -47,10 +52,10 @@
 							width: 80px;
 							height: 80px;
 							border-radius: 9999px;
-							background-color: #E4F5FF;
+							background-color: #e4f5ff;
 						}
 
-						&>div {
+						& > div {
 							display: flex;
 							flex-direction: column;
 							justify-content: space-evenly;

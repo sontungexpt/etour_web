@@ -13,6 +13,11 @@ import useCompanyInformation from "../../hooks/useCompanyInformation";
 import useStaffInformation from "../../hooks/useStaffInformation";
 import styles from "./HomePage.module.scss";
 import { setBasicInformation } from "../../features/staffSlice";
+import Card from "../../components/Card/Card";
+import ImageButton from "../../components/ImageButton/ImageButton";
+
+import { ReactComponent as SIGN_OUT_ICON } from "../../assets/sign-out.svg";
+import { ReactComponent as EDIT_ICON } from "../../assets/edit.svg";
 
 export default function HomePage() {
 	const navigate = useNavigate();
@@ -33,85 +38,74 @@ export default function HomePage() {
 	return (
 		<div className={styles.container}>
 			<div className={styles.main}>
-				<h1>Hello, welcome to E-Tour Business</h1>
+				<h1>Hello {data?.fullName}, welcome to E-Tour Business</h1>
 				<div className={styles.dashboard}>
 					<div className={styles.information}>
-						<div className={styles.box}>
-							<div className={styles.staffBasicInfo}>
-								<img src="" alt="" />
-								<div>
-									<p>{data?.fullName}</p>
-									<p>{data?.role}</p>
+						<Card backgroundColor="white">
+							<div className={styles.box}>
+								<h2>Staff information</h2>
+								<div className={styles.staffBasicInfo}>
+									<img src="" alt="" />
+									<div>
+										<p>{data?.fullName}</p>
+										<p>{data?.role}</p>
+									</div>
+								</div>
+								<div className={styles.permission}>
+									<p>Permissions</p>
+									<ul>
+										{data?.permissions?.map((permission) => (
+											<li>{permission}</li>
+										))}
+									</ul>
+								</div>
+								<div className={styles.functionBox}>
+									<ImageButton
+										onClick={() => {}}
+										icon={EDIT_ICON}
+										backgroundColor={COLORS.editBackground}
+										color={COLORS.edit}
+									>
+										Edit profile
+									</ImageButton>
+									<ImageButton
+										onClick={() => {
+											localStorage.removeItem("accessToken");
+											localStorage.removeItem("refresshToken");
+											navigate(ENDPOINT.ON_BOARDING);
+											toast("Sign out successfully");
+										}}
+										icon={SIGN_OUT_ICON}
+										backgroundColor={COLORS.deleteBackground}
+										color={COLORS.delete}
+									>
+										Sign out
+									</ImageButton>
 								</div>
 							</div>
-							<div className={styles.permission}>
-								<p>Permissions</p>
-								<ul>
-									{data?.permissions?.map((permission) => (
-										<li>{permission}</li>
-									))}
-								</ul>
-							</div>
-							<Button
-								onClick={() => {
-									localStorage.removeItem("accessToken");
-									localStorage.removeItem("refresshToken");
-									navigate(ENDPOINT.ON_BOARDING);
-									toast("Sign out successfully");
-								}}
-								variant="contained"
-								sx={{
-									width: "100%",
-									backgroundColor: COLORS.primary,
-									borderRadius: "8px",
-									padding: "8px",
-								}}
-							>
-								<p className={styles.signout}>Sign out</p>
-							</Button>
-						</div>
-						<div className={styles.box}>
-							<div className={styles.staffBasicInfo}>
-								<img src="" alt="" />
-								<div>
-									<p>{companyData?.name}</p>
+						</Card>
+						<Card backgroundColor="white">
+							<div className={styles.box}>
+								<h2>Company information</h2>
+								<div className={styles.staffBasicInfo}>
+									<img src="" alt="" />
+									<div>
+										<p>{companyData?.name}</p>
+									</div>
 								</div>
+								<Button
+									variant="contained"
+									sx={{
+										width: "100%",
+										backgroundColor: COLORS.primary,
+										borderRadius: "8px",
+										padding: "8px",
+									}}
+								>
+									<p className={styles.signout}>Edit company</p>
+								</Button>
 							</div>
-							<Button
-								variant="contained"
-								sx={{
-									width: "100%",
-									backgroundColor: COLORS.primary,
-									borderRadius: "8px",
-									padding: "8px",
-								}}
-							>
-								<p className={styles.signout}>Edit company</p>
-							</Button>
-						</div>
-					</div>
-					<div className={styles.function}>
-						<div
-							onClick={() => navigate(ENDPOINT.TOURIST_ROUTE)}
-							className={styles.item}
-						>
-							<p>Manage tourist route</p>
-							<img src={CHEVRON} alt="" />
-						</div>
-						<div
-							onClick={() => navigate(ENDPOINT.TOUR)}
-							className={styles.item}
-						>
-							<p>Manage tour</p>
-							<img src={CHEVRON} alt="" />
-						</div>
-						<div
-							onClick={() => navigate(ENDPOINT.VOUCHER)}
-							className={styles.item}
-						>
-							<p>Manage voucher</p>
-							<img src={CHEVRON} alt="" />
-						</div>
+						</Card>
 					</div>
 				</div>
 			</div>

@@ -8,6 +8,7 @@ import useStaffInformation from "../../hooks/useStaffInformation";
 import LOGO from "../../assets/logo.svg";
 import { ReactComponent as Route } from "../../assets/route.svg";
 import { ReactComponent as Tour } from "../../assets/tour.svg";
+import { ReactComponent as HOME } from "../../assets/home.svg";
 
 import ENDPOINT from "../../constant/endponint";
 import styles from "./BasePage.module.scss";
@@ -27,12 +28,24 @@ export default function BasePage() {
 
 	return (
 		<div className={styles.container}>
-			{location.pathname == ENDPOINT.HOME ||
-			location.pathname == ENDPOINT.AUTHENTICATION ||
+			{location.pathname == ENDPOINT.AUTHENTICATION ||
 			location.pathname == ENDPOINT.ON_BOARDING ? null : (
 				<div className={styles.drawer}>
-					<img src={LOGO} alt="" />
+					<button
+						type="button"
+						className={styles.logo}
+						onClick={() => navigate(ENDPOINT.HOME)}
+					>
+						<img src={LOGO} alt="" />
+					</button>
 					<div className={styles.navButtonGroup}>
+						<NavigationButton
+							onClick={() => navigate(ENDPOINT.HOME)}
+							isHighlighted={location.pathname == ENDPOINT.HOME}
+							icon={HOME}
+						>
+							Home
+						</NavigationButton>
 						<NavigationButton
 							onClick={() => navigate(ENDPOINT.TOURIST_ROUTE)}
 							isHighlighted={location.pathname == ENDPOINT.TOURIST_ROUTE}

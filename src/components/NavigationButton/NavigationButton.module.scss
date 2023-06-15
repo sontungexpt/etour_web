@@ -1,21 +1,20 @@
+@import "../../constant/color.module";
+
 .container {
+	position: relative;
 	width: 100%;
 	padding: 10px 0px;
 	background-color: white;
 	transition: 0.3s;
 	border: none;
 	outline: none;
-   border-radius: 15px;
+	border-radius: 15px;
 
 	display: flex;
 	align-items: center;
 	gap: 20px;
 	padding: 15px 20px;
-
-	&:hover {
-		background-color: #e0e7fe;
-		border: none;
-	}
+	opacity: 1;
 
 	&:active,
 	&:focus {
@@ -24,19 +23,42 @@
 	}
 
 	p {
-		color: #3f72af;
+		color: $nav-color;
+	}
+
+	&::after {
+		content: "";
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-color: transparent;
+		opacity: 0.08;
+		top: 0;
+		left: 0;
+		transition: 0.3s;
+		border-radius: 15px;
+	}
+
+	&:hover::after {
+		background-color: $nav-color;
+		opacity: 0.19;
+	}
+
+	&:active::after {
+		background-color: rgba(0, 0, 0, 0.233);
 	}
 }
 
 .highlight {
-	background-color: #3f72af;
+	background-color: $nav-color;
 
 	p {
 		color: white;
 	}
 
-	&:hover {
-		background-color: #265691;
-		border: none;
+	&:hover::after {
+		background-color: black;
+		opacity: 0.14;
 	}
 }
