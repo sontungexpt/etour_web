@@ -29,13 +29,20 @@ export const touristRouteSlice = createSlice({
 		setGetListTouristRouteError(state, action) {
 			state.getListTouristRouteError = action.payload.error;
 		},
+		setDeleteTouristRouteStatus(state, action) {
+			state.deleteStatus = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(deleteTouristRoutes.pending, (state, action) => {
 			state.deleteStatus = STATUS.PENDING;
 		});
-		builder.addCase(deleteTouristRoutes.fulfilled, (state) => {
+		builder.addCase(deleteTouristRoutes.fulfilled, (state, action) => {
 			state.deleteStatus = STATUS.SUCCESS;
+			const ids = action.meta.arg;
+			state.routes = state.routes.filter(
+				(route: any) => !ids.includes(route._id)
+			);
 		});
 		builder.addCase(deleteTouristRoutes.rejected, (state) => {
 			state.deleteStatus = STATUS.FAIL;
@@ -43,8 +50,11 @@ export const touristRouteSlice = createSlice({
 	},
 });
 
-export const { setRoutes, setGetListTouristRouteError } =
-	touristRouteSlice.actions;
+export const {
+	setRoutes,
+	setGetListTouristRouteError,
+	setDeleteTouristRouteStatus,
+} = touristRouteSlice.actions;
 
 export const selectRoutes = (state: RootState) => state.touristRoute.routes;
 export const selectGetListTouristRoutesError = (state: RootState) => ({

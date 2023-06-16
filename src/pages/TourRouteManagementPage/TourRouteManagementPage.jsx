@@ -33,8 +33,10 @@ import {
 	selectDeleteStatus,
 	selectGetListTouristRoutesError,
 	selectRoutes,
+	setDeleteTouristRouteStatus,
 } from "../../features/touristRouteSlice";
 import { STATUS } from "../../constant/status";
+import useCallAPIToast from "../../hooks/useCallAPIToast";
 
 const columns = [
 	{
@@ -83,12 +85,11 @@ export default function TourRouteManagementPage() {
 		error: createdError,
 	} = useCreateRoute();
 
-	const searchRef = useRef();
-	const toastRef = useRef();
-	const [searchValue, setSearchValue] = usePersistentState(
-		"tour-route-search",
-		""
-	);
+	// const searchRef = useRef();
+	// const [searchValue, setSearchValue] = usePersistentState(
+	// 	"tour-route-search",
+	// 	""
+	// );
 
 	const [routeName, setRouteName] = useState("");
 	const [reservationFee, setReservationFee] = useState(0);
@@ -105,6 +106,19 @@ export default function TourRouteManagementPage() {
 	);
 	const deleteStatus = useSelector(selectDeleteStatus);
 
+	useCallAPIToast({
+		status: deleteStatus,
+		message: {
+			pending: "Deleting...",
+			success: "Delete tourist route successfully",
+			fail: "Fail to delete tourist route",
+		},
+		onResponse: () => {
+			setSelectedIDs([]);
+			dispatch(setDeleteTouristRouteStatus(""));
+		},
+	});
+
 	useEffect(() => {
 		if (isError) {
 			toast(`An error occur when retrieve tourist route: ${error.message}`);
@@ -119,39 +133,6 @@ export default function TourRouteManagementPage() {
 	useEffect(() => {
 		if (createdData) toast.success("Successfully create route");
 	}, [createdData]);
-
-	useEffect(() => {
-		if (!deleteStatus) return;
-		if (!toastRef.current) toastRef.current = toast.loading("Deleting...");
-
-		if (deleteStatus == STATUS.PENDING) {
-		} else {
-			if (deleteStatus == STATUS.SUCCESS) {
-				toast.update(toastRef.current, {
-					render: "Delete tourist route successfully",
-					type: "success",
-					isLoading: false,
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: false,
-				});
-			} else if (deleteStatus == STATUS.FAIL) {
-				toast.update(toastRef.current, {
-					render: "Fail to delete tourist route",
-					type: "fail",
-					isLoading: false,
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: false,
-				});
-			}
-
-			toastRef.current = null;
-			setSelectedIDs([]);
-		}
-	}, [deleteStatus]);
 
 	async function handleSubmit() {
 		setIsOpenCreateBox(false);
