@@ -121,18 +121,16 @@ export default function DetailRoutePage() {
 					<h1>{routeInformation?.name}</h1>
 					<p className={styles.title}>Description</p>
 					<p>{routeInformation?.description}</p>
-					{/* <p>
-						Reservation fee:{" "}
-						<span>{routeInformation?.reservationFee}</span>
-					</p> */}
 					<p className={styles.title}>Reservation fee</p>
 					<p>{routeInformation?.reservationFee}</p>
-					<p>Route: {routeInformation?.route?.join(" - ")} </p>
-				</div>
-				<div className={styles.imagePreview}>
-					{routeInformation?.images?.map((image) => (
-						<img key={image} src={`${API_ENDPOINT.IMAGE}/${image}`} />
-					))}
+					<p className={styles.title}>Route</p>
+					<p>{routeInformation?.route?.join(" - ")} </p>
+					<p className={styles.title}>Tourist route images</p>
+					<div className={styles.imagePreview}>
+						{routeInformation?.images?.map((image) => (
+							<img key={image} src={`${API_ENDPOINT.IMAGE}/${image}`} />
+						))}
+					</div>
 				</div>
 				<Button
 					onClick={() => setIsOpenCreateBox(true)}
