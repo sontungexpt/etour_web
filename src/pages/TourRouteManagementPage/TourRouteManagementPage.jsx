@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
-	Button,
+	Box,
 	FormControl,
 	FormHelperText,
 	Input,
@@ -19,15 +19,17 @@ import CenteredModal from "../../components/CenteredModal/CenteredModal";
 import ImageButton from "../../components/ImageButton/ImageButton";
 import RouteList from "../../components/RouteList/RouteList";
 import useCreateRoute from "../../hooks/useCreateRoute";
-import usePersistentState from "../../hooks/usePersistentState";
 import styles from "./TourRouteManagementPage.module.scss";
 
 import { ReactComponent as ADD_ICON } from "../../assets/add.svg";
+import { ReactComponent as CHECK_ICON } from "../../assets/check.svg";
+import { ReactComponent as NEXT_ICON } from "../../assets/chevron.svg";
 import { ReactComponent as DELETE_ICON } from "../../assets/delete.svg";
 import { ReactComponent as EDIT_ICON } from "../../assets/edit.svg";
 
 import moment from "moment/moment";
 import { useDispatch, useSelector } from "react-redux";
+import { API_ENDPOINT } from "../../constant/api";
 import {
 	deleteTouristRoutes,
 	selectDeleteStatus,
@@ -35,7 +37,6 @@ import {
 	selectRoutes,
 	setDeleteTouristRouteStatus,
 } from "../../features/touristRouteSlice";
-import { STATUS } from "../../constant/status";
 import useCallAPIToast from "../../hooks/useCallAPIToast";
 
 const columns = [
@@ -79,18 +80,15 @@ export default function TourRouteManagementPage() {
 	const dispatch = useDispatch();
 	const [selectedIDs, setSelectedIDs] = useState([]);
 
+	const choosePictureRef = useRef();
+
 	const {
 		createRoute,
 		data: createdData,
 		error: createdError,
 	} = useCreateRoute();
 
-	// const searchRef = useRef();
-	// const [searchValue, setSearchValue] = usePersistentState(
-	// 	"tour-route-search",
-	// 	""
-	// );
-
+	const [id, setId] = useState();
 	const [routeName, setRouteName] = useState("");
 	const [reservationFee, setReservationFee] = useState(0);
 	const [description, setDescription] = useState("");
@@ -156,6 +154,34 @@ export default function TourRouteManagementPage() {
 		createRoute(data);
 	}
 
+	function handleCreate() {
+		setId();
+		setIsOpenCreateBox(true);
+		setRouteName("");
+		setDescription("");
+		setType();
+		setReservationFee(0);
+		setRoute([]);
+		setImages([]);
+	}
+
+	function handleEdit(id) {
+		const route = data.find((d) => d._id == id);
+		setIsOpenCreateBox(true);
+		setId(id);
+		setRouteName(route.name);
+		setDescription(route.description);
+		setType(route.type);
+		setReservationFee(route.reservationFee);
+		setRoute(
+			route.route.map((d, i) => ({
+				id: `item-${i}`,
+				content: d,
+			}))
+		);
+		setImages(route.images);
+	}
+
 	return (
 		<>
 			<div className={styles.container}>
@@ -165,7 +191,7 @@ export default function TourRouteManagementPage() {
 						icon={ADD_ICON}
 						color={COLORS.edit}
 						backgroundColor={COLORS.editBackground}
-						onClick={() => setIsOpenCreateBox(true)}
+						onClick={handleCreate}
 					>
 						Create new tourist route
 					</ImageButton>
@@ -175,7 +201,7 @@ export default function TourRouteManagementPage() {
 						backgroundColor={COLORS.editBackground}
 						disabled={selectedIDs.length != 1}
 						onClick={() => {
-							navigate(selectedIDs[0]);
+							handleEdit(selectedIDs[0]);
 						}}
 					>
 						Edit
@@ -198,8 +224,11 @@ export default function TourRouteManagementPage() {
 						columns={columns}
 						getRowId={(row) => row._id}
 						checkboxSelection
-						onCellClick={({ row }) => {
+						onCellClick={({ row, field }) => {
 							const id = row._id;
+							if (field != "__check__") {
+								handleEdit(id);
+							}
 							if (selectedIDs.includes(id))
 								setSelectedIDs((prev) => [
 									...prev.filter((d) => d != id),
@@ -221,6 +250,18 @@ export default function TourRouteManagementPage() {
 			>
 				<div className={styles.createBox}>
 					<h1>Create new route</h1>
+					{id ? (
+						<ImageButton
+							backgroundColor={COLORS.editBackground}
+							color={COLORS.edit}
+							icon={NEXT_ICON}
+							reversed
+							fullWidth
+							onClick={() => navigate(id)}
+						>
+							View detail
+						</ImageButton>
+					) : null}
 					<div className={styles.form}>
 						<TextField
 							value={routeName}
@@ -239,11 +280,32 @@ export default function TourRouteManagementPage() {
 							{Array(images.length)
 								.fill("")
 								.map?.((_, i) => (
-									<img src={URL.createObjectURL(images[i])} />
+									<img
+										src={
+											images[i]?.name
+												? URL.createObjectURL(images[i])
+												: `${API_ENDPOINT.IMAGE}/${images[i]}`
+										}
+									/>
 								))}
 						</div>
+						<ImageButton
+							icon={ADD_ICON}
+							backgroundColor={COLORS.editBackground}
+							color={COLORS.edit}
+							style={{
+								paddingTop: 15,
+								paddingBottom: 15,
+							}}
+							fullWidth
+							onClick={() => choosePictureRef.current.click()}
+						>
+							Choose picture
+						</ImageButton>
 						<Input
+							inputRef={choosePictureRef}
 							type="file"
+							style={{ display: "none" }}
 							inputProps={{ multiple: true }}
 							onChange={(e) => setImages(e.target.files)}
 						/>
@@ -287,18 +349,27 @@ export default function TourRouteManagementPage() {
 						<h2>Tourist route</h2>
 					</div>
 					<RouteList list={route} onChange={setRoute} />
-					<Button
-						onClick={handleSubmit}
-						variant="contained"
-						sx={{
-							backgroundColor: COLORS.primary,
-							borderRadius: "8px",
-							height: "40px",
-							width: "100%",
-						}}
-					>
-						<p className={styles.buttonText}>Submit</p>
-					</Button>
+					<Box display={"flex"} gap={1}>
+						<ImageButton
+							backgroundColor={COLORS.submit}
+							color={COLORS.submitBackground}
+							fullWidth={true}
+							icon={CHECK_ICON}
+							onClick={handleSubmit}
+						>
+							Submit
+						</ImageButton>
+						<ImageButton
+							icon={DELETE_ICON}
+							color={COLORS.delete}
+							backgroundColor={COLORS.deleteBackground}
+							onClick={() => {
+								dispatch(deleteTouristRoutes(selectedIDs));
+							}}
+						>
+							Delete
+						</ImageButton>
+					</Box>
 				</div>
 			</CenteredModal>
 		</>

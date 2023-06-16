@@ -10,6 +10,7 @@ export default function ImageButton({
 	children,
 	icon: Icon,
 	disabled = false,
+	reversed = false,
 }) {
 	return (
 		<button
@@ -21,6 +22,7 @@ export default function ImageButton({
 					? COLORS.disabledBackground
 					: backgroundColor,
 				color: disabled ? COLORS.disabled : color,
+				flexDirection: reversed ? "row-reverse" : "row",
 				...style,
 			}}
 			className={`${styles.container} ${disabled ? styles.disabled : ""}`}
