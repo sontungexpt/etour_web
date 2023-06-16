@@ -6,6 +6,10 @@
 	gap: 50px;
 	padding: 80px 80px 0px 0px;
 
+	.header {
+		position: relative;
+	}
+
 	& > div:nth-child(1) {
 		display: grid;
 		gap: 20px;
@@ -147,10 +151,8 @@
 	.imagePreview {
 		overflow: auto;
 		display: flex;
-		// flex-wrap: wrap;
 
 		img {
-			// width: 200px;
 			height: 200px;
 			margin: 5px;
 			object-fit: contain;
@@ -165,41 +167,3 @@
 	}
 }
 
-.createBox {
-	width: 500px;
-	max-height: 600px;
-	overflow: auto;
-	padding: 50px;
-	background-color: #fff;
-	transform: translate(-50%, -50%);
-	border-radius: 10px;
-	display: grid;
-	gap: 40px;
-
-	& > h1 {
-		font-size: 1.7rem;
-		font-weight: 400;
-	}
-
-	h2 {
-		font-weight: 400;
-		font-size: 1.4rem;
-	}
-
-	.form {
-		display: grid;
-		gap: 20px;
-
-		textarea {
-			height: 100px;
-		}
-
-		.select {
-			color: black;
-		}
-	}
-
-	.buttonText {
-		color: white;
-	}
-}

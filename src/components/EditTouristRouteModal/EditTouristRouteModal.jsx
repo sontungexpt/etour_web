@@ -71,7 +71,6 @@ export function useEditTouristRouteModalState() {
 		openModal: (data) => {
 			setIsOpenCreateBox(true);
 			updateData(data);
-			console.log(data.images);
 		},
 		closeModal: () => setIsOpenCreateBox(false),
 	};

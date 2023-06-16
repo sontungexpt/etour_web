@@ -26,17 +26,25 @@ import useRouteById from "../../hooks/useRouteById";
 import useTourByRouteId from "../../hooks/useTourByRouteId";
 import useTouristRoute from "../../hooks/useTouristRoute";
 
+import { ReactComponent as EDIT_ICON } from "../../assets/edit.svg";
+import { ReactComponent as ADD_ICON } from "../../assets/add.svg";
+
 import styles from "./DetailRoutePage.module.scss";
+import ImageButton from "../../components/ImageButton/ImageButton";
+import EditTouristRouteModal, {
+	useEditTouristRouteModalState,
+} from "../../components/EditTouristRouteModal/EditTouristRouteModal";
+import EditTourModal, {
+	useEditTourModalState,
+} from "../../components/EditTourModal/EditTourModal";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
-	const {
-		createTour,
-		data: createdData,
-		error: createdError,
-	} = useCreateTour();
 
 	const { id } = useParams();
+
+	const { modalState: editTourModalState, openModal: openEditTourModal } =
+		useEditTourModalState(id);
 	const {
 		data: routeInformation,
 		isError: isRouteInformationError,
@@ -49,9 +57,7 @@ export default function DetailRoutePage() {
 		error: retrieveTourError,
 	} = useTourByRouteId(id);
 
-	useEffect(() => {
-		console.log({ tours, routeInformation });
-	}, [id, tours, !routeInformation]);
+	const { modalState, openModal } = useEditTouristRouteModalState();
 
 	const searchRef = useRef();
 	const [searchValue, setSearchValue] = usePersistentState(
@@ -59,68 +65,37 @@ export default function DetailRoutePage() {
 		""
 	);
 
-	const [tourName, setTourName] = useState("");
-	const [description, setDescription] = useState("");
-	const [price, setPrice] = useState(0);
-	const [from, setFrom] = useState(new Date());
-	const [to, setTo] = useState(new Date());
-	const [type, setType] = useState("normal");
-	const [image, setImage] = useState();
+	// const [tourName, setTourName] = useState("");
+	// const [description, setDescription] = useState("");
+	// const [price, setPrice] = useState(0);
+	// const [from, setFrom] = useState(new Date());
+	// const [to, setTo] = useState(new Date());
+	// const [type, setType] = useState("normal");
+	// const [image, setImage] = useState();
 
-	const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
+	// const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
-	const { data, isError, error } = useTouristRoute({
-		route: [],
-		keyword: searchValue,
-	});
+	// const { data, isError, error } = useTouristRoute({
+	// 	route: [],
+	// 	keyword: searchValue,
+	// });
 
-	useEffect(() => {
-		if (isError) {
-			toast(`An error occur when retrieve tourist route: ${error.message}`);
-		}
-	}, [isError]);
-
-	useEffect(() => {
-		if (createdError)
-			toast.error(`Fail to create tourist route: ${createdError.message}`);
-	}, [createdError]);
-
-	useEffect(() => {
-		if (createdData) {
-			toast.success(`Successfully create tour`);
-		}
-	}, [createdData]);
-
-	async function handleSubmit() {
-		setIsOpenCreateBox(false);
-		const data = {
-			name: tourName,
-			description,
-			from,
-			to,
-			price,
-			type,
-			touristRoute: id,
-			...(image
-				? {
-						image: {
-							originalname: image.name,
-							buffer: await image.arrayBuffer(),
-						},
-				  }
-				: {}),
-		};
-		createTour(data);
-	}
+	// useEffect(() => {
+	// 	if (isError) {
+	// 		toast(`An error occur when retrieve tourist route: ${error.message}`);
+	// 	}
+	// }, [isError]);
 
 	return (
 		<>
 			<div className={styles.container}>
-				<div>
+				<div className={styles.header}>
 					<p className={styles.title}>Tourist route name</p>
 					<h1>{routeInformation?.name}</h1>
 					<p className={styles.title}>Description</p>
 					<p>{routeInformation?.description}</p>
+					{/* <p className={styles.title}>Tourist route type</p>
+					<p>{routeInformation?.type} </p> */}
 					<p className={styles.title}>Reservation fee</p>
 					<p>{routeInformation?.reservationFee}</p>
 					<p className={styles.title}>Route</p>
@@ -131,18 +106,28 @@ export default function DetailRoutePage() {
 							<img key={image} src={`${API_ENDPOINT.IMAGE}/${image}`} />
 						))}
 					</div>
+					<ImageButton
+						onClick={() => openModal(routeInformation)}
+						backgroundColor={COLORS.lightEditBackground}
+						color={COLORS.editBackground}
+						icon={EDIT_ICON}
+						style={{
+							position: "absolute",
+							top: 10,
+							right: 50,
+						}}
+					>
+						Edit
+					</ImageButton>
 				</div>
-				<Button
-					onClick={() => setIsOpenCreateBox(true)}
-					variant="outlined"
-					sx={{
-						borderRadius: "8px",
-						padding: "8px",
-						width: "100%",
-					}}
+				<ImageButton
+					onClick={() => openEditTourModal({})}
+					backgroundColor={COLORS.editBackground}
+					color={COLORS.edit}
+					icon={ADD_ICON}
 				>
-					<p className={styles.create}>Create new tour</p>
-				</Button>
+					Add new tour
+				</ImageButton>
 				<div className={styles.data}>
 					<div className={styles.table}>
 						<div className={styles.line}>
@@ -176,82 +161,8 @@ export default function DetailRoutePage() {
 					</div>
 				</div>
 			</div>
-			<CenteredModal
-				isOpen={isOpenCreateBox}
-				onClose={() => setIsOpenCreateBox(false)}
-			>
-				<div className={styles.createBox}>
-					<h1>Create new tour</h1>
-					<div className={styles.form}>
-						<TextField
-							value={tourName}
-							onChange={(e) => setTourName(e.target.value)}
-							label="Tour name"
-							variant="standard"
-						/>
-						<TextField
-							value={price}
-							onChange={(e) => setPrice(parseInt(e.target.value))}
-							type="number"
-							label="Price"
-							variant="standard"
-						/>
-						<div className={styles.imagePreview}>
-							{image ? <img src={URL.createObjectURL(image)} /> : null}
-						</div>
-						<Input
-							type="file"
-							inputProps={{ multiple: false }}
-							onChange={(e) => setImage(e.target.files[0])}
-						/>
-						<TextField
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-							label="Description"
-							variant="standard"
-						/>
-						<LocalizationProvider dateAdapter={AdapterDayjs}>
-							<DatePicker
-								label="From"
-								onChange={(d) => setFrom(new Date(d.$d))}
-							/>
-							<DatePicker
-								label="To"
-								onChange={(d) => setTo(new Date(d.$d))}
-							/>
-						</LocalizationProvider>
-						<FormControl sx={{ mt: 2, minWidth: 120 }}>
-							<InputLabel id="demo-simple-select-helper-label">
-								Type
-							</InputLabel>
-							<Select
-								labelId="demo-simple-select-helper-label"
-								id="demo-simple-select-helper"
-								label="Age"
-								value={type}
-								onChange={(e) => setType(e.target.value)}
-							>
-								<MenuItem value={"normal"}>Normal</MenuItem>
-								<MenuItem value={"promotion"}>Promotion</MenuItem>
-							</Select>
-							<FormHelperText>Normal nè</FormHelperText>
-							<FormHelperText>Promotion nè</FormHelperText>
-						</FormControl>
-					</div>
-					<Button
-						onClick={handleSubmit}
-						variant="contained"
-						sx={{
-							backgroundColor: COLORS.primary,
-							borderRadius: "8px",
-							height: "40px",
-							width: "100%",
-						}}
-					>
-						<p className={styles.buttonText}>Submit</p>
-					</Button>
-				</div>
-			</CenteredModal>
+			<EditTourModal {...editTourModalState} />
+			<EditTouristRouteModal {...modalState} />
 		</>
 	);
 }
