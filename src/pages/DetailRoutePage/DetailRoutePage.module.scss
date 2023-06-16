@@ -100,6 +100,7 @@
 	.data {
 		display: grid;
 		gap: 30px;
+		background-color: white;
 
 		.table {
 			.line {
@@ -154,7 +155,8 @@
 
 		img {
 			height: 200px;
-			margin: 5px;
+			margin-right: 10px;
+			margin-bottom: 8px;
 			object-fit: contain;
 		}
 	}

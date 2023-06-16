@@ -59,33 +59,6 @@ export default function DetailRoutePage() {
 
 	const { modalState, openModal } = useEditTouristRouteModalState();
 
-	const searchRef = useRef();
-	const [searchValue, setSearchValue] = usePersistentState(
-		"tour-route-search",
-		""
-	);
-
-	// const [tourName, setTourName] = useState("");
-	// const [description, setDescription] = useState("");
-	// const [price, setPrice] = useState(0);
-	// const [from, setFrom] = useState(new Date());
-	// const [to, setTo] = useState(new Date());
-	// const [type, setType] = useState("normal");
-	// const [image, setImage] = useState();
-
-	// const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
-
-	// const { data, isError, error } = useTouristRoute({
-	// 	route: [],
-	// 	keyword: searchValue,
-	// });
-
-	// useEffect(() => {
-	// 	if (isError) {
-	// 		toast(`An error occur when retrieve tourist route: ${error.message}`);
-	// 	}
-	// }, [isError]);
-
 	return (
 		<>
 			<div className={styles.container}>
@@ -114,7 +87,7 @@ export default function DetailRoutePage() {
 						style={{
 							position: "absolute",
 							top: 10,
-							right: 50,
+							right: 30,
 						}}
 					>
 						Edit

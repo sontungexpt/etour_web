@@ -27,6 +27,7 @@ import styles from "./EditTouristRouteModal.module.scss";
 import useChangeRoute from "../../hooks/touristRoute/useChangeRoute";
 import useCreateRoute from "../../hooks/touristRoute/useCreateRoute";
 import useCallAPIToast from "../../hooks/useCallAPIToast";
+import axios from "axios";
 
 export const TOURIST_ROUTE_DEFAULT_VALUE = {
 	name: "",
@@ -118,6 +119,22 @@ export default function EditTouristRouteModal({
 
 	async function handleSubmit() {
 		onClose();
+
+		// const formData = new FormData();
+		// formData.append('image', data.images[0])
+
+		// const config = {
+		// 	method: 'post',
+		// 	url: 'https://etour-server.hoanghy.tech/images',
+		// 	headers: {
+		// 		'Content-Type': 'multipart/form-data'
+		// 	},
+		// 	data: formData
+		// }
+
+		// const res = await axios(config)
+		// console.log({data: res.data})
+		// console.log(data.images[0])
 
 		const submitData = {
 			..._.pick(data, [
