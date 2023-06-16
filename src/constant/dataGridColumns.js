@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const TOURIST_ROUTE_COLUMN = [
 	{
 		field: "_id",
