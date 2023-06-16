@@ -162,6 +162,9 @@ export default function EditTouristRouteModal({
 						reversed
 						fullWidth
 						onClick={() => navigate(data._id)}
+						style={{
+							padding: "14px 0",
+						}}
 					>
 						View detail
 					</ImageButton>
@@ -301,9 +304,6 @@ export default function EditTouristRouteModal({
 							icon={DELETE_ICON}
 							color={COLORS.delete}
 							backgroundColor={COLORS.deleteBackground}
-							// onClick={() => {
-							// 	dispatch(deleteTouristRoutes(selectedIDs));
-							// }}
 						>
 							Delete
 						</ImageButton>

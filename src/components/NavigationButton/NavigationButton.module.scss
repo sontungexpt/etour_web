@@ -16,14 +16,21 @@
 	padding: 15px 20px;
 	opacity: 1;
 
-	&:active,
-	&:focus {
-		outline: none;
-		border: none;
+	svg { 
+		width: 20px;
+		height: 20px;
 	}
 
 	p {
 		color: $nav-color;
+		font-weight: 600;
+		font-size: 1rem;
+	}
+
+	&:active,
+	&:focus {
+		outline: none;
+		border: none;
 	}
 
 	&::after {

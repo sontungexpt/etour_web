@@ -1,7 +1,7 @@
 const COLORS = {
 	primary: "#00A3FF",
 
-	navButton: '#3f72af',
+	navButton: '#007EA7',
 	// navButton: "#00BCF8",
 
 	submit: "#336cff",
@@ -9,8 +9,9 @@ const COLORS = {
 
 	delete: "#FF3912",
 	deleteBackground: "#fae3decc",
-	edit: "#3F72AF",
-	editBackground: "#DBE2EF",
+	// edit: "#2c62a3",
+	editBackground: "#007EA7",
+	edit: "#ffffff",
 
 	disabled: "#9a9a9c",
 	disabledBackground: "#ebebeb",

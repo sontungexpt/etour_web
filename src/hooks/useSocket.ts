@@ -28,7 +28,12 @@ export default function useSocket(
 		});
 
 		socket_.on("connect", () => {
-			setSocket((prev) => prev || socket_);
+			setSocket((prev) => {
+				if (prev) {
+					socket_.disconnect();
+					return prev;
+				} else return socket_;
+			});
 		});
 	}, [token, ...(dependencies || [])]);
 

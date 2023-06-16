@@ -2,7 +2,8 @@
 	width: 100vw;
 	height: 100vh;
 	display: flex;
-	background-color: #f1f8fc;
+	// background-color: ;
+	background: linear-gradient(155deg, #ebf6fc, rgb(249, 243, 250));
 
 	.drawer {
 		left: 0px;
@@ -14,6 +15,7 @@
 		.logo {
 			border: none;
 			outline: none;
+			background-color: transparent;
 
 			padding: 0;
 			img {

@@ -117,12 +117,16 @@ export default function DetailRoutePage() {
 		<>
 			<div className={styles.container}>
 				<div>
+					<p className={styles.title}>Tourist route name</p>
 					<h1>{routeInformation?.name}</h1>
+					<p className={styles.title}>Description</p>
 					<p>{routeInformation?.description}</p>
-					<p>
+					{/* <p>
 						Reservation fee:{" "}
 						<span>{routeInformation?.reservationFee}</span>
-					</p>
+					</p> */}
+					<p className={styles.title}>Reservation fee</p>
+					<p>{routeInformation?.reservationFee}</p>
 					<p>Route: {routeInformation?.route?.join(" - ")} </p>
 				</div>
 				<div className={styles.imagePreview}>

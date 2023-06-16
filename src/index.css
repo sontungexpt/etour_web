@@ -18,7 +18,7 @@
 	--background: #ecf7fe;
 	--primary: #00a3ff;
 	background-color: var(--background);
-	color: black;
+	color: #003459;
 }
 
 *::-webkit-scrollbar {
@@ -57,12 +57,12 @@ body {
 h1 {
 	font-size: 3.2em;
 	line-height: 1.1;
-	color: black;
+	color: #003459;
 }
 
 p {
 	font-size: 1rem;
-	color: black;
+	color: #00171f;
 }
 
 button {
