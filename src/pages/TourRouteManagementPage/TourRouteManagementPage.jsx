@@ -281,6 +281,7 @@ export default function TourRouteManagementPage() {
 								.fill("")
 								.map?.((_, i) => (
 									<img
+										key={images[i]?.name || images[i]}
 										src={
 											images[i]?.name
 												? URL.createObjectURL(images[i])
