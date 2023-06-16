@@ -6,10 +6,14 @@ import { useEffect } from "react";
 
 export default function useAuthenticationNavigate() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const authenticationState = useAuthenticationState();
 
 	useEffect(() => {
-		if (authenticationState == AUTHENTICATION_STATE.UNAUTHENTICATED)
-			navigate(ENDPOINT.ON_BOARDING);
+		if (authenticationState == AUTHENTICATION_STATE.UNAUTHENTICATED) {
+			console.log({ location });
+			if (location.pathname != ENDPOINT.ON_BOARDING)
+				navigate(ENDPOINT.ON_BOARDING);
+		}
 	}, []);
 }

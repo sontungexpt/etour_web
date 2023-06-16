@@ -13,31 +13,27 @@ export default function useSocket(
 	dependencies
 ) {
 	const token = useAccessToken();
-	const dispatch = useDispatch();
-	// const socket = useSelector(selectSocket);
 	const { socket, setSocket } = useContext(SocketContext);
 
 	useEffect(() => {
 		if (socket) return;
 		let socket_: Socket;
-		if (token) {
-			socket_ = io(`${API.base}`, {
-				path: "/socket",
-				query: {
-					type: "staff",
-					token,
-				},
-			});
+		if (!token) return;
+		socket_ = io(`${API.base}`, {
+			path: "/socket",
+			query: {
+				type: "staff",
+				token,
+			},
+		});
 
-			socket_.on("connect", () => {
-				// dispatch(setSocket(socket_));
-				setSocket(socket_);
-			});
-		}
+		socket_.on("connect", () => {
+			setSocket(socket_);
+		});
 	}, [token, ...(dependencies || [])]);
 
 	useEffect(() => {
-		onConnect?.call?.(null, socket);
+		if (socket) onConnect?.call?.(null, socket);
 	}, [!!socket]);
 
 	return socket;
