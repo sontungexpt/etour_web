@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import CenteredModal from "../../components/CenteredModal/CenteredModal";
 import ImageButton from "../../components/ImageButton/ImageButton";
 import RouteList from "../../components/RouteList/RouteList";
-import useCreateRoute from "../../hooks/useCreateRoute";
+import useCreateRoute from "../../hooks/touristRoute/useCreateRoute";
 import styles from "./TourRouteManagementPage.module.scss";
 
 import { ReactComponent as ADD_ICON } from "../../assets/add.svg";
@@ -38,6 +38,7 @@ import {
 	setDeleteTouristRouteStatus,
 } from "../../features/touristRouteSlice";
 import useCallAPIToast from "../../hooks/useCallAPIToast";
+import useChangeRoute from "../../hooks/touristRoute/useChangeRoute";
 
 const columns = [
 	{
@@ -88,6 +89,13 @@ export default function TourRouteManagementPage() {
 		error: createdError,
 	} = useCreateRoute();
 
+	const {
+		changeRoute,
+		data: changedData,
+		error: changedError,
+		status: changedStatus,
+	} = useChangeRoute();
+
 	const [id, setId] = useState();
 	const [routeName, setRouteName] = useState("");
 	const [reservationFee, setReservationFee] = useState(0);
@@ -99,9 +107,7 @@ export default function TourRouteManagementPage() {
 	const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
 	const data = useSelector(selectRoutes);
-	const { isError, createError: error } = useSelector(
-		selectGetListTouristRoutesError
-	);
+	const { isError, error } = useSelector(selectGetListTouristRoutesError);
 	const deleteStatus = useSelector(selectDeleteStatus);
 
 	useCallAPIToast({
@@ -116,6 +122,20 @@ export default function TourRouteManagementPage() {
 			dispatch(setDeleteTouristRouteStatus(""));
 		},
 	});
+
+	// console.log({ changedStatus });
+	// useCallAPIToast({
+	// 	status: changedStatus,
+	// 	message: {
+	// 		pending: "Uploading data...",
+	// 		success: "Update tourist route successfully",
+	// 		fail: "Fail to update tourist route",
+	// 	},
+	// 	onResponse: () => {
+	// 		setSelectedIDs([]);
+	// 		dispatch(setDeleteTouristRouteStatus(""));
+	// 	},
+	// });
 
 	useEffect(() => {
 		if (isError) {
@@ -143,15 +163,20 @@ export default function TourRouteManagementPage() {
 			images: await Promise.all(
 				Array(images.length)
 					.fill("")
-					.map(async (_, index) => ({
-						originalname: images[index].name,
-						buffer: await images[index].arrayBuffer(),
-					}))
+					.map(async (image, index) =>
+						typeof image == "string"
+							? image
+							: {
+									originalname: images[index].name,
+									buffer: await images[index].arrayBuffer(),
+							  }
+					)
 			),
 			route: route.map(({ content }) => content),
 		};
 
-		createRoute(data);
+		if (id) changeRoute({ _id: id, ...data });
+		else createRoute(data);
 	}
 
 	function handleCreate() {
@@ -249,7 +274,8 @@ export default function TourRouteManagementPage() {
 				onClose={() => setIsOpenCreateBox(false)}
 			>
 				<div className={styles.createBox}>
-					<h1>Create new route</h1>
+					<h1>{id ? "Change tourist route" : "Create new route"}</h1>
+					<p>{id}</p>
 					{id ? (
 						<ImageButton
 							backgroundColor={COLORS.editBackground}
@@ -360,16 +386,18 @@ export default function TourRouteManagementPage() {
 						>
 							Submit
 						</ImageButton>
-						<ImageButton
-							icon={DELETE_ICON}
-							color={COLORS.delete}
-							backgroundColor={COLORS.deleteBackground}
-							onClick={() => {
-								dispatch(deleteTouristRoutes(selectedIDs));
-							}}
-						>
-							Delete
-						</ImageButton>
+						{id ? (
+							<ImageButton
+								icon={DELETE_ICON}
+								color={COLORS.delete}
+								backgroundColor={COLORS.deleteBackground}
+								onClick={() => {
+									dispatch(deleteTouristRoutes(selectedIDs));
+								}}
+							>
+								Delete
+							</ImageButton>
+						) : null}
 					</Box>
 				</div>
 			</CenteredModal>
