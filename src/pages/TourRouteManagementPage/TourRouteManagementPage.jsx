@@ -131,10 +131,7 @@ export default function TourRouteManagementPage() {
 			success: "Create tourist route successfully",
 			fail: "Fail to create tourist route",
 		},
-		onResponse: () => {
-			setSelectedIDs([]);
-			dispatch(setDeleteTouristRouteStatus(""));
-		},
+		onResponse: () => {},
 	});
 
 	useCallAPIToast({
@@ -144,10 +141,7 @@ export default function TourRouteManagementPage() {
 			success: "Update tourist route successfully",
 			fail: "Fail to update tourist route",
 		},
-		onResponse: () => {
-			setSelectedIDs([]);
-			dispatch(setDeleteTouristRouteStatus(""));
-		},
+		onResponse: () => {},
 	});
 
 	async function handleSubmit() {

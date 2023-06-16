@@ -28,12 +28,12 @@ export default function useSocket(
 		});
 
 		socket_.on("connect", () => {
-			setSocket(socket_);
+			setSocket((prev) => prev || socket_);
 		});
 	}, [token, ...(dependencies || [])]);
 
 	useEffect(() => {
-		if (socket) onConnect?.call?.(null, socket);
+		if (socket) onConnect?.(socket);
 	}, [!!socket]);
 
 	return socket;
