@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import router from "./routers/mainNavigator";
 import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import store from "./store";
+import { useDispatch } from "react-redux";
+import {
+	setRoutes,
+	setGetListTouristRouteError,
+} from "./features/touristRouteSlice";
 
 function App() {
 	return (

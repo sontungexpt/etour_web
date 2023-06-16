@@ -1,134 +1,28 @@
 .container {
-	width: 100vw;
-	min-height: 100vh;
+	width: 100%;
+	// height: 100vh;
 	display: flex;
 	flex-direction: column;
-	gap: 50px;
-	padding: 80px 150px;
+	gap: 60px;
+	padding: 80px 20px 0 0;
 
 	background-color: #fff;
 
 	h1 {
-		font-weight: 400;
+		font-weight: 700;
 		font-size: 2rem;
 	}
 
-	.command {
-		display: grid;
-		gap: 20px;
-
-		.search {
-			display: flex;
-			justify-content: space-between;
-			gap: 40px;
-
-			input {
-				width: 100%;
-				height: 40px;
-				background-color: white;
-				outline: none;
-				color: black;
-				font-size: 1rem;
-				padding: 10px;
-				border: none;
-				border-bottom: 1px solid black;
-
-				&::placeholder {
-					color: #7b7b7b;
-				}
-			}
-
-			p {
-				color: white;
-				font-weight: 500;
-				text-transform: none;
-			}
-		}
-
-		.filter {
-			display: flex;
-			gap: 30px;
-
-			.item {
-				display: flex;
-				padding: 7px 13px;
-				gap: 10px;
-				border-radius: 1000px;
-				background-color: var(--primary);
-
-				p {
-					color: white;
-					font-size: 1rem;
-					font-weight: 500;
-					min-width: 35px;
-				}
-
-				&:nth-child(2) {
-					p {
-						width: 100px;
-					}
-				}
-
-				.clickable {
-					cursor: pointer;
-				}
-
-				.close {
-					width: 25px;
-					height: 25px;
-					padding: 5px;
-					cursor: pointer;
-					background-color: #2d5d9c;
-					border-radius: 999px;
-				}
-			}
-		}
+	.buttonGroup {
+		display: flex;
+		gap: 15px;
 	}
 
 	.data {
-		display: grid;
-		gap: 30px;
-
-		.table {
-			.line {
-				display: grid;
-				grid-template-columns: 2fr 2fr 2fr 2fr;
-				gap: 10px;
-				padding: 15px;
-				transition: 0.3s;
-
-				&:not(:nth-child(1)) {
-					cursor: pointer;
-				}
-
-				p {
-					color: black;
-				}
-
-				&:nth-child(1) {
-					p {
-						color: #7b7b7b !important;
-					}
-				}
-
-				p:nth-child(2),
-				p:nth-child(3) {
-					text-align: center;
-				}
-				p:nth-child(4) {
-					text-align: right;
-				}
-
-				&:not(:nth-child(1)):hover {
-					background-color: #ebebeb;
-				}
-			}
-
-			hr {
-				border-top: 1px solid black;
-			}
-		}
+		height: 550px;
+		overflow: auto;
 	}
+
 
 	.create {
 		color: var(--primary);

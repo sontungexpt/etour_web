@@ -13,6 +13,11 @@ import { ReactComponent as HOME } from "../../assets/home.svg";
 import ENDPOINT from "../../constant/endponint";
 import styles from "./BasePage.module.scss";
 import NavigationButton from "../../components/NavigationButton/NavigationButton";
+import {
+	setRoutes,
+	setGetListTouristRouteError,
+} from "../../features/touristRouteSlice";
+import useTouristRoute from "../../hooks/useTouristRoute";
 
 export default function BasePage() {
 	const location = useLocation();
@@ -25,6 +30,15 @@ export default function BasePage() {
 	useEffect(() => {
 		if (data) dispatch(setBasicInformation(data));
 	}, [data]);
+
+	const { data: routes, error: routeError } = useTouristRoute({
+		route: [],
+		keyword: "",
+	});
+	useEffect(() => {
+		dispatch(setRoutes(routes));
+		dispatch(setGetListTouristRouteError({ error: routeError }));
+	}, [routes, routeError]);
 
 	return (
 		<div className={styles.container}>

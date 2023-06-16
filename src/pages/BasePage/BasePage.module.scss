@@ -2,7 +2,6 @@
 	width: 100vw;
 	height: 100vh;
 	display: flex;
-	gap: 30px;
 
 	.drawer {
 		left: 0px;
@@ -10,7 +9,7 @@
 		height: 100vh;
 		background-color: white;
 		z-index: 10;
-		padding: 20px 40px;
+		padding: 20px 0px 0 40px;
 
 		.logo {
          border: none;
@@ -34,5 +33,6 @@
 	.content {
       width: 100%;
 		overflow: auto;
+      padding-left: 40px;
 	}
 }

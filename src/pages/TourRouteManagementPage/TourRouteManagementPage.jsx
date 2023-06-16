@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import {
 	Button,
-	Chip,
 	FormControl,
 	FormHelperText,
 	Input,
@@ -12,25 +11,72 @@ import {
 	Select,
 	TextField,
 } from "@mui/material";
-import CHEVRON from "../../assets/chevron-down.svg";
-import CLOSE from "../../assets/close.svg";
-import SEARCH from "../../assets/search.svg";
-import ROUTE from "../../assets/taxi.svg";
+import { DataGrid } from "@mui/x-data-grid";
 import COLORS from "../../constant/color";
 
 import { toast } from "react-toastify";
-import usePersistentState from "../../hooks/usePersistentState";
-import useTouristRoute from "../../hooks/useTouristRoute";
-import styles from "./TourRouteManagementPage.module.scss";
 import CenteredModal from "../../components/CenteredModal/CenteredModal";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import ImageButton from "../../components/ImageButton/ImageButton";
 import RouteList from "../../components/RouteList/RouteList";
 import useCreateRoute from "../../hooks/useCreateRoute";
-import { API, API_ENDPOINT } from "../../constant/api";
-import axios from "axios";
+import usePersistentState from "../../hooks/usePersistentState";
+import styles from "./TourRouteManagementPage.module.scss";
+
+import { ReactComponent as ADD_ICON } from "../../assets/add.svg";
+import { ReactComponent as DELETE_ICON } from "../../assets/delete.svg";
+import { ReactComponent as EDIT_ICON } from "../../assets/edit.svg";
+
+import moment from "moment/moment";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	deleteTouristRoutes,
+	selectDeleteStatus,
+	selectGetListTouristRoutesError,
+	selectRoutes,
+} from "../../features/touristRouteSlice";
+import { STATUS } from "../../constant/status";
+
+const columns = [
+	{
+		field: "_id",
+		headerName: "ID",
+		width: 250,
+	},
+	{
+		field: "name",
+		headerName: "Tourist route name",
+		width: 300,
+	},
+	{
+		field: "type",
+		headerName: "Type",
+		width: 120,
+	},
+	{
+		field: "reservationFee",
+		headerName: "Reservation Fee",
+		width: 150,
+	},
+	{
+		field: "route",
+		headerName: "Route",
+		valueGetter: (param) => param.row.route.join(" - "),
+		width: 250,
+	},
+	{
+		field: "createdAt",
+		headerName: "Created at",
+		width: 280,
+		valueGetter: (param) =>
+			moment(param.row.createdAt).format("DD MMMM YYYY, h:mm:ss a"),
+	},
+];
 
 export default function TourRouteManagementPage() {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const [selectedIDs, setSelectedIDs] = useState([]);
+
 	const {
 		createRoute,
 		data: createdData,
@@ -38,6 +84,7 @@ export default function TourRouteManagementPage() {
 	} = useCreateRoute();
 
 	const searchRef = useRef();
+	const toastRef = useRef();
 	const [searchValue, setSearchValue] = usePersistentState(
 		"tour-route-search",
 		""
@@ -52,12 +99,11 @@ export default function TourRouteManagementPage() {
 
 	const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
-	const { data, isError, error } = useTouristRoute({
-		route: [],
-		keyword: searchValue,
-	});
-
-	console.log({ images });
+	const data = useSelector(selectRoutes);
+	const { isError, createError: error } = useSelector(
+		selectGetListTouristRoutesError
+	);
+	const deleteStatus = useSelector(selectDeleteStatus);
 
 	useEffect(() => {
 		if (isError) {
@@ -74,24 +120,41 @@ export default function TourRouteManagementPage() {
 		if (createdData) toast.success("Successfully create route");
 	}, [createdData]);
 
+	useEffect(() => {
+		if (!deleteStatus) return;
+		if (!toastRef.current) toastRef.current = toast.loading("Deleting...");
+
+		if (deleteStatus == STATUS.PENDING) {
+		} else {
+			if (deleteStatus == STATUS.SUCCESS) {
+				toast.update(toastRef.current, {
+					render: "Delete tourist route successfully",
+					type: "success",
+					isLoading: false,
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: false,
+				});
+			} else if (deleteStatus == STATUS.FAIL) {
+				toast.update(toastRef.current, {
+					render: "Fail to delete tourist route",
+					type: "fail",
+					isLoading: false,
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: false,
+				});
+			}
+
+			toastRef.current = null;
+			setSelectedIDs([]);
+		}
+	}, [deleteStatus]);
+
 	async function handleSubmit() {
 		setIsOpenCreateBox(false);
-
-		// const imageIDs = await Promise.all(
-		// 	Array(images.length)
-		// 		.fill("")
-		// 		.map(async (_, i) => {
-		// 			const image = images[i];
-		// 			const formData = new FormData();
-		// 			formData.append("image", image);
-		// 			const response = await axios.post(API_ENDPOINT.IMAGE, formData, {
-		// 				headers: {
-		// 					"Content-Type": "multipart/form-data",
-		// 				},
-		// 			});
-		// 			return response.data.data.imageId;
-		// 		})
-		// );
 
 		const data = {
 			name: routeName,
@@ -116,90 +179,60 @@ export default function TourRouteManagementPage() {
 		<>
 			<div className={styles.container}>
 				<h1>Manage tourist route</h1>
-				<Button
-					onClick={() => setIsOpenCreateBox(true)}
-					variant="outlined"
-					sx={{
-						borderRadius: "8px",
-						padding: "8px",
-						width: "100%",
-					}}
-				>
-					<p className={styles.create}>Create new tourist route</p>
-				</Button>
-				<div className={styles.command}>
-					<div className={styles.search}>
-						<input
-							ref={searchRef}
-							onKeyDown={(e) => {
-								if (e.key === "Enter")
-									setSearchValue(searchRef.current.value);
-							}}
-							type="text"
-							placeholder="Find tour by name..."
-						/>
-						<Button
-							onClick={() => setSearchValue(searchRef.current.value)}
-							variant="contained"
-							sx={{
-								backgroundColor: COLORS.primary,
-								borderRadius: "8px",
-								height: "40px",
-								width: "200px",
-							}}
-						>
-							<p>Search</p>
-						</Button>
-					</div>
-					<div className={styles.filter}>
-						{searchValue ? (
-							<div className={styles.item}>
-								<img src={SEARCH} alt="" />
-								<p>{searchValue}</p>
-								<img
-									className={styles.close}
-									onClick={() => {
-										searchRef.current.value = "";
-										setSearchValue("");
-									}}
-									src={CLOSE}
-									alt=""
-								/>
-							</div>
-						) : null}
-						<div className={styles.item}>
-							<img src={ROUTE} alt="" />
-							<p>Filter route</p>
-							<img className={styles.clickable} src={CHEVRON} alt="" />
-						</div>
-					</div>
+				<div className={styles.buttonGroup}>
+					<ImageButton
+						icon={ADD_ICON}
+						color={COLORS.edit}
+						backgroundColor={COLORS.editBackground}
+						onClick={() => setIsOpenCreateBox(true)}
+					>
+						Create new tourist route
+					</ImageButton>
+					<ImageButton
+						icon={EDIT_ICON}
+						color={COLORS.edit}
+						backgroundColor={COLORS.editBackground}
+						disabled={selectedIDs.length != 1}
+						onClick={() => {
+							navigate(selectedIDs[0]);
+						}}
+					>
+						Edit
+					</ImageButton>
+					<ImageButton
+						icon={DELETE_ICON}
+						color={COLORS.delete}
+						backgroundColor={COLORS.deleteBackground}
+						disabled={selectedIDs.length == 0}
+						onClick={() => {
+							dispatch(deleteTouristRoutes(selectedIDs));
+						}}
+					>
+						Delete
+					</ImageButton>
 				</div>
 				<div className={styles.data}>
-					<div className={styles.table}>
-						<div className={styles.line}>
-							<p>Name</p>
-							<p>Route</p>
-							<p>Reservation fee</p>
-							<p>Customers</p>
-						</div>
-						{data?.map(({ name, reservationFee, route, _id }, index) => (
-							<div key={index}>
-								<hr />
-								<div
-									onClick={() => {
-										navigate(_id);
-									}}
-									className={styles.line}
-								>
-									<p>{name}</p>
-									<p>{route.join(" - ")}</p>
-									<p>{reservationFee}</p>
-									<p>{Math.floor(Math.random(100))}</p>
-								</div>
-							</div>
-						))}
-					</div>
-				</div>{" "}
+					<DataGrid
+						rows={data || []}
+						columns={columns}
+						getRowId={(row) => row._id}
+						checkboxSelection
+						onCellClick={({ row }) => {
+							const id = row._id;
+							if (selectedIDs.includes(id))
+								setSelectedIDs((prev) => [
+									...prev.filter((d) => d != id),
+								]);
+							else setSelectedIDs((prev) => [...prev, id]);
+						}}
+						onColumnHeaderClick={({ field }) => {
+							if (field == "__check__")
+								if (selectedIDs.length == 0)
+									setSelectedIDs(data.map((row) => row._id));
+								else setSelectedIDs([]);
+						}}
+					/>
+				</div>
 			</div>
 			<CenteredModal
 				isOpen={isOpenCreateBox}
