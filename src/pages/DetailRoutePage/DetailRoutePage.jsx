@@ -37,6 +37,8 @@ import EditTouristRouteModal, {
 import EditTourModal, {
 	useEditTourModalState,
 } from "../../components/EditTourModal/EditTourModal";
+import { TOUR_COLUMN } from "../../constant/dataGridColumns";
+import { DataGrid } from "@mui/x-data-grid";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
@@ -102,7 +104,34 @@ export default function DetailRoutePage() {
 					Add new tour
 				</ImageButton>
 				<div className={styles.data}>
-					<div className={styles.table}>
+					<DataGrid
+						rows={tours || []}
+						columns={TOUR_COLUMN}
+						getRowId={(row) => row._id}
+						checkboxSelection
+						onCellClick={({ row, field }) => {
+							const id = row._id;
+							if (field != "__check__") {
+								// handleEdit(id);
+							}
+							if (selectedIDs.includes(id)) {
+								// setSelectedIDs((prev) => [
+								// 	...prev.filter((d) => d != id),
+								// ]);
+							} else {
+								// setSelectedIDs((prev) => [...prev, id]);
+							}
+						}}
+						onColumnHeaderClick={({ field }) => {
+							if (field == "__check__")
+								if (selectedIDs.length == 0) {
+									// setSelectedIDs(data.map((row) => row._id));
+								} else {
+									// setSelectedIDs([]);
+								}
+						}}
+					/>
+					{/* <div className={styles.table}>
 						<div className={styles.line}>
 							<p>Name</p>
 							<p>From</p>
@@ -131,7 +160,7 @@ export default function DetailRoutePage() {
 								</div>
 							</div>
 						))}
-					</div>
+					</div> */}
 				</div>
 			</div>
 			<EditTourModal {...editTourModalState} />
