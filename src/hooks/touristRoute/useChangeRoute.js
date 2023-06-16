@@ -10,11 +10,11 @@ export default function useChangeRoute() {
 	const socket = useSocket((socket) => {
 		socket.on("edit-route-result", (data) => {
 			setData(data.data);
-			// setStatus(STATUS.SUCCESS);
+			setStatus(STATUS.SUCCESS);
 		});
 		socket.on("error", (error) => {
 			setError(error);
-			// setStatus(STATUS.FAIL);
+			setStatus(STATUS.FAIL);
 		});
 	}, []);
 
@@ -22,7 +22,7 @@ export default function useChangeRoute() {
 		setData(null);
 		setError(null);
 		socket.emit("edit-route", newData);
-		// setStatus(STATUS.PENDING);
+		setStatus(STATUS.PENDING);
 	}
 
 	return { changeRoute, status, data, error };

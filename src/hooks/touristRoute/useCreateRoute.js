@@ -13,11 +13,11 @@ export default function useCreateRoute() {
 		// });
 		socket.on("create-route-result", (data) => {
 			setData(data.data);
-			// setStatus(STATUS.SUCCESS);
+			setStatus(STATUS.SUCCESS);
 		});
 		socket.on("error", (error) => {
 			setError(error);
-			// setStatus(STATUS.FAIL);
+			setStatus(STATUS.FAIL);
 		});
 	}, []);
 
@@ -25,7 +25,7 @@ export default function useCreateRoute() {
 		setData(null);
 		setError(null);
 		socket.emit("create-route", newData);
-		// setStatus(STATUS.PENDING);
+		setStatus(STATUS.PENDING);
 	}
 
 	return { createRoute, status, data, error };

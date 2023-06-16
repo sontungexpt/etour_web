@@ -87,6 +87,7 @@ export default function TourRouteManagementPage() {
 		createRoute,
 		data: createdData,
 		error: createdError,
+		status: createdStatus,
 	} = useCreateRoute();
 
 	const {
@@ -107,7 +108,7 @@ export default function TourRouteManagementPage() {
 	const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
 	const data = useSelector(selectRoutes);
-	const { isError, error } = useSelector(selectGetListTouristRoutesError);
+	// const { isError, error } = useSelector(selectGetListTouristRoutesError);
 	const deleteStatus = useSelector(selectDeleteStatus);
 
 	useCallAPIToast({
@@ -123,34 +124,31 @@ export default function TourRouteManagementPage() {
 		},
 	});
 
-	// console.log({ changedStatus });
-	// useCallAPIToast({
-	// 	status: changedStatus,
-	// 	message: {
-	// 		pending: "Uploading data...",
-	// 		success: "Update tourist route successfully",
-	// 		fail: "Fail to update tourist route",
-	// 	},
-	// 	onResponse: () => {
-	// 		setSelectedIDs([]);
-	// 		dispatch(setDeleteTouristRouteStatus(""));
-	// 	},
-	// });
+	useCallAPIToast({
+		status: createdStatus,
+		message: {
+			pending: "Uploading data...",
+			success: "Create tourist route successfully",
+			fail: "Fail to create tourist route",
+		},
+		onResponse: () => {
+			setSelectedIDs([]);
+			dispatch(setDeleteTouristRouteStatus(""));
+		},
+	});
 
-	useEffect(() => {
-		if (isError) {
-			toast(`An error occur when retrieve tourist route: ${error.message}`);
-		}
-	}, [isError]);
-
-	useEffect(() => {
-		if (createdError)
-			toast.error(`Fail to create tourist route: ${createdError.message}`);
-	}, [createdError]);
-
-	useEffect(() => {
-		if (createdData) toast.success("Successfully create route");
-	}, [createdData]);
+	useCallAPIToast({
+		status: changedStatus,
+		message: {
+			pending: "Uploading data...",
+			success: "Update tourist route successfully",
+			fail: "Fail to update tourist route",
+		},
+		onResponse: () => {
+			setSelectedIDs([]);
+			dispatch(setDeleteTouristRouteStatus(""));
+		},
+	});
 
 	async function handleSubmit() {
 		setIsOpenCreateBox(false);

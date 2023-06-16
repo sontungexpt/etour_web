@@ -127,7 +127,7 @@ export default function DetailRoutePage() {
 				</div>
 				<div className={styles.imagePreview}>
 					{routeInformation?.images?.map((image) => (
-						<img src={`${API_ENDPOINT.IMAGE}/${image}`} />
+						<img key={image} src={`${API_ENDPOINT.IMAGE}/${image}`} />
 					))}
 				</div>
 				<Button
