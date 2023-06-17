@@ -1,4 +1,4 @@
-import { createHashRouter } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import OnBoardingPage from "../pages/OnBoardingPage/OnBoardingPage";
 import ENDPOINT from "../constant/endponint";
 import HomePage from "../pages/HomePage/HomePage";
@@ -9,7 +9,7 @@ import TourManagementPage from "../pages/TourManagementPage/TourManagementPage";
 import DetailRoutePage from "../pages/DetailRoutePage/DetailRoutePage";
 import VoucherManagementPage from "../pages/VoucherManagementPage/VoucherManagementPage";
 
-export default createHashRouter([
+export default createBrowserRouter([
 	{
 		path: "/",
 		element: <BasePage />,
