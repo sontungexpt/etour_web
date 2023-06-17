@@ -24,15 +24,14 @@ export default function useTourById(id) {
 	}, [!!globalSocket]);
 
 	useEffect(() => {
-		if (status == STATUS.UPDATE) setStatus("");
-		if (status == STATUS.SUCCESS) setStatus("");
+		// if (status == STATUS.SUCCESS) setStatus("");
 	}, [status]);
 
 	useSocket(
 		(socket) => {
 			socket.emit("view-tour", { id });
 			socket.on("tour", (data) => {
-				setStatus((prev) => (prev == "" ? STATUS.UPDATE : STATUS.SUCCESS));
+				setStatus(STATUS.SUCCESS);
 				setData(data.data);
 			});
 			socket.on("error", (error) => {

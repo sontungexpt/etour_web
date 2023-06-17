@@ -17,11 +17,14 @@
 	}
 
 	.data {
+		border-radius: 30px;
+		// border: 0.5px solid #4e6270;
 		background-color: white;
+		box-shadow: 0 0 15px 0 #d8d4e5;
+		margin-bottom: 20px;
 		height: 550px;
 		overflow: auto;
 	}
-
 
 	.create {
 		color: var(--primary);
@@ -29,4 +32,3 @@
 		text-transform: none;
 	}
 }
-

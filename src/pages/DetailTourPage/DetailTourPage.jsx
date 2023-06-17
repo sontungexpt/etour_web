@@ -5,38 +5,50 @@ import COLORS from "../../constant/color";
 import useTourById from "../../hooks/tour/useTourById";
 import styles from "./DetailTourPage.module.scss";
 import ImageButton from "../../components/ImageButton/ImageButton";
+import EditTourModal, {
+	useEditTourModalState,
+} from "../../components/EditTourModal/EditTourModal";
+import moment from "moment";
 
 export default function DetailTourPage() {
 	const { id } = useParams();
 
 	const { data } = useTourById(id);
 
+	const { modalState: editTourModalState, openModal } =
+		useEditTourModalState(id);
+
 	return (
-		<div className={styles.container}>
-			<div className={styles.header}>
-				{data?.image ? (
-					<img src={`${API_ENDPOINT.IMAGE}/${data.image}`} />
-				) : null}
-				<p className={styles.title}>Tourist route name</p>
-				<h1>{data?.name}</h1>
-				<p className={styles.title}>Description</p>
-				<p>{data?.description}</p>
-				<p className={styles.title}>Tour type</p>
-				<p>{data?.type} </p>
-				<ImageButton
-					// onClick={() => openModal(data)}
-					backgroundColor={COLORS.lightEditBackground}
-					color={COLORS.editBackground}
-					icon={EDIT_ICON}
-					style={{
-						position: "absolute",
-						top: 330,
-						right: 30,
-					}}
-				>
-				Edit
-				</ImageButton>
+		<>
+			<div className={styles.container}>
+				<div className={styles.header}>
+					{data?.image ? (
+						<img src={`${API_ENDPOINT.IMAGE}/${data.image}`} />
+					) : null}
+					<p className={styles.title}>Tour name</p>
+					<h1 className={styles.tourName}>{data?.name}</h1>
+					<p>{moment(data?.from).format("h:mm:ss a, DD MMMM YYYY")}</p>
+					<p className={styles.title}>Description</p>
+					<p>{data?.description}</p>
+					<p className={styles.title}>Tour type</p>
+					<p>{data?.type} </p>
+					<ImageButton
+						onClick={() => openModal(data)}
+						backgroundColor={COLORS.lightEditBackground}
+						color={COLORS.editBackground}
+						icon={EDIT_ICON}
+						style={{
+							position: "absolute",
+							top: 330,
+							right: 30,
+							padding: "20px 15px 20px 30px",
+						}}
+					>
+						{""}
+					</ImageButton>
+				</div>
 			</div>
-		</div>
+			<EditTourModal {...editTourModalState} />
+		</>
 	);
 }
