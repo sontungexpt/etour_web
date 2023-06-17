@@ -156,8 +156,8 @@ export default function EditTouristRouteModal({
 				<p>{data._id}</p>
 				{data._id ? (
 					<ImageButton
-						backgroundColor={COLORS.editBackground}
-						color={COLORS.edit}
+						backgroundColor={COLORS.lightEditBackground}
+						color={COLORS.editBackground}
 						icon={NEXT_ICON}
 						reversed
 						fullWidth

@@ -8,6 +8,7 @@ import OnBoardingPage from "../pages/OnBoardingPage/OnBoardingPage";
 import TourManagementPage from "../pages/TourManagementPage/TourManagementPage";
 import TourRouteManagementPage from "../pages/TourRouteManagementPage/TourRouteManagementPage";
 import VoucherManagementPage from "../pages/VoucherManagementPage/VoucherManagementPage";
+import DetailTourPage from "../pages/DetailTourPage/DetailTourPage";
 
 export default createBrowserRouter([
 	{
@@ -41,6 +42,10 @@ export default createBrowserRouter([
 			{
 				path: ENDPOINT.VOUCHER,
 				element: <VoucherManagementPage />,
+			},
+			{
+				path: `${ENDPOINT.TOUR}/:id`,
+				element: <DetailTourPage />,
 			},
 		],
 	},

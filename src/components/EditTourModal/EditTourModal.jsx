@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import _ from "lodash";
 
 import {
-	Button,
 	FormControl,
 	FormHelperText,
 	Input,
@@ -24,13 +23,15 @@ import { API_ENDPOINT } from "../../constant/api";
 import useCreateTour from "../../hooks/tour/useCreateTour";
 
 import { ReactComponent as ADD_ICON } from "../../assets/add.svg";
+import { ReactComponent as NEXT_ICON } from "../../assets/chevron.svg";
 import { ReactComponent as CHECK_ICON } from "../../assets/check.svg";
 
 import ImageButton from "../../components/ImageButton/ImageButton";
 
-import useCallAPIToast from "../../hooks/useCallAPIToast";
-import styles from "./EditTourModal.module.scss";
 import useUpdateTour from "../../hooks/tour/useUpdateTour";
+import styles from "./EditTourModal.module.scss";
+import { useNavigate } from "react-router-dom";
+import ENDPOINT from "../../constant/endponint";
 
 export function useEditTourModalState(touristRoute) {
 	const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
@@ -69,6 +70,8 @@ export function useEditTourModalState(touristRoute) {
 }
 
 export default function EditTourModal({ isOpen, onClose, data, setData }) {
+	const navigate = useNavigate();
+
 	const { createTour } = useCreateTour();
 	const { updateTour } = useUpdateTour();
 
@@ -79,7 +82,7 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
 		const image =
 			typeof data.image == "string"
 				? data.image
-				: data.image
+				: data.image?.name
 				? {
 						originalname: data.image.name,
 						buffer: await data.image.arrayBuffer(),
@@ -91,7 +94,6 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
 				"name",
 				"price",
 				"description",
-				"file",
 				"from",
 				"to",
 				"type",
@@ -107,6 +109,21 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
 		<CenteredModal isOpen={isOpen} onClose={onClose}>
 			<div className={styles.createBox}>
 				<h1>{data?._id ? "Change tour" : "Create new tour"}</h1>
+				{data._id ? (
+					<ImageButton
+						backgroundColor={COLORS.lightEditBackground}
+						color={COLORS.editBackground}
+						icon={NEXT_ICON}
+						reversed
+						fullWidth
+						onClick={() => navigate(`${ENDPOINT.TOUR}/${data._id}`)}
+						style={{
+							padding: "14px 0",
+						}}
+					>
+						View detail
+					</ImageButton>
+				) : null}
 				<div className={styles.form}>
 					<TextField
 						value={data.name}

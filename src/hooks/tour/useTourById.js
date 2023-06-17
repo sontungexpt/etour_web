@@ -4,8 +4,8 @@ import { STATUS } from "../../constant/status";
 import useCallAPIToast from "../useCallAPIToast";
 import SocketContext from "../../contexts/SocketContext";
 
-export default function useRouteById(id) {
-	const [route, setRoute] = useState(null);
+export default function useTourById(id) {
+	const [data, setData] = useState(null);
 	const [status, setStatus] = useState();
 	const [error, setError] = useState(null);
 	const { socket: globalSocket } = useContext(SocketContext);
@@ -13,9 +13,9 @@ export default function useRouteById(id) {
 	useCallAPIToast({
 		status,
 		message: {
-			pending: "Loading tourist route data...",
-			success: "Successfully load tourist route data",
-			fail: `Fail to load tourist route data: ${error?.message}`,
+			pending: "Loading tour data...",
+			success: "Successfully load tour data",
+			fail: `Fail to load tour data: ${error?.message}`,
 		},
 	});
 
@@ -30,10 +30,10 @@ export default function useRouteById(id) {
 
 	useSocket(
 		(socket) => {
-			socket.emit("view-route", { id });
-			socket.on("route", (data) => {
+			socket.emit("view-tour", { id });
+			socket.on("tour", (data) => {
 				setStatus((prev) => (prev == "" ? STATUS.UPDATE : STATUS.SUCCESS));
-				setRoute(data.data);
+				setData(data.data);
 			});
 			socket.on("error", (error) => {
 				setStatus(STATUS.FAIL);
@@ -43,5 +43,5 @@ export default function useRouteById(id) {
 		[id]
 	);
 
-	return { data: route, status, isError: error !== null, error };
+	return { data, status, isError: error !== null, error };
 }
