@@ -20,6 +20,7 @@ import {
 import useTouristRoute from "../../hooks/touristRoute/useTouristRoute";
 
 export default function BasePage() {
+	console.log("debug");
 	const location = useLocation();
 	const navigate = useNavigate();
 	useAuthenticationNavigate();
