@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import PropTypes from "prop-types";
 
 import TRASH from "../../assets/trash.svg";
 
-import styles from "./RouteList.module.scss";
 import { Button, TextField } from "@mui/material";
 import { toast } from "react-toastify";
+import styles from "./RouteList.module.scss";
 
 const getItems = (count) =>
 	Array.from({ length: count }, (v, k) => k).map((k) => ({
@@ -161,3 +162,25 @@ export default function RouteList({ list, onChange }) {
 		</DragDropContext>
 	);
 }
+
+RouteList.propTypes = {
+	/**
+	 * List of destination
+	 */
+	list: PropTypes.arrayOf(
+		PropTypes.shape({
+			id: PropTypes.string,
+			content: PropTypes.string,
+		})
+	),
+	onChange: PropTypes.func,
+};
+
+RouteList.defaultProps = {
+	list: [
+		{ id: "item-0", content: "Destination A" },
+		{ id: "item-1", content: "Destination B" },
+		{ id: "item-2", content: "Destination C" },
+	],
+	onChange: () => {},
+};

@@ -1,9 +1,9 @@
-import NavigationButton from "./NavigationButton";
+import RouteList from "./RouteList";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 export default {
-	title: "Button/NavigationButton",
-	component: NavigationButton,
+	title: "Input/RouteList",
+	component: RouteList,
 	tags: ["autodocs"],
 	argTypes: {},
 };
@@ -12,8 +12,4 @@ export default {
 
 export const Normal = {
 	args: {},
-};
-
-export const Selected = {
-	args: { isHighlighted: true },
 };
