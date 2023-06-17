@@ -2,8 +2,11 @@
 
 .container {
 	display: flex;
+	width: max-content;
+	height: fit-content;
 	position: relative;
 	justify-content: center;
+	align-items: center;
 	border-radius: 10px;
 	gap: 15px;
 	padding: 22px 35px;
@@ -19,6 +22,7 @@
 	}
 
 	p {
+		font-size: 1rem;
 		font-weight: 500;
 	}
 
