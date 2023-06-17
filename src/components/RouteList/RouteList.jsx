@@ -1,6 +1,6 @@
+import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import PropTypes from "prop-types";
 
 import TRASH from "../../assets/trash.svg";
 

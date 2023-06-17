@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import COLORS from "../../constant/color";
 import CenteredModal from "../CenteredModal/CenteredModal";
 
@@ -14,20 +15,19 @@ import {
 	TextField,
 } from "@mui/material";
 import { ReactComponent as ADD_ICON } from "../../assets/add.svg";
-import { ReactComponent as DELETE_ICON } from "../../assets/delete.svg";
 import { ReactComponent as CHECK_ICON } from "../../assets/check.svg";
 import { ReactComponent as NEXT_ICON } from "../../assets/chevron.svg";
+import { ReactComponent as DELETE_ICON } from "../../assets/delete.svg";
 import RouteList from "../../components/RouteList/RouteList";
 import { API_ENDPOINT } from "../../constant/api";
 
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import ImageButton from "../ImageButton/ImageButton";
-import styles from "./EditTouristRouteModal.module.scss";
 import useChangeRoute from "../../hooks/touristRoute/useChangeRoute";
 import useCreateRoute from "../../hooks/touristRoute/useCreateRoute";
 import useCallAPIToast from "../../hooks/useCallAPIToast";
-import axios from "axios";
+import ImageButton from "../ImageButton/ImageButton";
+import styles from "./EditTouristRouteModal.module.scss";
 
 export const TOURIST_ROUTE_DEFAULT_VALUE = {
 	name: "",
@@ -329,3 +329,24 @@ export default function EditTouristRouteModal({
 		</CenteredModal>
 	);
 }
+
+EditTouristRouteModal.propTypes = {
+	isOpen: PropTypes.bool,
+	onClose: PropTypes.func,
+	data: PropTypes.shape({}),
+	setData: PropTypes.func,
+};
+
+EditTouristRouteModal.defaultProps = {
+	isOpen: false,
+	onClose: () => {},
+	data: {
+		name: "",
+		reservationFee: 0,
+		description: "",
+		images: [],
+		type: "",
+		route: [],
+	},
+	setData: () => {},
+};

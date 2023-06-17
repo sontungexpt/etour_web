@@ -6,7 +6,7 @@ import Modal from "react-modal";
 
 import styles from "./CenteredModal.module.scss";
 
-Modal.setAppElement("#modal");
+// Modal.setAppElement("#modal");
 
 export default function CenteredModal({
 	isOpen,
@@ -17,6 +17,7 @@ export default function CenteredModal({
 	return (
 		<Modal
 			isOpen={isOpen}
+			ariaHideApp={false}
 			onRequestClose={onClose}
 			className={styles.modal}
 			style={{
