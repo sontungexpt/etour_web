@@ -1,13 +1,24 @@
 .container {
 	width: 100%;
-	// min-height: 100vh;
 	display: grid;
-	grid-template-columns: 3fr 2fr;
+	grid-template-rows: max-content max-content max-content;
+	grid-template-columns: 4fr 3fr;
 	flex-direction: column;
 	gap: 50px;
 	padding: 80px 80px 50px 0px;
 
+	.pageTitle {
+		grid-column-start: 1;
+		grid-column-end: 2;
+      font-size: 2.1rem;
+	}
+
 	.header {
+      grid-column: 1;
+      grid-row: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
 		width: 100%;
 		position: relative;
 		border-radius: 20px;
@@ -16,6 +27,10 @@
 		background-color: white;
 		box-shadow: 0 0 20px 0 #dfdfdf;
 
+      h1 {
+         font-size: 1.8rem;
+      }
+
 		& > img {
 			width: calc(100% + 60px);
 			margin: 0 -30px;
@@ -23,10 +38,10 @@
 			object-fit: cover;
 		}
 
-      .tourName {
-         width: 80%;
-         margin-bottom: -0px;
-      }
+		.tourName {
+			width: 80%;
+			margin-bottom: -0px;
+		}
 	}
 
 	& > div:nth-child(1) {
