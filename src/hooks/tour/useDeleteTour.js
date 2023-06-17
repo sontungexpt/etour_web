@@ -18,10 +18,10 @@ export default function useDeleteTour() {
 		});
 	}, []);
 
-	function deleteTour(newData) {
+	function deleteTour(IDs) {
 		setData(null);
 		setError(null);
-		socket.emit("delete-tour", newData);
+		socket.emit("delete-tour", IDs);
 		setStatus(STATUS.PENDING);
 	}
 

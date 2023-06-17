@@ -42,6 +42,7 @@ import EditTourModal, {
 import { TOUR_COLUMN } from "../../constant/dataGridColumns";
 import { DataGrid } from "@mui/x-data-grid";
 import useCallAPIToast from "../../hooks/useCallAPIToast";
+import useDeleteTour from "../../hooks/tour/useDeleteTour";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
@@ -51,6 +52,20 @@ export default function DetailRoutePage() {
 
 	const { modalState: editTourModalState, openModal: openEditTourModal } =
 		useEditTourModalState(id);
+
+	const { deleteTour, status: deleteTourStatus } = useDeleteTour();
+
+	useCallAPIToast({
+		status: deleteTourStatus,
+		message: {
+			pending: "Sending data...",
+			success: "Successfully delete tour",
+			fail: "Fail to delete tour",
+		},
+		onSuccess: () => {
+			setSelectedIDs([]);
+		},
+	});
 
 	const { data: routeInformation, status: getRouteInfoStatus } =
 		useRouteById(id);
@@ -79,7 +94,7 @@ export default function DetailRoutePage() {
 	const { modalState, openModal } = useEditTouristRouteModalState();
 
 	const handleDelete = () => {
-		console.log({ selectedIDs });
+		deleteTour(selectedIDs);
 	};
 
 	return (
