@@ -1,15 +1,15 @@
-import { createHashRouter, createBrowserRouter } from "react-router-dom";
-import OnBoardingPage from "../pages/OnBoardingPage/OnBoardingPage";
+import { createBrowserRouter } from "react-router-dom";
 import ENDPOINT from "../constant/endponint";
-import HomePage from "../pages/HomePage/HomePage";
 import AuthenticationPage from "../pages/AuthenticationPage/AuthenticationPage";
-import TourRouteManagementPage from "../pages/TourRouteManagementPage/TourRouteManagementPage";
 import BasePage from "../pages/BasePage/BasePage";
-import TourManagementPage from "../pages/TourManagementPage/TourManagementPage";
 import DetailRoutePage from "../pages/DetailRoutePage/DetailRoutePage";
+import HomePage from "../pages/HomePage/HomePage";
+import OnBoardingPage from "../pages/OnBoardingPage/OnBoardingPage";
+import TourManagementPage from "../pages/TourManagementPage/TourManagementPage";
+import TourRouteManagementPage from "../pages/TourRouteManagementPage/TourRouteManagementPage";
 import VoucherManagementPage from "../pages/VoucherManagementPage/VoucherManagementPage";
 
-export default createHashRouter([
+export default createBrowserRouter([
 	{
 		path: "/",
 		element: <BasePage />,

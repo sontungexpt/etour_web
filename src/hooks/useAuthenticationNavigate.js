@@ -11,7 +11,6 @@ export default function useAuthenticationNavigate() {
 
 	useEffect(() => {
 		if (authenticationState == AUTHENTICATION_STATE.UNAUTHENTICATED) {
-			console.log({ location });
 			if (location.pathname != ENDPOINT.ON_BOARDING)
 				navigate(ENDPOINT.ON_BOARDING);
 		}
