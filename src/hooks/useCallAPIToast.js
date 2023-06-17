@@ -4,8 +4,9 @@ import { toast } from "react-toastify";
 
 export default function useCallAPIToast({
 	status,
-	message: { pending, success, fail },
+	message: { pending, success, fail, update },
 	onPending = () => {},
+	onUpdate = () => {},
 	onSuccess = () => {},
 	onFail = () => {},
 	onResponse = () => {},
@@ -16,34 +17,46 @@ export default function useCallAPIToast({
 		if (!status) return;
 		if (!toastRef.current) toastRef.current = toast.loading(pending);
 
-		if (status == STATUS.PENDING) {
+		if (status == STATUS.UPDATE) {
+			toast.update(toastRef.current, {
+				render: update || success,
+				type: "info",
+				isLoading: false,
+				autoClose: 2000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: false,
+			});
+			onUpdate();
+			toastRef.current = null;
+		} else if (status == STATUS.PENDING) {
 		} else {
 			if (status == STATUS.SUCCESS) {
 				toast.update(toastRef.current, {
 					render: success,
 					type: "success",
 					isLoading: false,
-					autoClose: 5000,
+					autoClose: 2000,
 					hideProgressBar: false,
 					closeOnClick: true,
 					pauseOnHover: false,
 				});
-            onSuccess()
+				onSuccess();
 			} else if (status == STATUS.FAIL) {
 				toast.update(toastRef.current, {
 					render: fail,
 					type: "fail",
 					isLoading: false,
-					autoClose: 5000,
+					autoClose: 3000,
 					hideProgressBar: false,
 					closeOnClick: true,
 					pauseOnHover: false,
 				});
-            onFail()
+				onFail();
 			}
 
 			toastRef.current = null;
-         onResponse()
+			onResponse();
 		}
 	}, [status]);
 

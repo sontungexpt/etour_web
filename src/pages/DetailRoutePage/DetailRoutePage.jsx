@@ -41,6 +41,7 @@ import EditTourModal, {
 } from "../../components/EditTourModal/EditTourModal";
 import { TOUR_COLUMN } from "../../constant/dataGridColumns";
 import { DataGrid } from "@mui/x-data-grid";
+import useCallAPIToast from "../../hooks/useCallAPIToast";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
@@ -50,17 +51,30 @@ export default function DetailRoutePage() {
 
 	const { modalState: editTourModalState, openModal: openEditTourModal } =
 		useEditTourModalState(id);
-	const {
-		data: routeInformation,
-		isError: isRouteInformationError,
-		error: routeInformationError,
-	} = useRouteById(id);
 
-	const {
-		data: tours,
-		isError: isRetrieveTourError,
-		error: retrieveTourError,
-	} = useTourByRouteId(id);
+	const { data: routeInformation, status: getRouteInfoStatus } =
+		useRouteById(id);
+
+	useCallAPIToast({
+		status: getRouteInfoStatus,
+		message: {
+			pending: "Loading tourist route data...",
+			success: "Successfully load tourist route data",
+			fail: "Fail to load tourist route data",
+			update: "Success to update data",
+		},
+	});
+
+	const { data: tours, status: getTourListStatus } = useTourByRouteId(id);
+
+	useCallAPIToast({
+		status: getTourListStatus,
+		message: {
+			pending: "Loading tour list data...",
+			success: "Successfully load tour list data",
+			fail: "Fail to load tour list data",
+		},
+	});
 
 	const { modalState, openModal } = useEditTouristRouteModalState();
 

@@ -1,26 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSocket from "../useSocket";
+import { STATUS } from "../../constant/status";
 
 export default function useTourByRouteId(id) {
-	const [routes, setRoutes] = useState([]);
+	const [data, setData] = useState([]);
+	const [status, setStatus] = useState();
 	const [error, setError] = useState(null);
+
+	useEffect(() => {
+		setStatus(STATUS.PENDING);
+	}, []);
 
 	useSocket(
 		(socket) => {
 			socket.emit("filter-tour", { touristRoute: id });
 			socket.on("list-tour", (data) => {
-				setRoutes(data.data);
+				setStatus(STATUS.SUCCESS);
+				setData(data.data);
 			});
 			socket.on("tour", (data) => {
-				console.log({ data });
-				setRoutes((prev) => [data.data, ...prev]);
+				setStatus(STATUS.UPDATE);
+				setData((prev) => [data.data, ...prev]);
 			});
 			socket.on("error", (error) => {
+				setStatus(STATUS.FAIL);
 				setError(error);
 			});
 		},
 		[id]
 	);
 
-	return { data: routes, isError: error !== null, error };
+	return { data, status, isError: error !== null, error };
 }
