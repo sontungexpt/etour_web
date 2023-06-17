@@ -1,102 +1,99 @@
 .container {
-	width: 100%;
-	min-height: 100vh;
-	display: flex;
-	align-items: center;
-	padding: 70px 0px;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem;
 
-	.main {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 100px;
+    .main {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 100px;
+        & > h1 {
+            font-size: 2rem;
+        }
 
-		& > h1 {
-			font-size: 2rem;
-		}
+        .dashboard {
+            display: grid;
+            grid-template-columns: 4fr 5fr;
+            gap: 30px;
 
-		.dashboard {
-			display: grid;
-			grid-template-columns: 4fr 5fr;
-			gap: 30px;
+            .information {
+                width: 100%;
+                display: flex;
+                flex-direction: row-reverse;
+                gap: 40px;
 
-			.information {
-				width: 100%;
-				display: flex;
-				flex-direction: column;
-				gap: 40px;
+                .box {
+                    width: max-content;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 25px 30px;
+                    gap: 30px;
 
-				.box {
-					width: max-content;
-					display: flex;
-					flex-direction: column;
-					align-items: flex-start;
-					padding: 25px 30px;
-					gap: 30px;
-					// background-color: #00baf823;
+                    .functionBox {
+                        display: flex;
+                        gap: 15px;
+                        flex-wrap: wrap;
+                    }
 
-					.functionBox {
-						display: flex;
-						gap: 15px;
-						flex-wrap: wrap;
-					}
+                    .staffBasicInfo {
+                        display: flex;
+                        gap: 15px;
 
-					.staffBasicInfo {
-						display: flex;
-						gap: 15px;
+                        img {
+                            width: 80px;
+                            height: 80px;
+                            border-radius: 9999px;
+                            background-color: #e4f5ff;
+                        }
 
-						img {
-							width: 80px;
-							height: 80px;
-							border-radius: 9999px;
-							background-color: #e4f5ff;
-						}
+                        & > div {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-evenly;
 
-						& > div {
-							display: flex;
-							flex-direction: column;
-							justify-content: space-evenly;
+                            p:nth-child(2) {
+                                color: #a1a1a1;
+                            }
+                        }
+                    }
 
-							p:nth-child(2) {
-								color: #a1a1a1;
-							}
-						}
-					}
+                    .permission {
+                        ul {
+                            margin-left: 30px;
+                        }
+                    }
+                }
 
-					.permission {
-						ul {
-							margin-left: 30px;
-						}
-					}
-				}
+                .signout {
+                    font-weight: 500;
+                    color: white;
+                    text-transform: none;
+                }
+            }
 
-				.signout {
-					font-weight: 500;
-					color: white;
-					text-transform: none;
-				}
-			}
+            .function {
+                padding: 0px 50px;
+                display: flex;
+                flex-direction: column;
+                gap: 40px;
 
-			.function {
-				padding: 0px 50px;
-				display: flex;
-				flex-direction: column;
-				gap: 40px;
+                .item {
+                    padding: 20px;
+                    display: flex;
+                    justify-content: space-between;
+                    border: 1px solid black;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: 0.3s;
 
-				.item {
-					padding: 20px;
-					display: flex;
-					justify-content: space-between;
-					border: 1px solid black;
-					border-radius: 5px;
-					cursor: pointer;
-					transition: 0.3s;
-
-					&:hover {
-						background-color: #eeeeee;
-					}
-				}
-			}
-		}
-	}
+                    &:hover {
+                        background-color: #eeeeee;
+                    }
+                }
+            }
+        }
+    }
 }
