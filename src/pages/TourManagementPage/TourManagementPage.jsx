@@ -21,7 +21,7 @@ import CenteredModal from "../../components/CenteredModal/CenteredModal";
 import RouteList from "../../components/RouteList/RouteList";
 import useCreateRoute from "../../hooks/touristRoute/useCreateRoute";
 import usePersistentState from "../../hooks/usePersistentState";
-import useTouristRoute from "../../hooks/useTouristRoute";
+import useTouristRoute from "../../hooks/touristRoute/useTouristRoute";
 
 import styles from "./TourManagementPage.module.scss";
 

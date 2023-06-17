@@ -17,7 +17,7 @@ import {
 	setRoutes,
 	setGetListTouristRouteError,
 } from "../../features/touristRouteSlice";
-import useTouristRoute from "../../hooks/useTouristRoute";
+import useTouristRoute from "../../hooks/touristRoute/useTouristRoute";
 
 export default function BasePage() {
 	const location = useLocation();

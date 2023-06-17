@@ -28,7 +28,7 @@ import { API_ENDPOINT } from "../../constant/api";
 import { selectBasicInformation } from "../../features/staffSlice";
 import useCreateVoucher from "../../hooks/useCreateVoucher";
 import usePersistentState from "../../hooks/usePersistentState";
-import useTouristRoute from "../../hooks/useTouristRoute";
+import useTouristRoute from "../../hooks/touristRoute/useTouristRoute";
 import styles from "./VoucherManagementPage.module.scss";
 import useVoucherList from "../../hooks/useVoucherList";
 

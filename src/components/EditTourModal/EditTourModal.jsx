@@ -22,11 +22,11 @@ import COLORS from "../../constant/color";
 import { toast } from "react-toastify";
 import CenteredModal from "../../components/CenteredModal/CenteredModal";
 import { API_ENDPOINT } from "../../constant/api";
-import useCreateTour from "../../hooks/useCreateTour";
+import useCreateTour from "../../hooks/tour/useCreateTour";
 import usePersistentState from "../../hooks/usePersistentState";
-import useRouteById from "../../hooks/useRouteById";
-import useTourByRouteId from "../../hooks/useTourByRouteId";
-import useTouristRoute from "../../hooks/useTouristRoute";
+import useRouteById from "../../hooks/touristRoute/useRouteById";
+import useTourByRouteId from "../../hooks/tour/useTourByRouteId";
+import useTouristRoute from "../../hooks/touristRoute/useTouristRoute";
 
 import { ReactComponent as EDIT_ICON } from "../../assets/edit.svg";
 import { ReactComponent as ADD_ICON } from "../../assets/add.svg";

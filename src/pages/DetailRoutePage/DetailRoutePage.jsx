@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
+	Box,
 	Button,
 	FormControl,
 	FormHelperText,
@@ -20,14 +21,15 @@ import COLORS from "../../constant/color";
 import { toast } from "react-toastify";
 import CenteredModal from "../../components/CenteredModal/CenteredModal";
 import { API_ENDPOINT } from "../../constant/api";
-import useCreateTour from "../../hooks/useCreateTour";
+import useCreateTour from "../../hooks/tour/useCreateTour";
 import usePersistentState from "../../hooks/usePersistentState";
-import useRouteById from "../../hooks/useRouteById";
-import useTourByRouteId from "../../hooks/useTourByRouteId";
-import useTouristRoute from "../../hooks/useTouristRoute";
+import useRouteById from "../../hooks/touristRoute/useRouteById";
+import useTourByRouteId from "../../hooks/tour/useTourByRouteId";
+import useTouristRoute from "../../hooks/touristRoute/useTouristRoute";
 
 import { ReactComponent as EDIT_ICON } from "../../assets/edit.svg";
 import { ReactComponent as ADD_ICON } from "../../assets/add.svg";
+import { ReactComponent as DELETE_ICON } from "../../assets/delete.svg";
 
 import styles from "./DetailRoutePage.module.scss";
 import ImageButton from "../../components/ImageButton/ImageButton";
@@ -42,6 +44,7 @@ import { DataGrid } from "@mui/x-data-grid";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
+	const [selectedIDs, setSelectedIDs] = useState([]);
 
 	const { id } = useParams();
 
@@ -60,6 +63,10 @@ export default function DetailRoutePage() {
 	} = useTourByRouteId(id);
 
 	const { modalState, openModal } = useEditTouristRouteModalState();
+
+	const handleDelete = () => {
+		console.log({ selectedIDs });
+	};
 
 	return (
 		<>
@@ -95,14 +102,24 @@ export default function DetailRoutePage() {
 						Edit
 					</ImageButton>
 				</div>
-				<ImageButton
-					onClick={() => openEditTourModal({})}
-					backgroundColor={COLORS.editBackground}
-					color={COLORS.edit}
-					icon={ADD_ICON}
-				>
-					Add new tour
-				</ImageButton>
+				<Box sx={{ display: "flex", gap: 2 }}>
+					<ImageButton
+						onClick={() => openEditTourModal({})}
+						backgroundColor={COLORS.editBackground}
+						color={COLORS.edit}
+						icon={ADD_ICON}
+					>
+						Add new tour
+					</ImageButton>
+					<ImageButton
+						onClick={handleDelete}
+						backgroundColor={COLORS.deleteBackground}
+						color={COLORS.delete}
+						icon={DELETE_ICON}
+					>
+						Delete
+					</ImageButton>
+				</Box>
 				<div className={styles.data}>
 					<DataGrid
 						rows={tours || []}
@@ -115,19 +132,19 @@ export default function DetailRoutePage() {
 								// handleEdit(id);
 							}
 							if (selectedIDs.includes(id)) {
-								// setSelectedIDs((prev) => [
-								// 	...prev.filter((d) => d != id),
-								// ]);
+								setSelectedIDs((prev) => [
+									...prev.filter((d) => d != id),
+								]);
 							} else {
-								// setSelectedIDs((prev) => [...prev, id]);
+								setSelectedIDs((prev) => [...prev, id]);
 							}
 						}}
 						onColumnHeaderClick={({ field }) => {
 							if (field == "__check__")
 								if (selectedIDs.length == 0) {
-									// setSelectedIDs(data.map((row) => row._id));
+									setSelectedIDs(tours.map((row) => row._id));
 								} else {
-									// setSelectedIDs([]);
+									setSelectedIDs([]);
 								}
 						}}
 					/>
