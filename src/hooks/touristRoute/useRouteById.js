@@ -1,15 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useSocket from "../useSocket";
 import { STATUS } from "../../constant/status";
+import useCallAPIToast from "../useCallAPIToast";
+import SocketContext from "../../contexts/SocketContext";
 
 export default function useRouteById(id) {
 	const [route, setRoute] = useState(null);
 	const [status, setStatus] = useState();
 	const [error, setError] = useState(null);
+	const { socket: globalSocket } = useContext(SocketContext);
+
+	useCallAPIToast({
+		status,
+		message: {
+			pending: "Loading tourist route data...",
+			success: "Successfully load tourist route data",
+			fail: `Fail to load tourist route data: ${error?.message}`,
+			update: "Success to update data",
+		},
+	});
 
 	useEffect(() => {
-		setStatus(STATUS.PENDING);
-	}, []);
+		if (globalSocket) setStatus(STATUS.PENDING);
+	}, [!!globalSocket]);
 
 	useEffect(() => {
 		if (status == STATUS.UPDATE) setStatus("");

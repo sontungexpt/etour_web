@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export default function useCallAPIToast({
 	status,
-	message: { pending, success, fail, update },
+	message: { pending, success, fail, update = "" },
 	onPending = () => {},
 	onUpdate = () => {},
 	onSuccess = () => {},
@@ -15,17 +15,23 @@ export default function useCallAPIToast({
 
 	useEffect(() => {
 		if (!status) return;
-		if (!toastRef.current) toastRef.current = toast.loading(pending);
+		if (!toastRef.current)
+			toastRef.current = toast.loading(pending, {
+				position: "bottom-left",
+				theme: "colored",
+			});
 
 		if (status == STATUS.UPDATE) {
 			toast.update(toastRef.current, {
+				position: "bottom-left",
 				render: update || success,
 				type: "info",
 				isLoading: false,
 				autoClose: 2000,
-				hideProgressBar: false,
+				hideProgressBar: true,
 				closeOnClick: true,
 				pauseOnHover: false,
+				theme: "colored",
 			});
 			onUpdate();
 			toastRef.current = null;
@@ -33,24 +39,28 @@ export default function useCallAPIToast({
 		} else {
 			if (status == STATUS.SUCCESS) {
 				toast.update(toastRef.current, {
+					position: "bottom-left",
 					render: success,
 					type: "success",
 					isLoading: false,
-					autoClose: 2000,
-					hideProgressBar: false,
+					autoClose: 4000,
+					hideProgressBar: true,
 					closeOnClick: true,
 					pauseOnHover: false,
+					theme: "colored",
 				});
 				onSuccess();
 			} else if (status == STATUS.FAIL) {
 				toast.update(toastRef.current, {
+					position: "bottom-left",
 					render: fail,
-					type: "fail",
+					type: "error",
 					isLoading: false,
-					autoClose: 3000,
+					autoClose: 5000,
 					hideProgressBar: false,
 					closeOnClick: true,
-					pauseOnHover: false,
+					pauseOnHover: true,
+					// theme: "colored",
 				});
 				onFail();
 			}

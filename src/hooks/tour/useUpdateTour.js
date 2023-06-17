@@ -3,7 +3,7 @@ import useSocket from "../useSocket";
 import { STATUS } from "../../constant/status";
 import useCallAPIToast from "../useCallAPIToast";
 
-export default function useDeleteTour() {
+export default function useUpdateTour() {
 	const [data, setData] = useState(null);
 	const [status, setStatus] = useState();
 	const [error, setError] = useState(null);
@@ -11,32 +11,29 @@ export default function useDeleteTour() {
 	useCallAPIToast({
 		status,
 		message: {
-			pending: "Sending data...",
-			success: "Successfully delete tour",
-			fail: `Fail to delete tour: ${error?.message}`,
-		},
-		onSuccess: () => {
-			setSelectedIDs([]);
+			pending: "Uploading data...",
+			success: "Update tour successfully",
+			fail: `Fail to update tour: ${error?.message}`,
 		},
 	});
 
 	const socket = useSocket((socket) => {
-		socket.on("delete-tour-result", (data) => {
-			setData(data.data);
+		socket.on("update-tour-result", (data) => {
 			setStatus(STATUS.SUCCESS);
+			setData(data.data);
 		});
 		socket.on("error", (error) => {
-			setError(error);
 			setStatus(STATUS.FAIL);
+			setError(error);
 		});
 	}, []);
 
-	function deleteTour(IDs) {
+	function updateTour(data) {
 		setData(null);
 		setError(null);
-		socket.emit("delete-tour", IDs);
 		setStatus(STATUS.PENDING);
+		socket.emit("update-tour", data);
 	}
 
-	return { deleteTour, status, data, error };
+	return { updateTour, status, data, error };
 }

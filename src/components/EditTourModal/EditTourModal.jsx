@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useRef, useState } from "react";
+
+import dayjs from "dayjs";
 
 import _ from "lodash";
 
@@ -13,31 +14,23 @@ import {
 	Select,
 	TextField,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import COLORS from "../../constant/color";
 
-import { toast } from "react-toastify";
 import CenteredModal from "../../components/CenteredModal/CenteredModal";
 import { API_ENDPOINT } from "../../constant/api";
 import useCreateTour from "../../hooks/tour/useCreateTour";
-import usePersistentState from "../../hooks/usePersistentState";
-import useRouteById from "../../hooks/touristRoute/useRouteById";
-import useTourByRouteId from "../../hooks/tour/useTourByRouteId";
-import useTouristRoute from "../../hooks/touristRoute/useTouristRoute";
 
-import { ReactComponent as EDIT_ICON } from "../../assets/edit.svg";
 import { ReactComponent as ADD_ICON } from "../../assets/add.svg";
+import { ReactComponent as CHECK_ICON } from "../../assets/check.svg";
 
 import ImageButton from "../../components/ImageButton/ImageButton";
-import EditTouristRouteModal, {
-	useEditTouristRouteModalState,
-} from "../../components/EditTouristRouteModal/EditTouristRouteModal";
 
-import styles from "./EditTourModal.module.scss";
 import useCallAPIToast from "../../hooks/useCallAPIToast";
+import styles from "./EditTourModal.module.scss";
+import useUpdateTour from "../../hooks/tour/useUpdateTour";
 
 export function useEditTourModalState(touristRoute) {
 	const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
@@ -76,20 +69,8 @@ export function useEditTourModalState(touristRoute) {
 }
 
 export default function EditTourModal({ isOpen, onClose, data, setData }) {
-	const {
-		createTour,
-		error: createdError,
-		status: createdStatus,
-	} = useCreateTour();
-
-	useCallAPIToast({
-		status: createdStatus,
-		message: {
-			pending: "Uploading data...",
-			success: "Create tour successfully",
-			fail: `Fail to create tour: ${createdError?.message}`,
-		},
-	});
+	const { createTour } = useCreateTour();
+	const { updateTour } = useUpdateTour();
 
 	const choosePictureRef = useRef();
 
@@ -106,6 +87,7 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
 				: null;
 		const submitData = {
 			..._.pick(data, [
+				"_id",
 				"name",
 				"price",
 				"description",
@@ -117,8 +99,8 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
 			]),
 			...(image ? { image } : {}),
 		};
-		console.log({ submitData });
-		createTour(submitData);
+		if (data._id) updateTour(submitData);
+		else createTour(submitData);
 	}
 
 	return (
@@ -150,7 +132,7 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
 						{data.image ? (
 							<img
 								src={
-									data.image
+									data.image?.name
 										? URL.createObjectURL(data.image)
 										: `${API_ENDPOINT.IMAGE}/${data.image}`
 								}
@@ -191,14 +173,16 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
 						variant="standard"
 					/>
 					<LocalizationProvider dateAdapter={AdapterDayjs}>
-						<DatePicker
+						<DateTimePicker
 							label="From"
+							value={dayjs(data.from)}
 							onChange={(d) =>
 								setData((prev) => ({ ...prev, from: new Date(d.$d) }))
 							}
 						/>
-						<DatePicker
+						<DateTimePicker
 							label="To"
+							value={dayjs(data.to)}
 							onChange={(d) =>
 								setData((prev) => ({ ...prev, to: new Date(d.$d) }))
 							}
@@ -224,18 +208,16 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
 						<FormHelperText>Promotion nè</FormHelperText>
 					</FormControl>
 				</div>
-				<Button
+				<ImageButton
+					backgroundColor={COLORS.submit}
+					color={COLORS.submitBackground}
+					fullWidth={true}
+					icon={CHECK_ICON}
 					onClick={handleSubmit}
-					variant="contained"
-					sx={{
-						backgroundColor: COLORS.primary,
-						borderRadius: "8px",
-						height: "40px",
-						width: "100%",
-					}}
+					style={{ padding: "15px 0" }}
 				>
-					<p className={styles.buttonText}>Submit</p>
-				</Button>
+					Submit
+				</ImageButton>
 			</div>
 		</CenteredModal>
 	);

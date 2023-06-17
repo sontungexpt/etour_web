@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { setBasicInformation } from "../../features/staffSlice";
@@ -18,9 +18,14 @@ import {
 	setGetListTouristRouteError,
 } from "../../features/touristRouteSlice";
 import useTouristRoute from "../../hooks/touristRoute/useTouristRoute";
+import { STATUS } from "../../constant/status";
+import SocketContext from "../../contexts/SocketContext";
+import useCallAPIToast from "../../hooks/useCallAPIToast";
 
 export default function BasePage() {
 	const location = useLocation();
+	const { socket, setSocket } = useContext(SocketContext);
+	const [status, setStatus] = useState(STATUS.PENDING);
 	const navigate = useNavigate();
 	useAuthenticationNavigate();
 
@@ -30,6 +35,19 @@ export default function BasePage() {
 	useEffect(() => {
 		if (data) dispatch(setBasicInformation(data));
 	}, [data]);
+
+	useEffect(() => {
+		if (socket) setStatus(STATUS.SUCCESS);
+	}, [socket]);
+
+	useCallAPIToast({
+		status,
+		message: {
+			pending: "Connecting...",
+			success: "Connect successfully",
+			fail: "Fail to connect to server",
+		},
+	});
 
 	const { data: routes, error: routeError } = useTouristRoute({
 		route: [],

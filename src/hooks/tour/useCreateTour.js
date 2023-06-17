@@ -1,11 +1,21 @@
 import { useState } from "react";
 import useSocket from "../useSocket";
 import { STATUS } from "../../constant/status";
+import useCallAPIToast from "../useCallAPIToast";
 
 export default function useCreateTour() {
 	const [data, setData] = useState(null);
 	const [status, setStatus] = useState();
 	const [error, setError] = useState(null);
+
+	useCallAPIToast({
+		status,
+		message: {
+			pending: "Uploading data...",
+			success: "Create tour successfully",
+			fail: `Fail to create tour: ${error?.message}`,
+		},
+	});
 
 	const socket = useSocket((socket) => {
 		socket.on("create-tour-result", (data) => {

@@ -1,48 +1,29 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import {
-	Box,
-	Button,
-	FormControl,
-	FormHelperText,
-	Input,
-	InputLabel,
-	MenuItem,
-	Select,
-	TextField,
-} from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Box } from "@mui/material";
 
 import COLORS from "../../constant/color";
 
-import { toast } from "react-toastify";
-import CenteredModal from "../../components/CenteredModal/CenteredModal";
 import { API_ENDPOINT } from "../../constant/api";
-import useCreateTour from "../../hooks/tour/useCreateTour";
-import usePersistentState from "../../hooks/usePersistentState";
-import useRouteById from "../../hooks/touristRoute/useRouteById";
 import useTourByRouteId from "../../hooks/tour/useTourByRouteId";
-import useTouristRoute from "../../hooks/touristRoute/useTouristRoute";
+import useRouteById from "../../hooks/touristRoute/useRouteById";
 
-import { ReactComponent as EDIT_ICON } from "../../assets/edit.svg";
 import { ReactComponent as ADD_ICON } from "../../assets/add.svg";
 import { ReactComponent as DELETE_ICON } from "../../assets/delete.svg";
+import { ReactComponent as EDIT_ICON } from "../../assets/edit.svg";
 
-import styles from "./DetailRoutePage.module.scss";
-import ImageButton from "../../components/ImageButton/ImageButton";
-import EditTouristRouteModal, {
-	useEditTouristRouteModalState,
-} from "../../components/EditTouristRouteModal/EditTouristRouteModal";
+import { DataGrid } from "@mui/x-data-grid";
 import EditTourModal, {
 	useEditTourModalState,
 } from "../../components/EditTourModal/EditTourModal";
+import EditTouristRouteModal, {
+	useEditTouristRouteModalState,
+} from "../../components/EditTouristRouteModal/EditTouristRouteModal";
+import ImageButton from "../../components/ImageButton/ImageButton";
 import { TOUR_COLUMN } from "../../constant/dataGridColumns";
-import { DataGrid } from "@mui/x-data-grid";
-import useCallAPIToast from "../../hooks/useCallAPIToast";
 import useDeleteTour from "../../hooks/tour/useDeleteTour";
+import styles from "./DetailRoutePage.module.scss";
 
 export default function DetailRoutePage() {
 	const navigate = useNavigate();
@@ -53,45 +34,14 @@ export default function DetailRoutePage() {
 	const { modalState: editTourModalState, openModal: openEditTourModal } =
 		useEditTourModalState(id);
 
-	const { deleteTour, status: deleteTourStatus } = useDeleteTour();
-
-	useCallAPIToast({
-		status: deleteTourStatus,
-		message: {
-			pending: "Sending data...",
-			success: "Successfully delete tour",
-			fail: "Fail to delete tour",
-		},
-		onSuccess: () => {
-			setSelectedIDs([]);
-		},
-	});
-
-	const { data: routeInformation, status: getRouteInfoStatus } =
-		useRouteById(id);
-
-	useCallAPIToast({
-		status: getRouteInfoStatus,
-		message: {
-			pending: "Loading tourist route data...",
-			success: "Successfully load tourist route data",
-			fail: "Fail to load tourist route data",
-			update: "Success to update data",
-		},
-	});
-
-	const { data: tours, status: getTourListStatus } = useTourByRouteId(id);
-
-	useCallAPIToast({
-		status: getTourListStatus,
-		message: {
-			pending: "Loading tour list data...",
-			success: "Successfully load tour list data",
-			fail: "Fail to load tour list data",
-		},
-	});
-
+	const { deleteTour } = useDeleteTour();
+	const { data: routeInformation } = useRouteById(id);
+	const { data: tours } = useTourByRouteId(id);
 	const { modalState, openModal } = useEditTouristRouteModalState();
+
+	const handleEdit = (id) => {
+		openEditTourModal(tours.find((tour) => tour._id == id));
+	};
 
 	const handleDelete = () => {
 		deleteTour(selectedIDs);
@@ -158,7 +108,7 @@ export default function DetailRoutePage() {
 						onCellClick={({ row, field }) => {
 							const id = row._id;
 							if (field != "__check__") {
-								// handleEdit(id);
+								handleEdit(id);
 							}
 							if (selectedIDs.includes(id)) {
 								setSelectedIDs((prev) => [
@@ -177,36 +127,6 @@ export default function DetailRoutePage() {
 								}
 						}}
 					/>
-					{/* <div className={styles.table}>
-						<div className={styles.line}>
-							<p>Name</p>
-							<p>From</p>
-							<p>Type</p>
-							<p>Customers</p>
-						</div>
-						{tours?.map?.(({ from, name, type }, index) => (
-							<div key={index}>
-								<hr />
-								<div
-									onClick={() => {
-										navigate(_id);
-									}}
-									className={styles.line}
-								>
-									<p>{name}</p>
-									<p>
-										{new Intl.DateTimeFormat("en-GB", {
-											dateStyle: "full",
-											timeStyle: "short",
-											timeZone: "Asia/Ho_Chi_Minh",
-										}).format(new Date(from))}
-									</p>
-									<p>{type}</p>
-									<p>{0}</p>
-								</div>
-							</div>
-						))}
-					</div> */}
 				</div>
 			</div>
 			<EditTourModal {...editTourModalState} />

@@ -120,22 +120,6 @@ export default function EditTouristRouteModal({
 	async function handleSubmit() {
 		onClose();
 
-		// const formData = new FormData();
-		// formData.append('image', data.images[0])
-
-		// const config = {
-		// 	method: 'post',
-		// 	url: 'https://etour-server.hoanghy.tech/images',
-		// 	headers: {
-		// 		'Content-Type': 'multipart/form-data'
-		// 	},
-		// 	data: formData
-		// }
-
-		// const res = await axios(config)
-		// console.log({data: res.data})
-		// console.log(data.images[0])
-
 		const submitData = {
 			..._.pick(data, [
 				"_id",
@@ -312,6 +296,7 @@ export default function EditTouristRouteModal({
 						fullWidth={true}
 						icon={CHECK_ICON}
 						onClick={handleSubmit}
+						style={{padding: '15px 0'}}
 					>
 						Submit
 					</ImageButton>
@@ -320,6 +305,7 @@ export default function EditTouristRouteModal({
 							icon={DELETE_ICON}
 							color={COLORS.delete}
 							backgroundColor={COLORS.deleteBackground}
+						style={{padding: '15px 20px'}}
 						>
 							Delete
 						</ImageButton>

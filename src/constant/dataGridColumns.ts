@@ -58,12 +58,8 @@ export const TOUR_COLUMN: GridColDef[] = [
 		field: "from",
 		headerName: "Departure date",
 		width: 250,
-	},
-	{
-		field: "customer",
-		headerName: "Tickets",
-		width: 150,
-		description: "Total ticket",
+		valueGetter: (param) =>
+			moment(param.row.from).format("DD MMMM YYYY, h:mm:ss a"),
 	},
 	{
 		field: "updatedAt",

@@ -7,7 +7,7 @@
 
 	.drawer {
 		left: 0px;
-		width: 400px;
+		width: 350px;
 		height: 100vh;
 		z-index: 10;
 		padding: 20px 0px 0 40px;
@@ -35,6 +35,6 @@
 	.content {
 		width: 100%;
 		overflow: auto;
-		padding-left: 40px;
+		padding-left: 100px;
 	}
 }
