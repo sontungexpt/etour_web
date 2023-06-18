@@ -8,6 +8,7 @@ const ENDPOINT = {
     VOUCHER: '/voucher',
     VALIDATE_COMPANY: '/validate-company',
     CHAT: '/chat',
+    REPORT: '/report',
 };
 
 export default ENDPOINT;
