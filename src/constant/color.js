@@ -16,6 +16,9 @@ const COLORS = {
 
 	disabled: "#9a9a9c",
 	disabledBackground: "#ebebeb",
+
+	dark: "#00171F",
+	darkBackground: "#fff",
 };
 
 export default COLORS;
