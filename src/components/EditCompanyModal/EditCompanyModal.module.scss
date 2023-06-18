@@ -42,10 +42,17 @@
         color: white;
     }
 
+    .image {
+        margin-top: 10px;
+        width: 100%;
+        object-fit: cover;
+    }
+
     .imagePreview {
         overflow: auto;
         display: flex;
         padding-bottom: 7px;
+        margin-top: 20px;
 
         img {
             width: 70%;
