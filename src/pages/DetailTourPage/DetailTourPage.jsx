@@ -13,6 +13,9 @@ import { ReactComponent as ADD_ICON } from '@/assets/add.svg';
 import { ReactComponent as EXPAND_ICON } from '@/assets/expand.svg';
 import useTourNotification from '@/hooks/notification/useTourNotification';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import EditNotificationModal, {
+    useEditNotificationState,
+} from '@/components/EditNotificationModal/EditNotificationModal';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function DetailTourPage() {
@@ -20,6 +23,8 @@ export default function DetailTourPage() {
 
     const { data } = useTourById(id);
     const { data: notifications } = useTourNotification(id);
+
+    const { modalState, openModal: openEditNotificationModal } = useEditNotificationState(id);
 
     const { modalState: editTourModalState, openModal } = useEditTourModalState(id);
 
@@ -53,10 +58,12 @@ export default function DetailTourPage() {
                     </ImageButton>
                 </div>
                 <div className={styles.notification}>
+                    <h1>Notification list</h1>
                     <ImageButton
                         icon={ADD_ICON}
                         color={COLORS.editBackground}
                         backgroundColor={COLORS.lightEditBackground}
+                        onClick={() => openEditNotificationModal({})}
                         fullWidth
                     >
                         Add notification
@@ -73,7 +80,9 @@ export default function DetailTourPage() {
                                         {notification?.title}
                                     </Typography>
                                     <Typography sx={{ color: 'text.secondary' }}>
-                                        {notification?.createdAt}
+                                        {moment(notification?.createdAt).format(
+                                            'DD MMMM YYYY, h:mm:ss a'
+                                        )}
                                     </Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
@@ -84,6 +93,7 @@ export default function DetailTourPage() {
                     </div>
                 </div>
             </div>
+            <EditNotificationModal {...modalState} />
             <EditTourModal {...editTourModalState} />
         </>
     );

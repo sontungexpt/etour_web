@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 
 import dayjs from 'dayjs';
+import { useForm, Controller } from 'react-hook-form';
 
 import _ from 'lodash';
 
@@ -20,20 +21,18 @@ import COLORS from '@/constant/color';
 
 import CenteredModal from '@/components/CenteredModal/CenteredModal';
 import { API_ENDPOINT } from '@/constant/api';
-import useCreateTour from '@/hooks/tour/useCreateTour';
 
 import { ReactComponent as ADD_ICON } from '@/assets/add.svg';
-import { ReactComponent as NEXT_ICON } from '@/assets/chevron.svg';
 import { ReactComponent as CHECK_ICON } from '@/assets/check.svg';
 
 import ImageButton from '@/components/ImageButton/ImageButton';
 
-import useUpdateTour from '@/hooks/tour/useUpdateTour';
-import styles from './EditTourModal.module.scss';
+import usePushTourNotification from '@/hooks/notification/usePushTourNotification';
 import { useNavigate } from 'react-router-dom';
-import ENDPOINT from '@/constant/endponint';
+import styles from './EditNotificationModal.module.scss';
+import { toast } from 'react-toastify';
 
-export function useEditTourModalState(touristRoute) {
+export function useEditNotificationState(tourId) {
     const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
     const [data, _setData] = useState({});
@@ -42,13 +41,9 @@ export function useEditTourModalState(touristRoute) {
         if (newData instanceof Function) {
             _setData((prev) => ({
                 ...newData(prev),
-                touristRoute,
             }));
         } else {
-            _setData({
-                ...newData,
-                touristRoute,
-            });
+            _setData(newData);
         }
     }
 
@@ -57,6 +52,7 @@ export function useEditTourModalState(touristRoute) {
             isOpen: isOpenCreateBox,
             onClose: () => setIsOpenCreateBox(false),
             data,
+            tourId,
             setData: updateData,
         },
         data,
@@ -69,15 +65,20 @@ export function useEditTourModalState(touristRoute) {
     };
 }
 
-export default function EditTourModal({ isOpen, onClose, data, setData }) {
+export default function EditNotificationModal({ isOpen, onClose, data, tourId, setData }) {
     const navigate = useNavigate();
 
-    const { createTour } = useCreateTour();
-    const { updateTour } = useUpdateTour();
+    const { pushTourNotification } = usePushTourNotification();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
     const choosePictureRef = useRef();
 
-    async function handleSubmit() {
+    async function onSubmit() {
         onClose();
         const image =
             typeof data.image == 'string'
@@ -88,61 +89,49 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
                       buffer: await data.image.arrayBuffer(),
                   }
                 : null;
+
         const submitData = {
-            ..._.pick(data, [
-                '_id',
-                'name',
-                'price',
-                'description',
-                'from',
-                'to',
-                'type',
-                'touristRoute',
-            ]),
-            ...(image ? { image } : {}),
+            tourId,
+            type: data.type || 'all',
+            notification: {
+                ..._.pick(data, 'title', 'content', 'image'),
+                ...(image ? { image } : {}),
+            },
         };
-        if (data._id) updateTour(submitData);
-        else createTour(submitData);
+
+        pushTourNotification(submitData);
     }
 
     return (
         <CenteredModal isOpen={isOpen} onClose={onClose}>
             <div className={styles.createBox}>
-                <h1>{data?._id ? 'Change tour' : 'Create new tour'}</h1>
-                {data._id ? (
-                    <ImageButton
-                        backgroundColor={COLORS.lightEditBackground}
-                        color={COLORS.editBackground}
-                        icon={NEXT_ICON}
-                        reversed
-                        fullWidth
-                        onClick={() => navigate(`${ENDPOINT.TOUR}/${data._id}`)}
-                        style={{
-                            padding: '14px 0',
-                        }}
-                    >
-                        View detail
-                    </ImageButton>
-                ) : null}
+                <h1>Create new notification</h1>
                 <div className={styles.form}>
                     <TextField
-                        value={data.name}
-                        onChange={(e) => setData((prev) => ({ ...prev, name: e.target.value }))}
-                        label="Tour name"
+                        value={data.title}
+                        color={errors.title ? 'error' : 'primary'}
+                        onChange={(e) => setData((prev) => ({ ...prev, title: e.target.value }))}
+                        label="Title"
                         variant="standard"
+                        required
+                        inputProps={register('title', { required: 'Title is required' })}
                     />
+                    {errors.title && <p className={styles.error}>{errors.title.message}</p>}
                     <TextField
-                        value={data.price}
+                        value={data.content}
                         onChange={(e) =>
                             setData((prev) => ({
                                 ...prev,
                                 price: parseInt(e.target.value),
                             }))
                         }
-                        type="number"
-                        label="Price"
+                        label="Content"
+                        multiline
                         variant="standard"
+                        required
+                        inputProps={register('content', { required: 'Content is required' })}
                     />
+                    {errors.content && <p className={styles.error}>{errors.content.message}</p>}
                     <div className={styles.imagePreview}>
                         {data.image ? (
                             <img
@@ -174,52 +163,39 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
                         sx={{ display: 'none' }}
                         onChange={(e) => setData((prev) => ({ ...prev, image: e.target.files[0] }))}
                     />
-                    <TextField
-                        value={data.description}
-                        onChange={(e) =>
-                            setData((prev) => ({
-                                ...prev,
-                                description: e.target.value,
-                            }))
-                        }
-                        multiline
-                        label="Description"
-                        variant="standard"
-                    />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker
-                            label="From"
-                            value={dayjs(data.from)}
-                            onChange={(d) => setData((prev) => ({ ...prev, from: new Date(d.$d) }))}
-                        />
-                        <DateTimePicker
-                            label="To"
-                            value={dayjs(data.to)}
-                            onChange={(d) => setData((prev) => ({ ...prev, to: new Date(d.$d) }))}
-                        />
-                    </LocalizationProvider>
                     <FormControl sx={{ mt: 2, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
+                        <InputLabel id="notification-type-select">Notification type</InputLabel>
                         <Select
-                            labelId="demo-simple-select-helper-label"
-                            id="demo-simple-select-helper"
-                            label="Age"
+                            labelId="notification-type-select"
+                            label="Notification type"
                             value={data.type}
-                            onChange={(e) => setData((prev) => ({ ...prev, type: e.target.value }))}
+                            required
+                            onChange={(e) =>
+                                setData((prev) => ({
+                                    ...prev,
+                                    type: e.target.value,
+                                }))
+                            }
+                            inputProps={register('type', {
+                                required: 'Notification type is required',
+                            })}
                         >
-                            <MenuItem value={'normal'}>Normal</MenuItem>
-                            <MenuItem value={'promotion'}>Promotion</MenuItem>
+                            <MenuItem value={'all'} divider>
+                                Urgent
+                            </MenuItem>
+                            <MenuItem value={'only-special'} divider>
+                                Normal
+                            </MenuItem>
                         </Select>
-                        <FormHelperText>Normal nè</FormHelperText>
-                        <FormHelperText>Promotion nè</FormHelperText>
                     </FormControl>
+                    {errors.type && <p className={styles.error}>{errors.type.message}</p>}
                 </div>
                 <ImageButton
                     backgroundColor={COLORS.submit}
                     color={COLORS.submitBackground}
                     fullWidth={true}
                     icon={CHECK_ICON}
-                    onClick={handleSubmit}
+                    onClick={handleSubmit(onSubmit)}
                     style={{ padding: '15px 0' }}
                 >
                     Submit

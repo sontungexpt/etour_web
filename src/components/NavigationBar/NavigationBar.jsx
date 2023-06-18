@@ -41,7 +41,7 @@ const NavigationBar = () => {
                             style={{
                                 width: '260px',
                                 height: 'fit-content',
-                                padding: '0.5rem 2rem',
+                                padding: '1.0rem 2rem',
                             }}
                         >
                             Home
@@ -53,7 +53,7 @@ const NavigationBar = () => {
                             style={{
                                 width: '260px',
                                 height: 'fit-content',
-                                padding: '0.5rem 2rem',
+                                padding: '1.0rem 2rem',
                             }}
                         >
                             Tourist route
@@ -65,7 +65,7 @@ const NavigationBar = () => {
                             style={{
                                 width: '260px',
                                 height: 'fit-content',
-                                padding: '0.5rem 2rem',
+                                padding: '1.0rem 2rem',
                             }}
                         >
                             Tour

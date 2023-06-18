@@ -1,0 +1,49 @@
+.createBox {
+    width: 500px;
+    max-height: 600px;
+    overflow: auto;
+    padding: 50px;
+    background-color: #fff;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    display: grid;
+    gap: 40px;
+
+    & > h1 {
+        font-size: 1.7rem;
+        font-weight: 400;
+    }
+
+    h2 {
+        font-weight: 400;
+        font-size: 1.4rem;
+    }
+
+    .form {
+        display: grid;
+        gap: 20px;
+
+        textarea {
+            height: 100px;
+        }
+
+        .imagePreview {
+            img {
+                height: 200px;
+            }
+        }
+
+        .select {
+            color: black;
+        }
+
+        .error {
+            margin-top: -10px;
+            color: rgb(227, 43, 43);
+        }
+    }
+
+    .buttonText {
+        color: white;
+    }
+}
