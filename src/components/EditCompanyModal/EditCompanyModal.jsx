@@ -30,7 +30,7 @@ export const TOURIST_ROUTE_DEFAULT_VALUE = {
 export function useEditCompanyModalState(companyData) {
     const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
-    const [data, _setData] = useState(companyData);
+    const [data, _setData] = useState(companyData || {});
 
     function updateData(newData) {
         _setData(newData);
@@ -42,7 +42,7 @@ export function useEditCompanyModalState(companyData) {
             onClose: () => setIsOpenCreateBox(false),
             data,
             setData: _setData,
-            companyId: companyData._id,
+            companyId: companyData?._id,
         },
         data,
         setData: updateData,
@@ -71,7 +71,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
     useCallAPIToast({
         status,
         message: {
-            pending: 'Uploading data...',
+            pending: 'Uploading data?...',
             success: 'Update company profile',
             fail: 'Fail to update company profile',
         },
@@ -82,11 +82,11 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
 
         setStatus(STATUS.PENDING);
         const formData = new FormData();
-        formData.append('name', data.name);
-        formData.append('email', data.email);
-        formData.append('description', data.description);
-        formData.append('image', data.image);
-        formData.append('previewImages', data.previewImages);
+        formData.append('name', data?.name);
+        formData.append('email', data?.email);
+        formData.append('description', data?.description);
+        formData.append('image', data?.image);
+        formData.append('previewImages', data?.previewImages);
 
         const res = await apiInstance.put(`http://localhost/company/${companyId}`, formData, {
             headers: {
@@ -95,7 +95,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
         });
         if (res.status == 200) {
             setStatus(STATUS.SUCCESS);
-            setData(res.data.data);
+            setData(res.data?.data);
         } else {
             setStatus(STATUS.FAIL);
         }
@@ -107,7 +107,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
                 <h1>Edit company profile</h1>
                 <div className={styles.form}>
                     <TextField
-                        value={data.name}
+                        value={data?.name}
                         onChange={(e) =>
                             setData((prev) => ({
                                 ...prev,
@@ -121,7 +121,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
                     />
                     {errors.name && <p className={styles.error}>{errors.name.message}</p>}
                     <TextField
-                        value={data.email}
+                        value={data?.email}
                         onChange={(e) =>
                             setData((prev) => ({
                                 ...prev,
@@ -135,7 +135,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
                     />
                     {errors.email && <p className={styles.error}>{errors.email.message}</p>}
                     <TextField
-                        value={data.description}
+                        value={data?.description}
                         onChange={(e) =>
                             setData((prev) => ({
                                 ...prev,
@@ -148,11 +148,11 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
                     />
                     <img
                         className={styles.image}
-                        key={data.image?.name || data.image}
+                        key={data?.image?.name || data?.image}
                         src={
-                            data.image?.name
-                                ? URL.createObjectURL(data.image)
-                                : `${API_ENDPOINT.IMAGE}/${data.image}`
+                            data?.image?.name
+                                ? URL.createObjectURL(data?.image)
+                                : `${API_ENDPOINT.IMAGE}/${data?.image}`
                         }
                     />
                     <ImageButton
@@ -181,15 +181,15 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
                         }
                     />
                     <div className={styles.imagePreview}>
-                        {Array((data.previewImages || []).length)
+                        {Array((data?.previewImages || []).length)
                             .fill('')
                             .map?.((_, i) => (
                                 <img
-                                    key={data.previewImages[i]?.name || data.previewImages[i]}
+                                    key={data?.previewImages[i]?.name || data?.previewImages[i]}
                                     src={
-                                        data.previewImages[i]?.name
-                                            ? URL.createObjectURL(data.previewImages[i])
-                                            : `${API_ENDPOINT.IMAGE}/${data.previewImages[i]}`
+                                        data?.previewImages[i]?.name
+                                            ? URL.createObjectURL(data?.previewImages[i])
+                                            : `${API_ENDPOINT.IMAGE}/${data?.previewImages[i]}`
                                     }
                                 />
                             ))}
@@ -231,7 +231,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
                     >
                         Submit
                     </ImageButton>
-                    {data._id ? (
+                    {data?._id ? (
                         <ImageButton
                             icon={DELETE_ICON}
                             color={COLORS.delete}

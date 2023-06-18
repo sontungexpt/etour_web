@@ -15,16 +15,15 @@ import styles from './HomePage.module.scss';
 
 import { ReactComponent as EDIT_ICON } from '@/assets/edit.svg';
 import { ReactComponent as SIGN_OUT_ICON } from '@/assets/sign-out.svg';
-import { ReactComponent as BUG } from '@/assets/bug.svg';
 import { avatarStorage } from '@/lib/image';
 import SocketContext from '@/contexts/SocketContext';
 import { useDispatch } from 'react-redux';
 import { afterSignOut } from '@/features/staffSlice';
 import { API_ENDPOINT } from '@/constant/api';
-import { randomUUID } from '@/lib/operation';
 import EditCompanyModal, {
     useEditCompanyModalState,
 } from '@/components/EditCompanyModal/EditCompanyModal';
+import AddStaffModal, { useAddStaffState } from '@/components/AddStaffModal/AddStaffModal';
 
 export default function HomePage() {
     const navigate = useNavigate();
@@ -34,6 +33,7 @@ export default function HomePage() {
     const { data: companyData, companyIsError, companyError } = useCompanyInformation();
     const { socket, setSocket } = useContext(SocketContext);
 
+    const { modalState: addStaffModalState, openModal: openAddStaffModal } = useAddStaffState();
     const { modalState: editCompanyModalState, openModal: openEditCompanyModal } =
         useEditCompanyModalState(companyData);
 
@@ -88,35 +88,22 @@ export default function HomePage() {
                                         ))}
                                     </ul>
                                 </div>
-                                <div>
-                                    <div className={styles.functionBox}>
-                                        <ImageButton
-                                            onClick={() => {}}
-                                            icon={EDIT_ICON}
-                                            backgroundColor={COLORS.editBackground}
-                                            color={COLORS.edit}
-                                        >
-                                            Edit profile
-                                        </ImageButton>
-                                        <ImageButton
-                                            onClick={handleOnPressSignOut}
-                                            icon={SIGN_OUT_ICON}
-                                            backgroundColor={COLORS.deleteBackground}
-                                            color={COLORS.delete}
-                                        >
-                                            Sign out
-                                        </ImageButton>
-                                    </div>
+                                <div className={styles.functionBox}>
                                     <ImageButton
-                                        icon={BUG}
-                                        onClick={() => navigate(ENDPOINT.REPORT)}
-                                        color={COLORS.delete}
-                                        style={{
-                                            marginTop: '1rem',
-                                        }}
-                                        fullWidth
+                                        onClick={() => {}}
+                                        icon={EDIT_ICON}
+                                        backgroundColor={COLORS.editBackground}
+                                        color={COLORS.edit}
                                     >
-                                        Report an issue
+                                        Edit profile
+                                    </ImageButton>
+                                    <ImageButton
+                                        onClick={handleOnPressSignOut}
+                                        icon={SIGN_OUT_ICON}
+                                        backgroundColor={COLORS.deleteBackground}
+                                        color={COLORS.delete}
+                                    >
+                                        Sign out
                                     </ImageButton>
                                 </div>
                             </div>
@@ -142,13 +129,9 @@ export default function HomePage() {
                                 </div>
                                 <p className={styles.title}>Preview images</p>
                                 <div className={styles.images}>
-                                    {companyData &&
-                                        companyData?.previewImages.map((image) => (
-                                            <img
-                                                src={`${API_ENDPOINT.IMAGE}/${image}`}
-                                                key={image + randomUUID()}
-                                            />
-                                        ))}
+                                    {(companyData?.previewImages || []).map((image) => (
+                                        <img key={image} src={`${API_ENDPOINT.IMAGE}/${image}`} />
+                                    ))}
                                 </div>
                             </div>
                             <div className={styles.companyProfileButton}>
@@ -163,6 +146,7 @@ export default function HomePage() {
                                 <ImageButton
                                     color={COLORS.greenPastelPrimary}
                                     backgroundColor={COLORS.greenPastelSecondary}
+                                    onClick={openAddStaffModal}
                                 >
                                     Add new staff
                                 </ImageButton>
@@ -170,7 +154,9 @@ export default function HomePage() {
                         </div>
                     </div>
                 </div>
+
                 <EditCompanyModal {...editCompanyModalState} />
+                <AddStaffModal {...addStaffModalState} />
             </div>
         </>
     );

@@ -1,6 +1,6 @@
 import { selectBasicInformation } from '@/features/staffSlice';
 import useChat from '@/hooks/chat/useChat';
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styles from './DetailChatPage.module.scss';
@@ -12,35 +12,20 @@ import { randomUUID } from '@/lib/operation';
 
 const DetailChatPage = () => {
     const { id } = useParams();
-    const { sendMessage, viewChatMessageWithRoomId, isError } = useChat(id);
+    const { sendMessage, messages, viewChatMessageWithRoomId, isError } = useChat(id);
     const [messagesState, setMessagesState] = React.useState();
     const { socket } = useContext(SocketContext);
     const scrollRef = useRef();
-    useEffect(() => {
-        if (socket) {
-            socket.on('chat-message-list', (data) => {
-                setMessagesState(data.data.messages);
-            });
-
-            socket.on('new-chat-message', (data) => {
-                console.log('new-chat-message', data);
-                console.log({ data });
-                const { chatRoomId } = data;
-                if (chatRoomId !== id) return;
-                setMessagesState((messages) => {
-                    if (messages) {
-                        return [...messages, data];
-                    }
-                    return [data];
-                });
-                // socket.emit('view-chat-room-list', {});
-            });
-        }
-    }, [socket, id]);
 
     useEffect(() => {
         viewChatMessageWithRoomId(id);
     }, [id, socket]);
+
+    useEffect(() => {
+        if (messages) {
+            setMessagesState(messages);
+        }
+    }, [messages]);
 
     useEffect(() => {
         if (messagesState) {
@@ -48,19 +33,11 @@ const DetailChatPage = () => {
         }
     }, [id, messagesState]);
 
-    useEffect(() => {
-        return () => {
-            socket?.off('chat-message-list');
-            socket?.off('new-chat-message');
-            setMessagesState(null);
-        };
-    }, [id]);
-
     const staff = useSelector(selectBasicInformation);
 
     const [message, setMessage] = React.useState('');
 
-    const handleSendMessage = useCallback(() => {
+    const handleSendMessage = () => {
         setMessage('');
         setMessagesState((prev) => [
             ...prev,
@@ -71,12 +48,12 @@ const DetailChatPage = () => {
                 createdAt: new Date(),
             },
         ]);
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
         sendMessage({
             chatRoomId: id,
             content: message,
         });
-        scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [message, id]);
+    };
 
     return (
         <div className={styles.hoc}>
@@ -99,7 +76,7 @@ const DetailChatPage = () => {
                                     const isCustomerMessage = message.uid !== staff._id;
                                     return (
                                         <div
-                                            key={message._id + randomUUID()}
+                                            key={message._id}
                                             className={styles.message}
                                             style={{
                                                 alignSelf: isCustomerMessage
@@ -179,7 +156,6 @@ const DetailChatPage = () => {
                         placeholder="Type a message..."
                         onChange={(e) => setMessage(e.target.value)}
                         value={message}
-                        disabled={!id && !messagesState}
                     />
                     <Button
                         variant="contained"

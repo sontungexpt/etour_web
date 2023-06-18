@@ -1,0 +1,18 @@
+export const STAFF_PERMISSION = [
+   //  'super-admin',
+    'view-report',
+    'edit-route',
+    'view-route',
+    'delete-route',
+    'edit-tour',
+    'view-tour',
+    'delete-tour',
+    'view-voucher',
+    'edit-voucher',
+    'delete-voucher',
+    'edit-company',
+    'view-tickets',
+    'add-staff',
+    'view-staff',
+    'remove-staff',
+];
