@@ -23,6 +23,9 @@ import usePersistentState from '../../hooks/usePersistentState';
 import useTouristRoute from '../../hooks/touristRoute/useTouristRoute';
 import styles from './VoucherManagementPage.module.scss';
 import useVoucherList from '../../hooks/useVoucherList';
+import { VOUCHER_COLUMN } from '@/constant/dataGridColumns';
+import { DataGrid } from '@mui/x-data-grid';
+import ImageButton from '@/components/ImageButton/ImageButton';
 
 export default function VoucherManagementPage() {
     const navigate = useNavigate();
@@ -88,66 +91,36 @@ export default function VoucherManagementPage() {
     return (
         <>
             <div className={styles.container}>
-                <h1>Manage tourist route</h1>
-                <Button
-                    onClick={() => setIsOpenCreateBox(true)}
-                    variant="outlined"
-                    sx={{
-                        borderRadius: '8px',
-                        padding: '8px',
-                        width: '100%',
-                    }}
-                >
-                    <p className={styles.create}>Create new tourist route</p>
-                </Button>
-                <div className={styles.command}>
-                    <div className={styles.search}>
-                        <input
-                            ref={searchRef}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') setSearchValue(searchRef.current.value);
-                            }}
-                            type="text"
-                            placeholder="Find tour by name..."
-                        />
-                        <Button
-                            onClick={() => setSearchValue(searchRef.current.value)}
-                            variant="contained"
-                            sx={{
-                                backgroundColor: COLORS.primary,
-                                borderRadius: '8px',
-                                height: '40px',
-                                width: '200px',
-                            }}
-                        >
-                            <p>Search</p>
-                        </Button>
-                    </div>
-                    <div className={styles.filter}>
-                        {searchValue ? (
-                            <div className={styles.item}>
-                                <img src={SEARCH} alt="" />
-                                <p>{searchValue}</p>
-                                <img
-                                    className={styles.close}
-                                    onClick={() => {
-                                        searchRef.current.value = '';
-                                        setSearchValue('');
-                                    }}
-                                    src={CLOSE}
-                                    alt=""
-                                />
-                            </div>
-                        ) : null}
-                        <div className={styles.item}>
-                            <img src={ROUTE} alt="" />
-                            <p>Filter route</p>
-                            <img className={styles.clickable} src={CHEVRON} alt="" />
-                        </div>
-                    </div>
-                </div>
+                <h1>Manage voucher</h1>
+                <ImageButton onClick={() => setIsOpenCreateBox(true)}>
+                    Create new voucher
+                </ImageButton>
                 <div className={styles.data}>
-                    <div className={styles.table}>
+                    <DataGrid
+                        rows={data || []}
+                        columns={VOUCHER_COLUMN}
+                        getRowId={(row) => row._id}
+                        onCellClick={({ row, field }) => {
+                            const id = row._id;
+                            if (field != '__check__') {
+                                handleEdit(id);
+                            }
+                            if (selectedIDs.includes(id)) {
+                                setSelectedIDs((prev) => [...prev.filter((d) => d != id)]);
+                            } else {
+                                setSelectedIDs((prev) => [...prev, id]);
+                            }
+                        }}
+                        onColumnHeaderClick={({ field }) => {
+                            if (field == '__check__')
+                                if (selectedIDs.length == 0) {
+                                    setSelectedIDs(tours.map((row) => row._id));
+                                } else {
+                                    setSelectedIDs([]);
+                                }
+                        }}
+                    />
+                    {/* <div className={styles.table}>
                         <div className={styles.line}>
                             <p>Name</p>
                             <p>Type</p>
@@ -170,8 +143,8 @@ export default function VoucherManagementPage() {
                                 </div>
                             </div>
                         ))}
-                    </div>
-                </div>{' '}
+                    </div> */}
+                </div>
             </div>
             <CenteredModal isOpen={isOpenCreateBox} onClose={() => setIsOpenCreateBox(false)}>
                 <div className={styles.createBox}>

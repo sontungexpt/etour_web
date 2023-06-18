@@ -73,6 +73,17 @@ const NavigationBar = () => {
                             Tour
                         </NavigationButton>
                         <NavigationButton
+                            onClick={() => navigate(ENDPOINT.VOUCHER)}
+                            isHighlighted={location.pathname == ENDPOINT.VOUCHER}
+                            icon={Tour}
+                            style={{
+                                width: '160px',
+                                padding: '0.8rem 2rem',
+                            }}
+                        >
+                            Voucher
+                        </NavigationButton>
+                        <NavigationButton
                             onClick={() => navigate(ENDPOINT.CHAT)}
                             isHighlighted={location.pathname == ENDPOINT.CHAT}
                             icon={CHAT}
