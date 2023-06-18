@@ -30,7 +30,7 @@ import ImageButton from '@/components/ImageButton/ImageButton';
 import usePushTourNotification from '@/hooks/notification/usePushTourNotification';
 import { useNavigate } from 'react-router-dom';
 import styles from './AddStaffModal.module.scss';
-import { STAFF_PERMISSION } from '@/constant/staffPermission';
+import { STAFF_PERMISSION } from '@/constant/staffPermission.ts';
 import apiInstance from '@/api/instance';
 import useCallAPIToast from '@/hooks/useCallAPIToast';
 import { STATUS } from '@/constant/status';
@@ -70,31 +70,20 @@ export default function AddStaffModal({ isOpen, onClose, data, setData }) {
         status,
         message: {
             pending: 'Uploading data...',
-            success: 'Update company profile',
-            fail: 'Fail to update company profile',
+            success: 'Add successfully',
+            fail: 'Fail to add staff',
         },
     });
 
     async function onSubmit() {
         onClose();
-        // const image =
-        //     typeof data.image == 'string'
-        //         ? data.image
-        //         : data.image?.name
-        //         ? {
-        //               originalname: data.image.name,
-        //               buffer: await data.image.arrayBuffer(),
-        //           }
-        //         : null;
 
         const submitData = {
             ..._.pick(data, ['fullName', 'role', 'image', 'permissions', 'username', 'password']),
-            // ...(image ? { image } : {}),
         };
 
-        console.log({ submitData });
+        setStatus(STATUS.PENDING);
 
-        // pushTourNotification(submitData);
         const res = await apiInstance.post(`${API_ENDPOINT.STAFF}`, submitData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -102,7 +91,6 @@ export default function AddStaffModal({ isOpen, onClose, data, setData }) {
         });
         if (res.status == 200) {
             setStatus(STATUS.SUCCESS);
-            // setData(res.data.data);
         } else {
             setStatus(STATUS.FAIL);
         }
@@ -206,6 +194,7 @@ export default function AddStaffModal({ isOpen, onClose, data, setData }) {
                         <FormGroup>
                             {STAFF_PERMISSION.map((permission) => (
                                 <FormControlLabel
+                                    key={permission}
                                     control={
                                         <Checkbox
                                             checked={(data?.permissions || []).includes(permission)}

@@ -8,7 +8,7 @@ import COLORS from '@/constant/color';
 import ENDPOINT from '@/constant/endponint';
 import useAuthenticationState from '@/hooks/useAuthenticationState';
 import useCompanyInformation from '@/hooks/useCompanyInformation';
-import useStaffInformation from '@/hooks/useStaffInformation';
+import useStaffInformation from '@/hooks/staff/useStaffInformation';
 import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
 import styles from './HomePage.module.scss';
@@ -26,12 +26,15 @@ import EditCompanyModal, {
     useEditCompanyModalState,
 } from '@/components/EditCompanyModal/EditCompanyModal';
 import AddStaffModal, { useAddStaffState } from '@/components/AddStaffModal/AddStaffModal';
+import useStaffPermission from '@/hooks/staff/useStaffPermission';
+import { StaffPermission } from '@/constant/staffPermission.ts';
 
 export default function HomePage() {
     const navigate = useNavigate();
     const authenticationState = useAuthenticationState();
 
     const { data, isError, error } = useStaffInformation();
+    const { hasPermission } = useStaffPermission();
     const { data: companyData, companyIsError, companyError } = useCompanyInformation();
     const { socket, setSocket } = useContext(SocketContext);
 
@@ -155,6 +158,7 @@ export default function HomePage() {
                             </div>
                             <div className={styles.companyProfileButton}>
                                 <ImageButton
+                                    hidden={!hasPermission(StaffPermission.EDIT_COMPANY)}
                                     color={COLORS.editBackground}
                                     backgroundColor={COLORS.lightEditBackground}
                                     icon={EDIT_ICON}
@@ -163,6 +167,7 @@ export default function HomePage() {
                                     Edit company
                                 </ImageButton>
                                 <ImageButton
+                                    hidden={!hasPermission(StaffPermission.ADD_STAFF)}
                                     color={COLORS.greenPastelPrimary}
                                     backgroundColor={COLORS.greenPastelSecondary}
                                     onClick={openAddStaffModal}

@@ -1,6 +1,6 @@
 import { selectLoginState, setBasicInformation } from '@/features/staffSlice';
 import useAuthenticationNavigate from '@/hooks/useAuthenticationNavigate';
-import useStaffInformation from '@/hooks/useStaffInformation';
+import useStaffInformation from '@/hooks/staff/useStaffInformation';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';

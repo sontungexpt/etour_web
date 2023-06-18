@@ -1,0 +1,38 @@
+export enum StaffPermission {
+    // SUPER_ADMIN = 'super-admin',
+    VIEW_REPORT = 'view-report',
+    EDIT_ROUTE = 'edit-route',
+    VIEW_ROUTE = 'view-route',
+    DELETE_ROUTE = 'delete-route',
+    EDIT_TOUR = 'edit-tour',
+    VIEW_TOUR = 'view-tour',
+    DELETE_TOUR = 'delete-tour',
+    VIEW_VOUCHER = 'view-voucher',
+    EDIT_VOUCHER = 'edit-voucher',
+    DELETE_VOUCHER = 'delete-voucher',
+    EDIT_COMPANY = 'edit-company',
+    VIEW_TICKETS = 'view-tickets',
+    ADD_STAFF = 'add-staff',
+    VIEW_STAFF = 'view-staff',
+    REMOVE_STAFF = 'remove-staff',
+}
+
+export const STAFF_PERMISSION = Object.values(StaffPermission);
+// export const STAFF_PERMISSION = [
+//    //  'super-admin',
+//     'view-report',
+//     'edit-route',
+//     'view-route',
+//     'delete-route',
+//     'edit-tour',
+//     'view-tour',
+//     'delete-tour',
+//     'view-voucher',
+//     'edit-voucher',
+//     'delete-voucher',
+//     'edit-company',
+//     'view-tickets',
+//     'add-staff',
+//     'view-staff',
+//     'remove-staff',
+// ];
