@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './ChatPage.module.scss';
 import LOGO from '@/assets/logo.svg';
 import ENDPOINT from '@/constant/endponint';
+import { randomUUID } from '@/lib/operation';
 
 const ChatPage = () => {
     const { id } = useParams();
@@ -18,7 +19,7 @@ const ChatPage = () => {
             {rooms ? (
                 rooms.length > 0 ? (
                     rooms.map((room) => {
-                        return <ChatItem room={room} key={room._id} param={id} />;
+                        return <ChatItem room={room} key={room._id + randomUUID()} param={id} />;
                     })
                 ) : (
                     <p
