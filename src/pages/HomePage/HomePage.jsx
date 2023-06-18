@@ -20,6 +20,7 @@ import SocketContext from '@/contexts/SocketContext';
 import { useDispatch } from 'react-redux';
 import { afterSignOut } from '@/features/staffSlice';
 import { API_ENDPOINT } from '@/constant/api';
+import { randomUUID } from '@/lib/operation';
 
 export default function HomePage() {
     const navigate = useNavigate();
@@ -122,7 +123,10 @@ export default function HomePage() {
                                 <p className={styles.title}>Preview images</p>
                                 <div className={styles.images}>
                                     {companyData.previewImages.map((image) => (
-                                        <img key={image} src={`${API_ENDPOINT.IMAGE}/${image}`} />
+                                        <img
+                                            src={`${API_ENDPOINT.IMAGE}/${image}`}
+                                            key={image + randomUUID()}
+                                        />
                                     ))}
                                 </div>
                             </div>
