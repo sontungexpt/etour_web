@@ -1,18 +1,18 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-import { ReactComponent as BACK_ICON } from "../../assets/chevron.svg";
+import { ReactComponent as BACK_ICON } from '../../assets/chevron.svg';
 
-import styles from "./PageTitle.module.scss";
-import ImageButton from "../ImageButton/ImageButton";
-import COLORS from "../../constant/color";
+import styles from './PageTitle.module.scss';
+import ImageButton from '../ImageButton/ImageButton';
+import COLORS from '../../constant/color';
 
 export default function PageTitle({ children }) {
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
-	return (
-		<div className={styles.container}>
-			{/* <BACK_ICON fill="#00171F" /> */}
-			<ImageButton
+    return (
+        <div className={styles.container}>
+            {/* <BACK_ICON fill="#00171F" /> */}
+            {/* <ImageButton
 				icon={BACK_ICON}
 				color={COLORS.editBackground}
 				backgroundColor={COLORS.lightEditBackground}
@@ -21,8 +21,9 @@ export default function PageTitle({ children }) {
             }}
 			>
 				Back
-			</ImageButton>
-			<h1 className={styles.container}>{children}</h1>
-		</div>
-	);
+			</ImageButton> */}
+            <a href="">{"< Back"}</a>
+            <h1 className={styles.container}>{children}</h1>
+        </div>
+    );
 }

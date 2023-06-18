@@ -78,7 +78,7 @@ export default function BasePage() {
                             style={{
                                 width: '260px',
                                 height: 'fit-content',
-                                padding: '0.5rem 2rem',
+                                //   padding: '0.5rem 2rem',
                             }}
                         >
                             Home
@@ -90,7 +90,7 @@ export default function BasePage() {
                             style={{
                                 width: '260px',
                                 height: 'fit-content',
-                                padding: '0.5rem 2rem',
+                                //   padding: '0.5rem 2rem',
                             }}
                         >
                             Tourist route
@@ -102,7 +102,7 @@ export default function BasePage() {
                             style={{
                                 width: '260px',
                                 height: 'fit-content',
-                                padding: '0.5rem 2rem',
+                                //   padding: '0.5rem 2rem',
                             }}
                         >
                             Tour

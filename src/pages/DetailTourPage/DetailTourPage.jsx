@@ -7,6 +7,7 @@ import styles from './DetailTourPage.module.scss';
 import ImageButton from '@/components/ImageButton/ImageButton';
 import EditTourModal, { useEditTourModalState } from '@/components/EditTourModal/EditTourModal';
 import moment from 'moment';
+import PageTitle from '@/components/PageTitle/PageTitle';
 
 export default function DetailTourPage() {
     const { id } = useParams();
@@ -18,7 +19,8 @@ export default function DetailTourPage() {
     return (
         <>
             <div className={styles.container}>
-                <h1 className={styles.pageTitle}>Tour detail</h1>
+                {/* <h1 className={styles.pageTitle}>Tour detail</h1> */}
+                <PageTitle>Tour detail</PageTitle>
                 <div className={styles.header}>
                     {data?.image ? <img src={`${API_ENDPOINT.IMAGE}/${data.image}`} /> : null}
                     <p className={styles.title}>Tour name</p>
