@@ -1,16 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { setBasicInformation } from '@/features/staffSlice';
+import {
+    selectBasicInformation,
+    selectLoginState,
+    setBasicInformation,
+} from '@/features/staffSlice';
 import useAuthenticationNavigate from '@/hooks/useAuthenticationNavigate';
 import useStaffInformation from '@/hooks/useStaffInformation';
 
-import LOGO from '@/assets/logo.svg';
-import { ReactComponent as Route } from '@/assets/route.svg';
-import { ReactComponent as Tour } from '@/assets/tour.svg';
-import { ReactComponent as HOME } from '@/assets/home.svg';
-
-import ENDPOINT from '@/constant/endponint';
 import styles from './BasePage.module.scss';
 import NavigationButton from '@/components/NavigationButton/NavigationButton';
 import { setRoutes, setGetListTouristRouteError } from '@/features/touristRouteSlice';
@@ -18,36 +16,61 @@ import useTouristRoute from '@/hooks/touristRoute/useTouristRoute';
 import { STATUS } from '@/constant/status';
 import SocketContext from '@/contexts/SocketContext';
 import useCallAPIToast from '@/hooks/useCallAPIToast';
-import { isPathNameInNeedToAuthPage } from '@/constant/need-to-auth-page';
 import useCompanyInformation from '@/hooks/useCompanyInformation';
+import RegisteringCompany from '@/components/RegisteringCompany/RegisteringCompany';
+import useAccessToken from '@/hooks/useAccessToken';
+import { isPathNameInNeedToAuthPage } from '../../constant/need-to-auth-page';
+import NavigationBar from '@/components/NavigationBar/NavigationBar';
+import { useSelector } from 'react-redux';
+import Loading from '@/components/Loading/Loading';
 
 export default function BasePage() {
     const location = useLocation();
-    const { socket, setSocket } = useContext(SocketContext);
-    const [status, setStatus] = useState(STATUS.PENDING);
+    const { socket, socketStatus, setSocketStatus } = useContext(SocketContext);
     const navigate = useNavigate();
     useAuthenticationNavigate();
 
     const dispatch = useDispatch();
-    const { data, isError, error } = useStaffInformation();
-    const { data: companyData } = useCompanyInformation();
+    const { data, error } = useStaffInformation();
+    const { data: companyData, isError } = useCompanyInformation();
 
     useEffect(() => {
-        if (data) dispatch(setBasicInformation(data));
+        if (data)
+            dispatch(
+                setBasicInformation({
+                    staff: data,
+                })
+            );
     }, [data]);
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        if (socket) setStatus(STATUS.SUCCESS);
+        if (companyData || isError) {
+            setLoading(false);
+        }
+    }, [isError, companyData]);
+
+    const isLoggedIn = useSelector(selectLoginState);
+
+    useEffect(() => {
+        if (socket) {
+            setSocketStatus(STATUS.SUCCESS);
+        } else {
+            if (isPathNameInNeedToAuthPage({ pathname: location.pathname }) && !isLoggedIn) {
+                setLoading(false);
+            }
+        }
     }, [socket]);
 
-    // useCallAPIToast({
-    // 	status,
-    // 	message: {
-    // 		pending: "Connecting...",
-    // 		success: "Connect successfully",
-    // 		fail: "Fail to connect to server",
-    // 	},
-    // });
+    useCallAPIToast({
+        status: socketStatus,
+        message: {
+            pending: 'Connecting to service...',
+            success: 'Connect to service successfully',
+            fail: 'Fail to connect to server',
+        },
+    });
 
     const { data: routes, error: routeError } = useTouristRoute({
         route: [],
@@ -58,58 +81,35 @@ export default function BasePage() {
         dispatch(setGetListTouristRouteError({ error: routeError }));
     }, [routes, routeError]);
 
+    if (
+        !isLoggedIn &&
+        !isPathNameInNeedToAuthPage({
+            pathname: location.pathname,
+        })
+    ) {
+        return <Loading />;
+    }
+
+    if (
+        companyData &&
+        !companyData.isApproveToActive &&
+        isLoggedIn &&
+        !isPathNameInNeedToAuthPage({
+            pathname: location.pathname,
+        })
+    ) {
+        console.log('navigate to auth');
+        return <RegisteringCompany />;
+    }
+
+    if (loading) {
+        console.log('navigate to auth');
+        return <Loading />;
+    }
+
     return (
         <div className={styles.container}>
-            {isPathNameInNeedToAuthPage(location.pathname) ||
-            (companyData && !companyData.isApproveToActive) ? null : (
-                <div className={styles.drawer}>
-                    <button
-                        type="button"
-                        className={styles.logo}
-                        onClick={() => navigate(ENDPOINT.HOME)}
-                    >
-                        <img src={LOGO} alt="" />
-                    </button>
-                    <div className={styles.navButtonGroup}>
-                        <NavigationButton
-                            onClick={() => navigate(ENDPOINT.HOME)}
-                            isHighlighted={location.pathname == ENDPOINT.HOME}
-                            icon={HOME}
-                            style={{
-                                width: '260px',
-                                height: 'fit-content',
-                                //   padding: '0.5rem 2rem',
-                            }}
-                        >
-                            Home
-                        </NavigationButton>
-                        <NavigationButton
-                            onClick={() => navigate(ENDPOINT.TOURIST_ROUTE)}
-                            isHighlighted={location.pathname == ENDPOINT.TOURIST_ROUTE}
-                            icon={Route}
-                            style={{
-                                width: '260px',
-                                height: 'fit-content',
-                                //   padding: '0.5rem 2rem',
-                            }}
-                        >
-                            Tourist route
-                        </NavigationButton>
-                        <NavigationButton
-                            onClick={() => navigate(ENDPOINT.TOUR)}
-                            isHighlighted={location.pathname == ENDPOINT.TOUR}
-                            icon={Tour}
-                            style={{
-                                width: '260px',
-                                height: 'fit-content',
-                                //   padding: '0.5rem 2rem',
-                            }}
-                        >
-                            Tour
-                        </NavigationButton>
-                    </div>
-                </div>
-            )}
+            <NavigationBar />
             <div className={styles.content}>
                 <Outlet />
             </div>

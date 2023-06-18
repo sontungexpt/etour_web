@@ -1,6 +1,7 @@
 export const STATUS = {
-	PENDING: "pending",
-	SUCCESS: "success",
-	FAIL: "fail",
-	UPDATE: "update",
+    PENDING: 'pending',
+    SUCCESS: 'success',
+    FAIL: 'fail',
+    UPDATE: 'update',
+    IDLE: 'idle',
 };

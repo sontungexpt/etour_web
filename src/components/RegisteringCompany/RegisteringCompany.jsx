@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ReactComponent as Check } from '@/assets/check.svg';
 import { ReactComponent as Cross } from '@/assets/cross.svg';
 import { ReactComponent as MenuDots } from '@/assets/menu-dots.svg';
@@ -7,14 +7,22 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ENDPOINT from '@/constant/endponint';
+import SocketContext from '@/contexts/SocketContext';
+import { afterSignOut } from '@/features/staffSlice';
+import { useDispatch } from 'react-redux';
 
 const RegisteringCompany = () => {
     const navigate = useNavigate();
+    const { socket, setSocket } = useContext(SocketContext);
+    const dispatch = useDispatch();
+
     const onPressLogOut = () => {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refresshToken');
+        localStorage.clear();
         navigate(ENDPOINT.ON_BOARDING);
         toast('Sign out successfully');
+        socket && socket.disconnect();
+        setSocket(null);
+        dispatch(afterSignOut());
     };
 
     return (

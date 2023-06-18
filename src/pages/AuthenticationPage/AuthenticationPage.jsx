@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Box from '@mui/material/Box';
@@ -18,11 +18,13 @@ import { API_ENDPOINT } from '@/constant/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { setBasicInformation } from '@/features/staffSlice';
+import SocketContext from '@/contexts/SocketContext';
 
 export default function AuthenticationPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const { socket } = useContext(SocketContext);
     const authenticationState = useAuthenticationState();
 
     const [username, setUsername] = useState('');
@@ -44,8 +46,11 @@ export default function AuthenticationPage() {
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
 
-            // localStorage.setItem("staff", JSON.stringify(data.staff));
-            dispatch(setBasicInformation(data.staff));
+            dispatch(
+                setBasicInformation({
+                    staff: data.staff,
+                })
+            );
 
             navigate(ENDPOINT.HOME);
         }

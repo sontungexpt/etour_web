@@ -16,7 +16,7 @@ export default function useSocket(onConnect: (socket: Socket) => void, dependenc
     const { socket, setSocket } = useContext(SocketContext);
 
     useEffect(() => {
-        if (socket) return;
+        if (socket && socket.connected) return;
         let socket_: Socket;
         if (!token) return;
         socket_ = io(`${API.base}`, {
@@ -35,7 +35,7 @@ export default function useSocket(onConnect: (socket: Socket) => void, dependenc
                 } else return socket_;
             });
         });
-    }, [token, ...(dependencies || [])]);
+    }, [token, socket, ...(dependencies || [])]);
 
     useEffect(() => {
         if (socket) onConnect?.(socket);

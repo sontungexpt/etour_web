@@ -14,7 +14,7 @@ export default function useCallAPIToast({
     const toastRef = useRef();
 
     useEffect(() => {
-        if (!status) return;
+        if (!status || status === STATUS.IDLE) return;
         if (!toastRef.current)
             toastRef.current = toast.loading(pending, {
                 position: 'bottom-left',
