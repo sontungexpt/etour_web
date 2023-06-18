@@ -1,40 +1,39 @@
 .container {
-	width: 100vw;
-	height: 100vh;
-	display: flex;
-	// background-color: ;
-	background: linear-gradient(155deg, #ebf6fc, rgb(249, 243, 250));
+    min-width: 100%;
+    min-height: 100vh;
+    // display: flex;
+    // background-color: ;
+    background: linear-gradient(155deg, #ebf6fc, rgb(249, 243, 250));
 
-	.drawer {
-		left: 0px;
-		width: 350px;
-		height: 100vh;
-		z-index: 10;
-		padding: 20px 0px 0 40px;
+    .drawer {
+        left: 0px;
+        z-index: 10;
+        padding: 0 40px;
+        display: flex;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        background-color: #fff;
+        box-shadow: 0 0 15px 0 #d8d4e5;
+        .logo {
+            border: none;
+            outline: none;
+            background-color: transparent;
+            padding: 0;
+            img {
+                width: 100px;
+                object-fit: contain;
+            }
+        }
 
-		.logo {
-			border: none;
-			outline: none;
-			background-color: transparent;
+        .navButtonGroup {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+    }
 
-			padding: 0;
-			img {
-				width: 100px;
-				object-fit: contain;
-			}
-		}
-
-		.navButtonGroup {
-			margin-top: 50px;
-			display: flex;
-			flex-direction: column;
-			gap: 15px;
-		}
-	}
-
-	.content {
-		width: 100%;
-		overflow: auto;
-		padding-left: 100px;
-	}
+    .content {
+        width: 100%;
+    }
 }

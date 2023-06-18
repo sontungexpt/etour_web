@@ -1,0 +1,111 @@
+.wrapper {
+    h2 {
+        margin: 0;
+        padding: 4rem 0;
+        text-align: center;
+    }
+    .container {
+        display: flex;
+        padding-bottom: 2rem;
+        justify-content: center;
+        gap: 2rem;
+        label {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            input {
+                padding: 10px;
+                width: 100%;
+            }
+
+            input[type='file'] {
+                display: none;
+            }
+
+            p[role='button'] {
+                border: 1px solid #3399ff;
+                border-radius: 6px;
+                padding: 10px;
+                text-align: center;
+                cursor: pointer;
+                &:hover {
+                    background-color: #3399ff;
+                    color: white;
+                }
+                &:focus {
+                    outline: 0;
+                }
+            }
+        }
+        $max-width: 500px;
+        $width: 500px;
+        div {
+            max-width: $max-width;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            label[for='image'] {
+                display: grid;
+                place-items: center;
+                padding: 1rem;
+                background-color: #fff;
+                align-self: flex-start;
+                width: 8rem;
+                height: 8rem;
+                border-radius: 50%;
+                border-color: #3399ff;
+                box-shadow: 0 0 0 3px #b6daff;
+                & > img {
+                    width: 4rem;
+                    height: 4rem;
+                    padding: 10px;
+                    object-fit: contain;
+                }
+            }
+            label[for='previewImages'] {
+                .previewImagesContainer {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: row;
+                    gap: 10px;
+                    img {
+                        width: 80px;
+                        height: 80px;
+                        object-fit: contain;
+                    }
+                }
+            }
+            p {
+                margin: 0;
+            }
+            label {
+                .error {
+                    color: red;
+                    font-size: smaller;
+                }
+                textarea {
+                    font-family: IBM Plex Sans, sans-serif;
+                    font-size: 0.875rem;
+                    font-weight: 400;
+                    line-height: 1.5;
+                    padding: 12px;
+                    border-radius: 12px 12px 0 12px;
+                    color: #24292f;
+                    background: #fff;
+                    border: 1px solid #d0d7de;
+                    box-shadow: 0px 2px 24px #daecff;
+                    max-width: $max-width;
+                    width: $width;
+                    &:focus-visible {
+                        outline: 0;
+                    }
+
+                    &:focus {
+                        border-color: #3399ff;
+                        box-shadow: 0 0 0 3px #b6daff;
+                    }
+                }
+            }
+        }
+    }
+}
