@@ -37,7 +37,3 @@ export function capitalize(str: string, all: boolean = false): string {
             .join(' ');
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
-
-export function randomUUID() {
-    return Math.random().toString(36).substring(2) + Date.now().toString(36);
-}

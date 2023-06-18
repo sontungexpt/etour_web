@@ -12,7 +12,6 @@ export default function useAuthenticationNavigate() {
     const authenticationState = useAuthenticationState();
     const { socket } = useContext(SocketContext);
     useEffect(() => {
-        console.log({ authenticationState1: authenticationState });
         if (authenticationState == AUTHENTICATION_STATE.UNAUTHENTICATED) {
             if (
                 !isPathNameInNeedToAuthPage({
