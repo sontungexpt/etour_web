@@ -1,5 +1,5 @@
 export default function useStaffPermission() {
-    const staffInfo = localStorage.getItem('staff-info', {});
+    const staffInfo = JSON.parse(localStorage.getItem('staff-info', {}));
 
     const permissions = staffInfo.permissions || [];
 
