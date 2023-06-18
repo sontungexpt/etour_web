@@ -123,13 +123,21 @@ export default function HomePage() {
                                     ))}
                                 </div>
                             </div>
-                            <ImageButton
-                                color={COLORS.editBackground}
-                                backgroundColor={COLORS.lightEditBackground}
-                                icon={EDIT_ICON}
-                            >
-                                Edit company
-                            </ImageButton>
+                            <div className={styles.companyProfileButton}>
+                                <ImageButton
+                                    color={COLORS.editBackground}
+                                    backgroundColor={COLORS.lightEditBackground}
+                                    icon={EDIT_ICON}
+                                >
+                                    Edit company
+                                </ImageButton>
+                                <ImageButton
+                                    color={COLORS.greenPastelPrimary}
+                                    backgroundColor={COLORS.greenPastelSecondary}
+                                >
+                                    Add new staff
+                                </ImageButton>
+                            </div>
                         </div>
                     </div>
                 </div>

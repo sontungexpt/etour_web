@@ -37,7 +37,6 @@ export default function DetailTourPage() {
     return data ? (
         <>
             <div className={styles.container}>
-                {/* <h1 className={styles.pageTitle}>Tour detail</h1> */}
                 <PageTitle>Tour detail</PageTitle>
                 <div className={styles.header}>
                     {data?.image ? <img src={`${API_ENDPOINT.IMAGE}/${data.image}`} /> : <p></p>}

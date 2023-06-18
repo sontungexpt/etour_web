@@ -11,18 +11,7 @@ export default function PageTitle({ children }) {
 
     return (
         <div className={styles.container}>
-            {/* <BACK_ICON fill="#00171F" /> */}
-            {/* <ImageButton
-				icon={BACK_ICON}
-				color={COLORS.editBackground}
-				backgroundColor={COLORS.lightEditBackground}
-            style={{
-               padding: '15px 30px'
-            }}
-			>
-				Back
-			</ImageButton> */}
-            <a href="">{"< Back"}</a>
+            <a onClick={() => navigate(-1)}>{'< Back'}</a>
             <h1 className={styles.container}>{children}</h1>
         </div>
     );
