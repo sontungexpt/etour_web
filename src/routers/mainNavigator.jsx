@@ -11,11 +11,13 @@ import VoucherManagementPage from '@/pages/VoucherManagementPage/VoucherManageme
 import DetailTourPage from '@/pages/DetailTourPage/DetailTourPage';
 import RegisterPage from '@/pages/RegisterPage/RegisterPage';
 import ValidateCompanyPage from '@/pages/ValidateCompanyPage/ValidateCompanyPage';
+import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 
 export default createBrowserRouter([
     {
         path: '/',
         element: <BasePage />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: ENDPOINT.ON_BOARDING,

@@ -1,221 +1,116 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { DataGrid } from '@mui/x-data-grid';
+import { useState } from 'react';
+import COLORS from '../../constant/color';
 
-import {
-    Button,
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-} from '@mui/material';
-import CHEVRON from '@/assets/chevron-down.svg';
-import CLOSE from '@/assets/close.svg';
-import SEARCH from '@/assets/search.svg';
-import ROUTE from '@/assets/taxi.svg';
-import COLORS from '@/constant/color';
-
-import { toast } from 'react-toastify';
-import CenteredModal from '@/components/CenteredModal/CenteredModal';
-import RouteList from '@/components/RouteList/RouteList';
-import useCreateRoute from '@/hooks/touristRoute/useCreateRoute';
-import usePersistentState from '@/hooks/usePersistentState';
-import useTouristRoute from '@/hooks/touristRoute/useTouristRoute';
-
+import ImageButton from '@/components/ImageButton/ImageButton';
 import styles from './TourManagementPage.module.scss';
 
+import { ReactComponent as ADD_ICON } from '@/assets/add.svg';
+import { ReactComponent as DELETE_ICON } from '@/assets/delete.svg';
+import { ReactComponent as EDIT_ICON } from '@/assets/edit.svg';
+
+import { useDispatch, useSelector } from 'react-redux';
+import EditTouristRouteModal, {
+    TOURIST_ROUTE_DEFAULT_VALUE,
+    useEditTouristRouteModalState,
+} from '@/components/EditTouristRouteModal/EditTouristRouteModal';
+import {
+    deleteTouristRoutes,
+    selectDeleteStatus,
+    selectRoutes,
+    setDeleteTouristRouteStatus,
+} from '@/features/touristRouteSlice';
+import useCallAPIToast from '@/hooks/useCallAPIToast';
+
+import { TOURIST_ROUTE_COLUMN } from '@/constant/dataGridColumns';
+
 export default function TourManagementPage() {
-    const navigate = useNavigate();
-    const { createRoute, data: createdData, error: createdError } = useCreateRoute();
+    const dispatch = useDispatch();
+    const [selectedIDs, setSelectedIDs] = useState([]);
 
-    const searchRef = useRef();
-    const [searchValue, setSearchValue] = usePersistentState('tour-search', '');
+    const { modalState, openModal } = useEditTouristRouteModalState();
 
-    const [routeName, setRouteName] = useState('');
-    const [reservationFee, setReservationFee] = useState(0);
-    const [description, setDescription] = useState('');
-    const [type, setType] = useState('');
-    const [route, setRoute] = useState([]);
+    const data = useSelector(selectRoutes);
+    const deleteStatus = useSelector(selectDeleteStatus);
 
-    const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
-
-    const { data, isError, error } = useTouristRoute({
-        route: [],
-        keyword: searchValue,
+    useCallAPIToast({
+        status: deleteStatus,
+        message: {
+            pending: 'Deleting...',
+            success: 'Delete tourist route successfully',
+            fail: 'Fail to delete tourist route',
+        },
+        onResponse: () => {
+            setSelectedIDs([]);
+            dispatch(setDeleteTouristRouteStatus(''));
+        },
     });
 
-    useEffect(() => {
-        if (isError) {
-            toast(`An error occur when retrieve tourist route: ${error.message}`);
-        }
-    }, [isError]);
-
-    useEffect(() => {
-        if (createdError) toast.error(`Fail to create tourist route: ${createdError.message}`);
-    }, [createdError]);
-
-    useEffect(() => {
-        if (createdData) toast.success('Successfully create route');
-    }, [createdData]);
-
-    function handleSubmit() {
-        setIsOpenCreateBox(false);
-        const data = {
-            name: routeName,
-            description,
-            reservationFee,
-            type,
-            route: route.map(({ content }) => content),
-        };
-        createRoute(data);
+    function handleEdit(id) {
+        openModal(data.find((d) => d._id == id));
     }
 
     return (
         <>
             <div className={styles.container}>
-                <h1>Manage tour</h1>
-                <Button
-                    onClick={() => setIsOpenCreateBox(true)}
-                    variant="outlined"
-                    sx={{
-                        borderRadius: '8px',
-                        padding: '8px',
-                        width: '100%',
-                    }}
-                >
-                    <p className={styles.create}>Create new tourist route</p>
-                </Button>
-                <div className={styles.command}>
-                    <div className={styles.search}>
-                        <input
-                            ref={searchRef}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') setSearchValue(searchRef.current.value);
-                            }}
-                            type="text"
-                            placeholder="Find tour by name..."
-                        />
-                        <Button
-                            onClick={() => setSearchValue(searchRef.current.value)}
-                            variant="contained"
-                            sx={{
-                                backgroundColor: COLORS.primary,
-                                borderRadius: '8px',
-                                height: '40px',
-                                width: '200px',
-                            }}
-                        >
-                            <p>Search</p>
-                        </Button>
-                    </div>
-                    <div className={styles.filter}>
-                        {searchValue ? (
-                            <div className={styles.item}>
-                                <img src={SEARCH} alt="" />
-                                <p>{searchValue}</p>
-                                <img
-                                    className={styles.close}
-                                    onClick={() => {
-                                        searchRef.current.value = '';
-                                        setSearchValue('');
-                                    }}
-                                    src={CLOSE}
-                                    alt=""
-                                />
-                            </div>
-                        ) : null}
-                        <div className={styles.item}>
-                            <img src={ROUTE} alt="" />
-                            <p>Filter route</p>
-                            <img className={styles.clickable} src={CHEVRON} alt="" />
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.data}>
-                    <div className={styles.table}>
-                        <div className={styles.line}>
-                            <p>Name</p>
-                            <p>Route</p>
-                            <p>Reservation fee</p>
-                            <p>Customers</p>
-                        </div>
-                        {data?.map(({ name, reservationFee, route, _id }, index) => (
-                            <div key={index}>
-                                <hr />
-                                <div
-                                    onClick={() => {
-                                        navigate(_id);
-                                    }}
-                                    className={styles.line}
-                                >
-                                    <p>{name}</p>
-                                    <p>{route.join(' - ')}</p>
-                                    <p>{reservationFee}</p>
-                                    <p>{Math.floor(Math.random(100))}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-            <CenteredModal isOpen={isOpenCreateBox} onClose={() => setIsOpenCreateBox(false)}>
-                <div className={styles.createBox}>
-                    <h1>Create new route</h1>
-                    <div className={styles.form}>
-                        <TextField
-                            value={routeName}
-                            onChange={(e) => setRouteName(e.target.value)}
-                            label="Route name"
-                            variant="standard"
-                        />
-                        <TextField
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            label="Description"
-                            multiline
-                            variant="standard"
-                        />
-                        <TextField
-                            error={!Number.isInteger(parseInt(reservationFee))}
-                            value={reservationFee}
-                            onChange={(e) => setReservationFee(e.target.value)}
-                            label="Reservation fee"
-                            helperText="Reservation fee must be a integer"
-                            variant="standard"
-                        />
-                        <FormControl sx={{ mt: 2, minWidth: 120 }}>
-                            <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-helper-label"
-                                id="demo-simple-select-helper"
-                                label="Age"
-                                value={type}
-                                onChange={(e) => setType(e.target.value)}
-                            >
-                                <MenuItem value={'country'}>Normal</MenuItem>
-                                <MenuItem value={'foreign'}>Promotion</MenuItem>
-                            </Select>
-                            <FormHelperText>Normal nè</FormHelperText>
-                            <FormHelperText>Promotion nè</FormHelperText>
-                        </FormControl>
-                        <h2>Tourist route</h2>
-                    </div>
-                    <RouteList list={route} onChange={setRoute} />
-                    <Button
-                        onClick={handleSubmit}
-                        variant="contained"
-                        sx={{
-                            backgroundColor: COLORS.primary,
-                            borderRadius: '8px',
-                            height: '40px',
-                            width: '100%',
+                <h1>Manage tourist route</h1>
+                <div className={styles.buttonGroup}>
+                    <ImageButton
+                        icon={ADD_ICON}
+                        color={COLORS.edit}
+                        backgroundColor={COLORS.editBackground}
+                        onClick={() => openModal(TOURIST_ROUTE_DEFAULT_VALUE)}
+                    >
+                        Create new tourist route
+                    </ImageButton>
+                    <ImageButton
+                        icon={EDIT_ICON}
+                        color={COLORS.edit}
+                        backgroundColor={COLORS.editBackground}
+                        disabled={selectedIDs.length != 1}
+                        onClick={() => {
+                            handleEdit(selectedIDs[0]);
                         }}
                     >
-                        <p className={styles.buttonText}>Submit</p>
-                    </Button>
+                        Edit
+                    </ImageButton>
+                    <ImageButton
+                        icon={DELETE_ICON}
+                        color={COLORS.delete}
+                        backgroundColor={COLORS.deleteBackground}
+                        disabled={selectedIDs.length == 0}
+                        onClick={() => {
+                            dispatch(deleteTouristRoutes(selectedIDs));
+                        }}
+                    >
+                        Delete
+                    </ImageButton>
                 </div>
-            </CenteredModal>
+                <div className={styles.data}>
+                    <DataGrid
+                        rows={data || []}
+                        columns={TOURIST_ROUTE_COLUMN}
+                        getRowId={(row) => row._id}
+                        checkboxSelection
+                        onCellClick={({ row, field }) => {
+                            const id = row._id;
+                            if (field != '__check__') {
+                                handleEdit(id);
+                            }
+                            if (selectedIDs.includes(id))
+                                setSelectedIDs((prev) => [...prev.filter((d) => d != id)]);
+                            else setSelectedIDs((prev) => [...prev, id]);
+                        }}
+                        onColumnHeaderClick={({ field }) => {
+                            if (field == '__check__')
+                                if (selectedIDs.length == 0)
+                                    setSelectedIDs(data.map((row) => row._id));
+                                else setSelectedIDs([]);
+                        }}
+                    />
+                </div>
+            </div>
+            <EditTouristRouteModal {...modalState} />
         </>
     );
 }

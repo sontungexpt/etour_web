@@ -16,19 +16,25 @@ import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/
 import EditNotificationModal, {
     useEditNotificationState,
 } from '@/components/EditNotificationModal/EditNotificationModal';
+import Loading from '@/components/Loading/Loading';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function DetailTourPage() {
     const { id } = useParams();
 
-    const { data } = useTourById(id);
+    const { data, error } = useTourById(id);
     const { data: notifications } = useTourNotification(id);
+
+    if (error?.status == '403')
+        throw new Error('You do not have permission to view this tour', {
+            cause: '403 - Forbidden',
+        });
 
     const { modalState, openModal: openEditNotificationModal } = useEditNotificationState(id);
 
     const { modalState: editTourModalState, openModal } = useEditTourModalState(id);
 
-    return (
+    return data ? (
         <>
             <div className={styles.container}>
                 {/* <h1 className={styles.pageTitle}>Tour detail</h1> */}
@@ -96,5 +102,7 @@ export default function DetailTourPage() {
             <EditNotificationModal {...modalState} />
             <EditTourModal {...editTourModalState} />
         </>
+    ) : (
+        <Loading />
     );
 }
