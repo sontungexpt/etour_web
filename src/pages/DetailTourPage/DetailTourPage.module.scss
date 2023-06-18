@@ -137,9 +137,9 @@
     .notification {
         grid-row: 2;
 
-		  h1 {
-			margin-bottom: 40px;
-		  }
+        h1 {
+            margin-bottom: 40px;
+        }
 
         .notification-list {
             margin-top: 20px;
@@ -147,9 +147,6 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-
-            .item {
-            }
         }
     }
 }
