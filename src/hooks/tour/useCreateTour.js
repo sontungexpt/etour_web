@@ -5,7 +5,7 @@ import useCallAPIToast from '../useCallAPIToast';
 
 export default function useCreateTour() {
     const [data, setData] = useState(null);
-    const [status, setStatus] = useState(STATUS.IDLE);
+    const [status, setStatus] = useState();
     const [error, setError] = useState(null);
 
     useCallAPIToast({

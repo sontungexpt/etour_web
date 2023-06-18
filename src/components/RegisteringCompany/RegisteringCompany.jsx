@@ -23,9 +23,6 @@ const RegisteringCompany = () => {
         socket && socket.disconnect();
         setSocket(null);
         dispatch(afterSignOut());
-        if (window) {
-            window.location.reload(false);
-        }
     };
 
     return (

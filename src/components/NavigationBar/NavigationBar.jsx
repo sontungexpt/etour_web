@@ -4,7 +4,6 @@ import LOGO from '@/assets/logo.svg';
 import { ReactComponent as Route } from '@/assets/route.svg';
 import { ReactComponent as Tour } from '@/assets/tour.svg';
 import { ReactComponent as HOME } from '@/assets/home.svg';
-import { ReactComponent as CHAT } from '@/assets/chat.svg';
 
 import ENDPOINT from '@/constant/endponint';
 import NavigationButton from '../NavigationButton/NavigationButton';
@@ -16,10 +15,6 @@ const NavigationBar = () => {
     const location = useLocation();
     const [isRender, setIsRender] = React.useState(false);
     useEffect(() => {
-        if (location.pathname.includes(ENDPOINT.CHAT)) {
-            setIsRender(false);
-            return;
-        }
         setIsRender(
             !isPathNameInNeedToAuthPage({
                 pathname: location.pathname,
@@ -36,7 +31,7 @@ const NavigationBar = () => {
                         className={styles.logo}
                         onClick={() => navigate(ENDPOINT.HOME)}
                     >
-                        <img src={LOGO} alt="Logo" />
+                        <img src={LOGO} alt="" />
                     </button>
                     <div className={styles.navButtonGroup}>
                         <NavigationButton
@@ -44,8 +39,9 @@ const NavigationBar = () => {
                             isHighlighted={location.pathname == ENDPOINT.HOME}
                             icon={HOME}
                             style={{
-                                width: '160px',
-                                padding: '0.8rem 2rem',
+                                width: '260px',
+                                height: 'fit-content',
+                                padding: '1.0rem 2rem',
                             }}
                         >
                             Home
@@ -55,33 +51,24 @@ const NavigationBar = () => {
                             isHighlighted={location.pathname == ENDPOINT.TOURIST_ROUTE}
                             icon={Route}
                             style={{
-                                width: '160px',
-                                padding: '0.8rem 2rem',
+                                width: '260px',
+                                height: 'fit-content',
+                                padding: '1.0rem 2rem',
                             }}
                         >
-                            Route
+                            Tourist route
                         </NavigationButton>
                         <NavigationButton
                             onClick={() => navigate(ENDPOINT.TOUR)}
                             isHighlighted={location.pathname == ENDPOINT.TOUR}
                             icon={Tour}
                             style={{
-                                width: '160px',
-                                padding: '0.8rem 2rem',
+                                width: '260px',
+                                height: 'fit-content',
+                                padding: '1.0rem 2rem',
                             }}
                         >
                             Tour
-                        </NavigationButton>
-                        <NavigationButton
-                            onClick={() => navigate(ENDPOINT.CHAT)}
-                            isHighlighted={location.pathname == ENDPOINT.CHAT}
-                            icon={CHAT}
-                            style={{
-                                width: '160px',
-                                padding: '0.8rem 2rem',
-                            }}
-                        >
-                            Chat
                         </NavigationButton>
                     </div>
                 </div>
