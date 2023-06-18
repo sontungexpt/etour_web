@@ -122,7 +122,7 @@ export default function HomePage() {
                                 <p className={styles.title}>Preview images</p>
                                 <div className={styles.images}>
                                     {companyData.previewImages.map((image) => (
-                                        <img src={`${API_ENDPOINT.IMAGE}/${image}`} />
+                                        <img key={image} src={`${API_ENDPOINT.IMAGE}/${image}`} />
                                     ))}
                                 </div>
                             </div>
