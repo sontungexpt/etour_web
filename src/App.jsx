@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { STATUS } from './constant/status';
+import SocketContext from './contexts/SocketContext';
 import router from './routers/mainNavigator';
 import store from './store';
-import SocketContext from './contexts/SocketContext';
-import { useState } from 'react';
-import { STATUS } from './constant/status';
 
 function App() {
     const [socket, setSocket] = useState();

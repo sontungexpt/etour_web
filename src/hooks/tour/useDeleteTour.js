@@ -3,7 +3,7 @@ import useSocket from '../useSocket';
 import { STATUS } from '@/constant/status';
 import useCallAPIToast from '../useCallAPIToast';
 
-export default function useDeleteTour() {
+export default function useDeleteTour({ onSuccess }) {
     const [data, setData] = useState(null);
     const [status, setStatus] = useState();
     const [error, setError] = useState(null);
@@ -15,9 +15,7 @@ export default function useDeleteTour() {
             success: 'Successfully delete tour',
             fail: `Fail to delete tour: ${error?.message}`,
         },
-        onSuccess: () => {
-            setSelectedIDs([]);
-        },
+        onSuccess,
     });
 
     const socket = useSocket((socket) => {

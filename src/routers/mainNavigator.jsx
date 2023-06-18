@@ -13,11 +13,13 @@ import RegisterPage from '@/pages/RegisterPage/RegisterPage';
 import ValidateCompanyPage from '@/pages/ValidateCompanyPage/ValidateCompanyPage';
 import ChatPage from '@/pages/ChatPage/ChatPage';
 import DetailChatPage from '@/pages/DetailChatPage/DetailChatPage';
+import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 
 export default createBrowserRouter([
     {
         path: '/',
         element: <BasePage />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: ENDPOINT.ON_BOARDING,

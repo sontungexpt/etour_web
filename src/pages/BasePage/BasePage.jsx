@@ -1,28 +1,22 @@
+import { selectLoginState, setBasicInformation } from '@/features/staffSlice';
+import useAuthenticationNavigate from '@/hooks/useAuthenticationNavigate';
+import useStaffInformation from '@/hooks/useStaffInformation';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import {
-    selectBasicInformation,
-    selectLoginState,
-    setBasicInformation,
-} from '@/features/staffSlice';
-import useAuthenticationNavigate from '@/hooks/useAuthenticationNavigate';
-import useStaffInformation from '@/hooks/useStaffInformation';
 
-import styles from './BasePage.module.scss';
-import NavigationButton from '@/components/NavigationButton/NavigationButton';
-import { setRoutes, setGetListTouristRouteError } from '@/features/touristRouteSlice';
-import useTouristRoute from '@/hooks/touristRoute/useTouristRoute';
+import Loading from '@/components/Loading/Loading';
+import NavigationBar from '@/components/NavigationBar/NavigationBar';
+import RegisteringCompany from '@/components/RegisteringCompany/RegisteringCompany';
 import { STATUS } from '@/constant/status';
 import SocketContext from '@/contexts/SocketContext';
+import { setGetListTouristRouteError, setRoutes } from '@/features/touristRouteSlice';
+import useTouristRoute from '@/hooks/touristRoute/useTouristRoute';
 import useCallAPIToast from '@/hooks/useCallAPIToast';
 import useCompanyInformation from '@/hooks/useCompanyInformation';
-import RegisteringCompany from '@/components/RegisteringCompany/RegisteringCompany';
-import useAccessToken from '@/hooks/useAccessToken';
-import { isPathNameInNeedToAuthPage } from '../../constant/need-to-auth-page';
-import NavigationBar from '@/components/NavigationBar/NavigationBar';
 import { useSelector } from 'react-redux';
-import Loading from '@/components/Loading/Loading';
+import { isPathNameInNeedToAuthPage } from '../../constant/need-to-auth-page';
+import styles from './BasePage.module.scss';
 
 export default function BasePage() {
     const location = useLocation();

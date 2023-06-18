@@ -13,23 +13,33 @@ import { ReactComponent as ADD_ICON } from '@/assets/add.svg';
 import { ReactComponent as EXPAND_ICON } from '@/assets/expand.svg';
 import useTourNotification from '@/hooks/notification/useTourNotification';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import EditNotificationModal, {
+    useEditNotificationState,
+} from '@/components/EditNotificationModal/EditNotificationModal';
+import Loading from '@/components/Loading/Loading';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function DetailTourPage() {
     const { id } = useParams();
 
-    const { data } = useTourById(id);
+    const { data, error } = useTourById(id);
     const { data: notifications } = useTourNotification(id);
+
+    if (error?.status == '403')
+        throw new Error('You do not have permission to view this tour', {
+            cause: '403 - Forbidden',
+        });
+
+    const { modalState, openModal: openEditNotificationModal } = useEditNotificationState(id);
 
     const { modalState: editTourModalState, openModal } = useEditTourModalState(id);
 
-    return (
+    return data ? (
         <>
             <div className={styles.container}>
-                {/* <h1 className={styles.pageTitle}>Tour detail</h1> */}
                 <PageTitle>Tour detail</PageTitle>
                 <div className={styles.header}>
-                    {data?.image ? <img src={`${API_ENDPOINT.IMAGE}/${data.image}`} /> : null}
+                    {data?.image ? <img src={`${API_ENDPOINT.IMAGE}/${data.image}`} /> : <p></p>}
                     <p className={styles.title}>Tour name</p>
                     <h1 className={styles.tourName}>{data?.name}</h1>
                     <p>{moment(data?.from).format('h:mm:ss a, DD MMMM YYYY')}</p>
@@ -53,10 +63,12 @@ export default function DetailTourPage() {
                     </ImageButton>
                 </div>
                 <div className={styles.notification}>
+                    <h1>Notification list</h1>
                     <ImageButton
                         icon={ADD_ICON}
                         color={COLORS.editBackground}
                         backgroundColor={COLORS.lightEditBackground}
+                        onClick={() => openEditNotificationModal({})}
                         fullWidth
                     >
                         Add notification
@@ -73,7 +85,9 @@ export default function DetailTourPage() {
                                         {notification?.title}
                                     </Typography>
                                     <Typography sx={{ color: 'text.secondary' }}>
-                                        {notification?.createdAt}
+                                        {moment(notification?.createdAt).format(
+                                            'DD MMMM YYYY, h:mm:ss a'
+                                        )}
                                     </Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
@@ -84,7 +98,10 @@ export default function DetailTourPage() {
                     </div>
                 </div>
             </div>
+            <EditNotificationModal {...modalState} />
             <EditTourModal {...editTourModalState} />
         </>
+    ) : (
+        <Loading />
     );
 }

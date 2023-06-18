@@ -182,6 +182,7 @@ export default memo(function EditTourModal({ isOpen, onClose, data, setData }) {
                                 description: e.target.value,
                             }))
                         }
+                        multiline
                         label="Description"
                         variant="standard"
                     />
