@@ -40,7 +40,7 @@ export default function DetailTourPage() {
                 {/* <h1 className={styles.pageTitle}>Tour detail</h1> */}
                 <PageTitle>Tour detail</PageTitle>
                 <div className={styles.header}>
-                    {data?.image ? <img src={`${API_ENDPOINT.IMAGE}/${data.image}`} /> : null}
+                    {data?.image ? <img src={`${API_ENDPOINT.IMAGE}/${data.image}`} /> : <p></p>}
                     <p className={styles.title}>Tour name</p>
                     <h1 className={styles.tourName}>{data?.name}</h1>
                     <p>{moment(data?.from).format('h:mm:ss a, DD MMMM YYYY')}</p>

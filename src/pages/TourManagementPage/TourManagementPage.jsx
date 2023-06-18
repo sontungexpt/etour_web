@@ -5,46 +5,26 @@ import COLORS from '../../constant/color';
 import ImageButton from '@/components/ImageButton/ImageButton';
 import styles from './TourManagementPage.module.scss';
 
-import { ReactComponent as ADD_ICON } from '@/assets/add.svg';
 import { ReactComponent as DELETE_ICON } from '@/assets/delete.svg';
 import { ReactComponent as EDIT_ICON } from '@/assets/edit.svg';
 
-import { useDispatch, useSelector } from 'react-redux';
-import EditTouristRouteModal, {
-    TOURIST_ROUTE_DEFAULT_VALUE,
-    useEditTouristRouteModalState,
-} from '@/components/EditTouristRouteModal/EditTouristRouteModal';
-import {
-    deleteTouristRoutes,
-    selectDeleteStatus,
-    selectRoutes,
-    setDeleteTouristRouteStatus,
-} from '@/features/touristRouteSlice';
-import useCallAPIToast from '@/hooks/useCallAPIToast';
+import { useDispatch } from 'react-redux';
 
-import { TOURIST_ROUTE_COLUMN } from '@/constant/dataGridColumns';
+import EditTourModal, { useEditTourModalState } from '@/components/EditTourModal/EditTourModal';
+import { TOUR_COLUMN } from '@/constant/dataGridColumns';
+import useDeleteTour from '@/hooks/tour/useDeleteTour';
+import useGetAPI from '@/hooks/useCallAPI';
 
 export default function TourManagementPage() {
     const dispatch = useDispatch();
     const [selectedIDs, setSelectedIDs] = useState([]);
+    const { data } = useGetAPI('view-company-tour', 'company-tour');
 
-    const { modalState, openModal } = useEditTouristRouteModalState();
-
-    const data = useSelector(selectRoutes);
-    const deleteStatus = useSelector(selectDeleteStatus);
-
-    useCallAPIToast({
-        status: deleteStatus,
-        message: {
-            pending: 'Deleting...',
-            success: 'Delete tourist route successfully',
-            fail: 'Fail to delete tourist route',
-        },
-        onResponse: () => {
-            setSelectedIDs([]);
-            dispatch(setDeleteTouristRouteStatus(''));
-        },
+    const { deleteTour } = useDeleteTour({
+        onSuccess: () => setSelectedIDs([]),
     });
+
+    const { modalState, openModal } = useEditTourModalState();
 
     function handleEdit(id) {
         openModal(data.find((d) => d._id == id));
@@ -53,16 +33,8 @@ export default function TourManagementPage() {
     return (
         <>
             <div className={styles.container}>
-                <h1>Manage tourist route</h1>
+                <h1>Manage tour</h1>
                 <div className={styles.buttonGroup}>
-                    <ImageButton
-                        icon={ADD_ICON}
-                        color={COLORS.edit}
-                        backgroundColor={COLORS.editBackground}
-                        onClick={() => openModal(TOURIST_ROUTE_DEFAULT_VALUE)}
-                    >
-                        Create new tourist route
-                    </ImageButton>
                     <ImageButton
                         icon={EDIT_ICON}
                         color={COLORS.edit}
@@ -80,7 +52,7 @@ export default function TourManagementPage() {
                         backgroundColor={COLORS.deleteBackground}
                         disabled={selectedIDs.length == 0}
                         onClick={() => {
-                            dispatch(deleteTouristRoutes(selectedIDs));
+                            deleteTour(selectedIDs);
                         }}
                     >
                         Delete
@@ -89,7 +61,7 @@ export default function TourManagementPage() {
                 <div className={styles.data}>
                     <DataGrid
                         rows={data || []}
-                        columns={TOURIST_ROUTE_COLUMN}
+                        columns={TOUR_COLUMN}
                         getRowId={(row) => row._id}
                         checkboxSelection
                         onCellClick={({ row, field }) => {
@@ -97,20 +69,24 @@ export default function TourManagementPage() {
                             if (field != '__check__') {
                                 handleEdit(id);
                             }
-                            if (selectedIDs.includes(id))
+                            if (selectedIDs.includes(id)) {
                                 setSelectedIDs((prev) => [...prev.filter((d) => d != id)]);
-                            else setSelectedIDs((prev) => [...prev, id]);
+                            } else {
+                                setSelectedIDs((prev) => [...prev, id]);
+                            }
                         }}
                         onColumnHeaderClick={({ field }) => {
                             if (field == '__check__')
-                                if (selectedIDs.length == 0)
-                                    setSelectedIDs(data.map((row) => row._id));
-                                else setSelectedIDs([]);
+                                if (selectedIDs.length == 0) {
+                                    setSelectedIDs(tours.map((row) => row._id));
+                                } else {
+                                    setSelectedIDs([]);
+                                }
                         }}
                     />
                 </div>
             </div>
-            <EditTouristRouteModal {...modalState} />
+            <EditTourModal {...modalState} />
         </>
     );
 }
