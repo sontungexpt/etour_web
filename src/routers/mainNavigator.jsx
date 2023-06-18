@@ -14,6 +14,7 @@ import ValidateCompanyPage from '@/pages/ValidateCompanyPage/ValidateCompanyPage
 import ChatPage from '@/pages/ChatPage/ChatPage';
 import DetailChatPage from '@/pages/DetailChatPage/DetailChatPage';
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
+import ReportIssuePage from '@/pages/ReportIssuePage/ReportIssuePage';
 
 export default createBrowserRouter([
     {
@@ -68,6 +69,10 @@ export default createBrowserRouter([
             {
                 path: `${ENDPOINT.CHAT}/:id`,
                 element: <DetailChatPage />,
+            },
+            {
+                path: `${ENDPOINT.REPORT}`,
+                element: <ReportIssuePage />,
             },
             {
                 path: '*',

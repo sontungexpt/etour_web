@@ -15,11 +15,13 @@ import styles from './HomePage.module.scss';
 
 import { ReactComponent as EDIT_ICON } from '@/assets/edit.svg';
 import { ReactComponent as SIGN_OUT_ICON } from '@/assets/sign-out.svg';
+import { ReactComponent as BUG } from '@/assets/bug.svg';
 import { avatarStorage } from '@/lib/image';
 import SocketContext from '@/contexts/SocketContext';
 import { useDispatch } from 'react-redux';
 import { afterSignOut } from '@/features/staffSlice';
 import { API_ENDPOINT } from '@/constant/api';
+import { randomUUID } from '@/lib/operation';
 import EditCompanyModal, {
     useEditCompanyModalState,
 } from '@/components/EditCompanyModal/EditCompanyModal';
@@ -88,22 +90,35 @@ export default function HomePage() {
                                         ))}
                                     </ul>
                                 </div>
-                                <div className={styles.functionBox}>
+                                <div>
+                                    <div className={styles.functionBox}>
+                                        <ImageButton
+                                            onClick={() => {}}
+                                            icon={EDIT_ICON}
+                                            backgroundColor={COLORS.editBackground}
+                                            color={COLORS.edit}
+                                        >
+                                            Edit profile
+                                        </ImageButton>
+                                        <ImageButton
+                                            onClick={handleOnPressSignOut}
+                                            icon={SIGN_OUT_ICON}
+                                            backgroundColor={COLORS.deleteBackground}
+                                            color={COLORS.delete}
+                                        >
+                                            Sign out
+                                        </ImageButton>
+                                    </div>
                                     <ImageButton
-                                        onClick={() => {}}
-                                        icon={EDIT_ICON}
-                                        backgroundColor={COLORS.editBackground}
-                                        color={COLORS.edit}
-                                    >
-                                        Edit profile
-                                    </ImageButton>
-                                    <ImageButton
-                                        onClick={handleOnPressSignOut}
-                                        icon={SIGN_OUT_ICON}
-                                        backgroundColor={COLORS.deleteBackground}
+                                        icon={BUG}
+                                        onClick={() => navigate(ENDPOINT.REPORT)}
                                         color={COLORS.delete}
+                                        style={{
+                                            marginTop: '1rem',
+                                        }}
+                                        fullWidth
                                     >
-                                        Sign out
+                                        Report an issue
                                     </ImageButton>
                                 </div>
                             </div>
@@ -129,9 +144,13 @@ export default function HomePage() {
                                 </div>
                                 <p className={styles.title}>Preview images</p>
                                 <div className={styles.images}>
-                                    {(companyData?.previewImages || []).map((image) => (
-                                        <img key={image} src={`${API_ENDPOINT.IMAGE}/${image}`} />
-                                    ))}
+                                    {companyData &&
+                                        companyData?.previewImages.map((image) => (
+                                            <img
+                                                src={`${API_ENDPOINT.IMAGE}/${image}`}
+                                                key={image + randomUUID()}
+                                            />
+                                        ))}
                                 </div>
                             </div>
                             <div className={styles.companyProfileButton}>
