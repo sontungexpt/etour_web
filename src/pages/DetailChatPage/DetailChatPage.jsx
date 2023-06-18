@@ -12,7 +12,7 @@ import { randomUUID } from '@/lib/operation';
 
 const DetailChatPage = () => {
     const { id } = useParams();
-    const { sendMessage, messages, viewChatMessageWithRoomId, isError } = useChat();
+    const { sendMessage, messages, viewChatMessageWithRoomId, isError } = useChat(id);
     const [messagesState, setMessagesState] = React.useState();
     const { socket } = useContext(SocketContext);
     const scrollRef = useRef();

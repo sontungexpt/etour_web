@@ -39,7 +39,7 @@ export default function useSocket(onConnect: (socket: Socket) => void, dependenc
 
     useEffect(() => {
         if (socket) onConnect?.(socket);
-    }, [!!socket]);
+    }, [!!socket, ...(dependencies || [])]);
 
     return socket;
 }

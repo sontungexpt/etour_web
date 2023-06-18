@@ -14,6 +14,9 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import ImageButton from '../ImageButton/ImageButton';
 import styles from './EditCompanyModal.module.scss';
+import apiInstance from '@/api/instance';
+import { STATUS } from '@/constant/status';
+import useCallAPIToast from '@/hooks/useCallAPIToast';
 
 export const TOURIST_ROUTE_DEFAULT_VALUE = {
     name: '',
@@ -30,7 +33,7 @@ export function useEditCompanyModalState(companyData) {
     const [data, _setData] = useState(companyData);
 
     function updateData(newData) {
-        _setData(...newData);
+        _setData(newData);
     }
 
     return {
@@ -39,6 +42,7 @@ export function useEditCompanyModalState(companyData) {
             onClose: () => setIsOpenCreateBox(false),
             data,
             setData: _setData,
+            companyId: companyData._id,
         },
         data,
         setData: updateData,
@@ -53,6 +57,8 @@ export function useEditCompanyModalState(companyData) {
 export default function EditCompanyModal({ isOpen, onClose, data, setData, companyId }) {
     const navigate = useNavigate();
 
+    const [status, setStatus] = useState();
+
     const choosePreviewImagesRef = useRef();
     const chooseImageRef = useRef();
 
@@ -62,9 +68,19 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
         formState: { errors },
     } = useForm();
 
+    useCallAPIToast({
+        status,
+        message: {
+            pending: 'Uploading data...',
+            success: 'Update company profile',
+            fail: 'Fail to update company profile',
+        },
+    });
+
     async function onSubmit() {
         onClose();
 
+        setStatus(STATUS.PENDING);
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('email', data.email);
@@ -72,7 +88,17 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
         formData.append('image', data.image);
         formData.append('previewImages', data.previewImages);
 
-        axios.put(`${API_ENDPOINT.COMPANY}/${companyId}`);
+        const res = await apiInstance.put(`http://localhost/company/${companyId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        if (res.status == 200) {
+            setStatus(STATUS.SUCCESS);
+            setData(res.data.data);
+        } else {
+            setStatus(STATUS.FAIL);
+        }
     }
 
     return (
@@ -121,7 +147,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
                         variant="standard"
                     />
                     <img
-                    className={styles.image}
+                        className={styles.image}
                         key={data.image?.name || data.image}
                         src={
                             data.image?.name

@@ -57,11 +57,15 @@ export default function useChat(chatRoomId?: string) {
             });
             // chatRoomId && socket.emit('view-chat-message', { chatRoomId: chatRoomId });
             socket.on('chat-message-list', (data) => {
-                setMessages(data.data);
-                setLastMessage(data.data.slice(-1)[0]);
+                console.log({ chatRoomId, roomId: data.data.chatRoomId });
+                if (data.data.chatRoomId == chatRoomId) {
+                    setMessages(data.data.messages);
+                    setLastMessage(data.data.messages.slice(-1)[0]);
+                }
             });
 
             socket.on('new-chat-message', (data) => {
+                if (data.chatRoomId != chatRoomId) return;
                 setMessages((messages) => {
                     if (messages) {
                         return [...messages, data];
