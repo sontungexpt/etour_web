@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 
 import dayjs from 'dayjs';
 
@@ -69,7 +69,7 @@ export function useEditTourModalState(touristRoute) {
     };
 }
 
-export default function EditTourModal({ isOpen, onClose, data, setData }) {
+export default memo(function EditTourModal({ isOpen, onClose, data, setData }) {
     const navigate = useNavigate();
 
     const { createTour } = useCreateTour();
@@ -182,7 +182,6 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
                                 description: e.target.value,
                             }))
                         }
-                        multiline
                         label="Description"
                         variant="standard"
                     />
@@ -227,4 +226,4 @@ export default function EditTourModal({ isOpen, onClose, data, setData }) {
             </div>
         </CenteredModal>
     );
-}
+});

@@ -7,6 +7,7 @@ const ENDPOINT = {
     TOUR: '/tour',
     VOUCHER: '/voucher',
     VALIDATE_COMPANY: '/validate-company',
+    CHAT: '/chat',
 };
 
 export default ENDPOINT;

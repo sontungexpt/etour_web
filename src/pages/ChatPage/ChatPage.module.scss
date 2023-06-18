@@ -1,0 +1,33 @@
+// import other scss files here
+@import '../DetailChatPage//DetailChatPage.module.scss';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    // position: fixed;
+    background-color: white;
+    min-height: 100vh;
+    top: 105px;
+    width: $chat;
+    overflow-y: auto;
+    img {
+        width: 100px;
+        cursor: pointer;
+        padding: 0 0.5rem;
+    }
+    .chatItem {
+        background-color: white;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        .lastMessage {
+            flex-direction: row;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            > p {
+                color: gray;
+                font-size: 0.8rem;
+            }
+        }
+    }
+}

@@ -11,13 +11,13 @@ import VoucherManagementPage from '@/pages/VoucherManagementPage/VoucherManageme
 import DetailTourPage from '@/pages/DetailTourPage/DetailTourPage';
 import RegisterPage from '@/pages/RegisterPage/RegisterPage';
 import ValidateCompanyPage from '@/pages/ValidateCompanyPage/ValidateCompanyPage';
-import ErrorPage from '@/pages/ErrorPage/ErrorPage';
+import ChatPage from '@/pages/ChatPage/ChatPage';
+import DetailChatPage from '@/pages/DetailChatPage/DetailChatPage';
 
 export default createBrowserRouter([
     {
         path: '/',
         element: <BasePage />,
-        errorElement: <ErrorPage />,
         children: [
             {
                 path: ENDPOINT.ON_BOARDING,
@@ -58,6 +58,14 @@ export default createBrowserRouter([
             {
                 path: `${ENDPOINT.TOUR}/:id`,
                 element: <DetailTourPage />,
+            },
+            {
+                path: '/chat',
+                element: <DetailChatPage />,
+            },
+            {
+                path: `${ENDPOINT.CHAT}/:id`,
+                element: <DetailChatPage />,
             },
             {
                 path: '*',

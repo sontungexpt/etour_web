@@ -32,11 +32,7 @@ export default function DetailRoutePage() {
     const { modalState: editTourModalState, openModal: openEditTourModal } =
         useEditTourModalState(id);
 
-    const { deleteTour } = useDeleteTour({
-        onSuccess: () => {
-            setSelectedIDs([]);
-        },
-    });
+    const { deleteTour } = useDeleteTour();
     const { data: routeInformation } = useRouteById(id);
     const { data: tours } = useTourByRouteId(id);
     const { modalState, openModal } = useEditTouristRouteModalState();

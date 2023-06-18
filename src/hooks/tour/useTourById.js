@@ -31,13 +31,8 @@ export default function useTourById(id) {
         (socket) => {
             socket.emit('view-tour', { id });
             socket.on('tour', (data) => {
-                if (data.status == '403') {
-                    setStatus(STATUS.FAIL);
-                    setError(data);
-                } else {
-                    setStatus(STATUS.SUCCESS);
-                    setData(data.data);
-                }
+                setStatus(STATUS.SUCCESS);
+                setData(data.data);
             });
             socket.on('error', (error) => {
                 setStatus(STATUS.FAIL);

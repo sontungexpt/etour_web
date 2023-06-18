@@ -1,22 +1,28 @@
-import { selectLoginState, setBasicInformation } from '@/features/staffSlice';
-import useAuthenticationNavigate from '@/hooks/useAuthenticationNavigate';
-import useStaffInformation from '@/hooks/useStaffInformation';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import {
+    selectBasicInformation,
+    selectLoginState,
+    setBasicInformation,
+} from '@/features/staffSlice';
+import useAuthenticationNavigate from '@/hooks/useAuthenticationNavigate';
+import useStaffInformation from '@/hooks/useStaffInformation';
 
-import Loading from '@/components/Loading/Loading';
-import NavigationBar from '@/components/NavigationBar/NavigationBar';
-import RegisteringCompany from '@/components/RegisteringCompany/RegisteringCompany';
+import styles from './BasePage.module.scss';
+import NavigationButton from '@/components/NavigationButton/NavigationButton';
+import { setRoutes, setGetListTouristRouteError } from '@/features/touristRouteSlice';
+import useTouristRoute from '@/hooks/touristRoute/useTouristRoute';
 import { STATUS } from '@/constant/status';
 import SocketContext from '@/contexts/SocketContext';
-import { setGetListTouristRouteError, setRoutes } from '@/features/touristRouteSlice';
-import useTouristRoute from '@/hooks/touristRoute/useTouristRoute';
 import useCallAPIToast from '@/hooks/useCallAPIToast';
 import useCompanyInformation from '@/hooks/useCompanyInformation';
-import { useSelector } from 'react-redux';
+import RegisteringCompany from '@/components/RegisteringCompany/RegisteringCompany';
+import useAccessToken from '@/hooks/useAccessToken';
 import { isPathNameInNeedToAuthPage } from '../../constant/need-to-auth-page';
-import styles from './BasePage.module.scss';
+import NavigationBar from '@/components/NavigationBar/NavigationBar';
+import { useSelector } from 'react-redux';
+import Loading from '@/components/Loading/Loading';
 
 export default function BasePage() {
     const location = useLocation();
@@ -55,7 +61,7 @@ export default function BasePage() {
                 setLoading(false);
             }
         }
-    }, [socket]);
+    }, [socket, location.pathname]);
 
     useCallAPIToast({
         status: socketStatus,
@@ -92,12 +98,10 @@ export default function BasePage() {
             pathname: location.pathname,
         })
     ) {
-        console.log('navigate to auth');
         return <RegisteringCompany />;
     }
 
     if (loading) {
-        console.log('navigate to auth');
         return <Loading />;
     }
 

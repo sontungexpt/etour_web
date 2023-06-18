@@ -1,0 +1,50 @@
+$chat: 25rem;
+.hoc {
+    display: grid;
+    grid-template-columns: $chat auto;
+    max-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
+    ::-webkit-scrollbar {
+        width: 0px; /* Remove scrollbar space */
+        background: none; /* Optional: just make scrollbar invisible */
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        padding-bottom: 8rem;
+        position: relative;
+        border-left: 1px solid #efefef;
+        min-height: 100vh;
+        overflow-y: auto;
+        .message {
+            margin: 4px 0;
+            flex-direction: row;
+            align-items: flex-end;
+            gap: 4;
+            max-width: 40%;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+        .inputContainer {
+            display: flex;
+            column-gap: 0.5rem;
+            position: fixed;
+            left: $chat;
+            bottom: 0;
+            right: 0;
+            padding: 1rem 2rem;
+            background-color: white;
+            border-left: 1px solid #efefef;
+            input {
+                width: 100%;
+                padding: 12px 16px;
+                border-radius: 100px;
+                background-color: rgb(246, 246, 246);
+                border: none;
+                outline: none;
+            }
+        }
+    }
+}
