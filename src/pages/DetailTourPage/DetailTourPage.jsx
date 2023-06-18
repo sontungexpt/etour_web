@@ -9,10 +9,17 @@ import EditTourModal, { useEditTourModalState } from '@/components/EditTourModal
 import moment from 'moment';
 import PageTitle from '@/components/PageTitle/PageTitle';
 
+import { ReactComponent as ADD_ICON } from '@/assets/add.svg';
+import { ReactComponent as EXPAND_ICON } from '@/assets/expand.svg';
+import useTourNotification from '@/hooks/notification/useTourNotification';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 export default function DetailTourPage() {
     const { id } = useParams();
 
     const { data } = useTourById(id);
+    const { data: notifications } = useTourNotification(id);
 
     const { modalState: editTourModalState, openModal } = useEditTourModalState(id);
 
@@ -44,6 +51,37 @@ export default function DetailTourPage() {
                     >
                         {''}
                     </ImageButton>
+                </div>
+                <div className={styles.notification}>
+                    <ImageButton
+                        icon={ADD_ICON}
+                        color={COLORS.editBackground}
+                        backgroundColor={COLORS.lightEditBackground}
+                        fullWidth
+                    >
+                        Add notification
+                    </ImageButton>
+                    <div className={styles['notification-list']}>
+                        {notifications.map((notification) => (
+                            <Accordion fullWidth>
+                                <AccordionSummary
+                                    expandIcon={<EXPAND_ICON />}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                >
+                                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                                        {notification?.title}
+                                    </Typography>
+                                    <Typography sx={{ color: 'text.secondary' }}>
+                                        {notification?.createdAt}
+                                    </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography>{notification?.content}</Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        ))}
+                    </div>
                 </div>
             </div>
             <EditTourModal {...editTourModalState} />
