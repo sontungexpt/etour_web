@@ -88,9 +88,6 @@ export default function HomePage() {
         socket && socket.disconnect();
         setSocket(null);
         dispatch(afterSignOut());
-        if (window) {
-            window.location.reload(false);
-        }
     };
 
     return (
@@ -184,16 +181,22 @@ export default function HomePage() {
                                         {''}
                                     </ImageButton>
                                     <div className={styles.staffList}>
-                                        {staffList.map((staff) => (
-                                            <div
-                                                key={`${staff.fullName} ${staff.role}`}
-                                                onClick={() => openAddStaffModal(staff)}
-                                                className={styles.staff}
-                                            >
-                                                <p>{staff?.fullName}</p>
-                                                <p>{staff?.role}</p>
-                                            </div>
-                                        ))}
+                                        {staffList && staffList.length > 0 ? (
+                                            staffList.map((staff) => (
+                                                <div
+                                                    key={`${staff.fullName} ${
+                                                        staff.role
+                                                    } + ${randomUUID()}`}
+                                                    onClick={() => openAddStaffModal(staff)}
+                                                    className={styles.staff}
+                                                >
+                                                    <p>{staff?.fullName}</p>
+                                                    <p>{staff?.role}</p>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p>No staff</p>
+                                        )}
                                     </div>
                                 </div>
                             </Card>

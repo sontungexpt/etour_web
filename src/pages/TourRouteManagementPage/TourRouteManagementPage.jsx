@@ -23,7 +23,6 @@ import {
 import useCallAPIToast from '@/hooks/useCallAPIToast';
 
 import { TOURIST_ROUTE_COLUMN } from '@/constant/dataGridColumns';
-import ExportButton from '@/components/ExportButton/ExportButton';
 
 export default function TourRouteManagementPage() {
     const dispatch = useDispatch();
@@ -86,11 +85,6 @@ export default function TourRouteManagementPage() {
                     >
                         Delete
                     </ImageButton>
-                    <ExportButton
-                        data={data}
-                        columns={TOURIST_ROUTE_COLUMN}
-                        fileName="Tourist route data"
-                    />
                 </div>
                 <div className={styles.data}>
                     <DataGrid

@@ -22,7 +22,6 @@ import ImageButton from '@/components/ImageButton/ImageButton';
 import { TOUR_COLUMN } from '@/constant/dataGridColumns';
 import useDeleteTour from '@/hooks/tour/useDeleteTour';
 import styles from './DetailRoutePage.module.scss';
-import ExportButton from '@/components/ExportButton/ExportButton';
 
 export default function DetailRoutePage() {
     const navigate = useNavigate();
@@ -101,11 +100,6 @@ export default function DetailRoutePage() {
                     >
                         Delete
                     </ImageButton>
-                    <ExportButton
-                        data={tours}
-                        columns={TOUR_COLUMN}
-                        fileName={`Tour data (Route ${id})`}
-                    />
                 </Box>
                 <div className={styles.data}>
                     <DataGrid

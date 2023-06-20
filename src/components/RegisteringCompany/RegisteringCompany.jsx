@@ -25,14 +25,9 @@ const RegisteringCompany = () => {
         socket && socket.disconnect();
         setSocket(null);
         dispatch(afterSignOut());
-        if (window) {
-            window.location.reload(false);
-        }
     };
 
-    const reviewState = companyData?.profileState;
-
-    console.log({ reviewState });
+    const profileState = companyData?.profileState;
 
     return (
         <div className={styles.container}>
@@ -40,26 +35,53 @@ const RegisteringCompany = () => {
             <div>
                 <div>
                     <Check />
-                    <p>Company information</p>
+                    <p
+                        style={{
+                            color: '#00B707',
+                        }}
+                    >
+                        Company information
+                    </p>
                 </div>
                 <div>
                     <Cross />
-                    <p>Confirmed company email</p>
+                    <p
+                        style={{
+                            color: '#FF3737',
+                        }}
+                    >
+                        Confirmed company email
+                    </p>
                 </div>
                 <div>
                     <Check />
-                    <p>Confirmed administrator email</p>
+                    <p
+                        style={{
+                            color: '#00B707',
+                        }}
+                    >
+                        Confirmed administrator email
+                    </p>
                 </div>
-                {
-                    <div>
+                <div>
+                    {profileState === 'pending' && (
                         <div className={styles.dots}>
                             <div></div>
                             <div></div>
                             <div></div>
                         </div>
-                        <p>Being reviewed by E-Tour</p>
-                    </div>
-                }
+                    )}
+                    {profileState === 'rejected' && <Cross />}
+                    <p
+                        style={{
+                            color: profileState === 'pending' ? '#FFC000' : '#FF3737',
+                        }}
+                    >
+                        {profileState === 'pending'
+                            ? 'Being reviewed by E-Tour'
+                            : 'Your company registration is rejected'}
+                    </p>
+                </div>
             </div>
             <div>
                 <Button
