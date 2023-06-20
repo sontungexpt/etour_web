@@ -10,11 +10,13 @@ import ENDPOINT from '@/constant/endponint';
 import SocketContext from '@/contexts/SocketContext';
 import { afterSignOut } from '@/features/staffSlice';
 import { useDispatch } from 'react-redux';
+import useCompanyInformation from '@/hooks/useCompanyInformation';
 
 const RegisteringCompany = () => {
     const navigate = useNavigate();
     const { socket, setSocket } = useContext(SocketContext);
     const dispatch = useDispatch();
+    const { data: companyData } = useCompanyInformation();
 
     const onPressLogOut = () => {
         localStorage.clear();
@@ -27,6 +29,10 @@ const RegisteringCompany = () => {
             window.location.reload(false);
         }
     };
+
+    const reviewState = companyData?.profileState;
+
+    console.log({ reviewState });
 
     return (
         <div className={styles.container}>
@@ -44,17 +50,23 @@ const RegisteringCompany = () => {
                     <Check />
                     <p>Confirmed administrator email</p>
                 </div>
-                <div>
-                    <div className={styles.dots}>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                {
+                    <div>
+                        <div className={styles.dots}>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <p>Being reviewed by E-Tour</p>
                     </div>
-                    <p>Being reviewed by E-Tour</p>
-                </div>
+                }
             </div>
             <div>
-                <Button variant="contained" color="primary">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate(ENDPOINT.UPDATE_REGISTER)}
+                >
                     Modify registration
                 </Button>
                 <Button variant="contained" color="error" fullWidth onClick={onPressLogOut}>

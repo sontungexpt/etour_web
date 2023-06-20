@@ -40,11 +40,11 @@ export function useEditCompanyModalState(companyData) {
         modalState: {
             isOpen: isOpenCreateBox,
             onClose: () => setIsOpenCreateBox(false),
-            data,
+            data: data || {},
             setData: _setData,
             companyId: companyData?._id,
         },
-        data,
+        data: data || {},
         setData: updateData,
         openModal: (data) => {
             setIsOpenCreateBox(true);

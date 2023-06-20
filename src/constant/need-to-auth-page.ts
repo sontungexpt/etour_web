@@ -5,6 +5,7 @@ export const NEED_TO_AUTH_PAGE: string[] = [
     ENDPOINT.ON_BOARDING,
     ENDPOINT.REGISTER,
     ENDPOINT.VALIDATE_COMPANY,
+    ENDPOINT.UPDATE_REGISTER,
 ];
 
 interface IPath {
