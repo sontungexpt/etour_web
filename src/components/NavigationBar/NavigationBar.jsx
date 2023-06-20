@@ -5,6 +5,7 @@ import { ReactComponent as Route } from '@/assets/route.svg';
 import { ReactComponent as Tour } from '@/assets/tour.svg';
 import { ReactComponent as HOME } from '@/assets/home.svg';
 import { ReactComponent as CHAT } from '@/assets/chat.svg';
+import { ReactComponent as VOUCHER } from '@/assets/voucher.svg';
 
 import ENDPOINT from '@/constant/endponint';
 import NavigationButton from '../NavigationButton/NavigationButton';
@@ -75,7 +76,7 @@ const NavigationBar = () => {
                         <NavigationButton
                             onClick={() => navigate(ENDPOINT.VOUCHER)}
                             isHighlighted={location.pathname == ENDPOINT.VOUCHER}
-                            icon={Tour}
+                            icon={VOUCHER}
                             style={{
                                 width: '160px',
                                 padding: '0.8rem 2rem',

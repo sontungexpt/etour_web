@@ -14,20 +14,16 @@ export default function ImageButton({
     icon: Icon,
     disabled = false,
     reversed = false,
-    hidden = false,
 }) {
     return (
         <button
             type="button"
             disabled={disabled}
-            hidden={hidden}
             style={{
                 width: fullWidth ? '100%' : 'max-content',
                 backgroundColor: disabled ? COLORS.disabledBackground : backgroundColor,
                 color: disabled ? COLORS.disabled : color,
                 flexDirection: reversed ? 'row-reverse' : 'row',
-                display: hidden ? 'none' : 'flex',
-                visibility: hidden ? 'hidden' : 'visible',
                 ...style,
             }}
             className={`${styles.container} ${disabled ? styles.disabled : ''}`}
@@ -70,7 +66,6 @@ ImageButton.propTypes = {
      * If reversed = false, he button icon will be displayed in front of text, else
      */
     reversed: PropTypes.bool,
-    hidden: PropTypes.bool,
 };
 
 ImageButton.defaultProps = {
@@ -82,5 +77,4 @@ ImageButton.defaultProps = {
     icon: ADD_ICON,
     disabled: false,
     reversed: false,
-    hidden: false,
 };

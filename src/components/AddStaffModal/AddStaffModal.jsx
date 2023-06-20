@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import _ from 'lodash';
-
 import {
     Checkbox,
     FormControl,
@@ -11,9 +9,6 @@ import {
     FormGroup,
     FormLabel,
     Input,
-    InputLabel,
-    MenuItem,
-    Select,
     TextField,
 } from '@mui/material';
 
@@ -24,16 +19,15 @@ import { API_ENDPOINT } from '@/constant/api';
 
 import { ReactComponent as ADD_ICON } from '@/assets/add.svg';
 import { ReactComponent as CHECK_ICON } from '@/assets/check.svg';
+import { ReactComponent as DELETE_ICON } from '@/assets/delete.svg';
 
 import ImageButton from '@/components/ImageButton/ImageButton';
 
-import usePushTourNotification from '@/hooks/notification/usePushTourNotification';
-import { useNavigate } from 'react-router-dom';
-import styles from './AddStaffModal.module.scss';
-import { STAFF_PERMISSION } from '@/constant/staffPermission.ts';
 import apiInstance from '@/api/instance';
-import useCallAPIToast from '@/hooks/useCallAPIToast';
+import { STAFF_PERMISSION, StaffPermission } from '@/constant/staffPermission.ts';
 import { STATUS } from '@/constant/status';
+import useCallAPIToast from '@/hooks/useCallAPIToast';
+import styles from './AddStaffModal.module.scss';
 
 export function useAddStaffState({ onUpdate }) {
     const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
@@ -92,7 +86,8 @@ export default function AddStaffModal({ isOpen, onClose, data, setData, onUpdate
         submitData.append('fullName', data.fullName);
         submitData.append('role', data.role);
         submitData.append('image', data.image);
-        submitData.append('permissions', data.permissions);
+        data.permissions.forEach((p) => submitData.append('permissions', p));
+        console.log({ permissions: data.permissions });
         if (!data._id) {
             submitData.append('username', data.username);
             submitData.append('password', data.password);
@@ -115,6 +110,21 @@ export default function AddStaffModal({ isOpen, onClose, data, setData, onUpdate
         if (res.status == 200) {
             setStatus(STATUS.SUCCESS);
             onUpdate?.(res.data.data);
+        } else {
+            setStatus(STATUS.FAIL);
+        }
+    }
+
+    async function handleDeleteStaff() {
+        onClose();
+
+        setStatus(STATUS.PENDING);
+
+        const res = await apiInstance.delete(`${API_ENDPOINT.STAFF}/${data?._id}`);
+
+        if (res.status == 200) {
+            setStatus(STATUS.SUCCESS);
+            onUpdate?.(data, 'delete');
         } else {
             setStatus(STATUS.FAIL);
         }
@@ -241,7 +251,7 @@ export default function AddStaffModal({ isOpen, onClose, data, setData, onUpdate
                                                     setData((prev) => ({
                                                         ...prev,
                                                         permissions: [
-                                                            ...data.permissions.filter(
+                                                            ...(data?.permissions || []).filter(
                                                                 (d) => d != permission
                                                             ),
                                                         ],
@@ -250,7 +260,7 @@ export default function AddStaffModal({ isOpen, onClose, data, setData, onUpdate
                                                     setData((prev) => ({
                                                         ...prev,
                                                         permissions: [
-                                                            ...data.permissions,
+                                                            ...(data?.permissions || []),
                                                             permission,
                                                         ],
                                                     }));
@@ -266,16 +276,28 @@ export default function AddStaffModal({ isOpen, onClose, data, setData, onUpdate
                     </FormControl>
                     {errors.type && <p className={styles.error}>{errors.type.message}</p>}
                 </div>
-                <ImageButton
-                    backgroundColor={COLORS.submit}
-                    color={COLORS.submitBackground}
-                    fullWidth={true}
-                    icon={CHECK_ICON}
-                    onClick={handleSubmit(onSubmit)}
-                    style={{ padding: '15px 0' }}
-                >
-                    Submit
-                </ImageButton>
+                <div style={{ display: 'flex', gap: 10 }}>
+                    <ImageButton
+                        backgroundColor={COLORS.submit}
+                        color={COLORS.submitBackground}
+                        fullWidth={true}
+                        icon={CHECK_ICON}
+                        onClick={handleSubmit(onSubmit)}
+                        style={{ padding: '15px 0' }}
+                    >
+                        Submit
+                    </ImageButton>
+                    <ImageButton
+                        backgroundColor={COLORS.deleteBackground}
+                        color={COLORS.delete}
+                        // fullWidth={true}
+                        icon={DELETE_ICON}
+                        onClick={handleDeleteStaff}
+                        style={{ padding: '15px 20px' }}
+                    >
+                        Delete
+                    </ImageButton>
+                </div>
             </div>
         </CenteredModal>
     );

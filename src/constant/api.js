@@ -9,6 +9,5 @@ export const API_ENDPOINT = {
     LOGIN: `${API.base}/company/login/basic`,
     IMAGE: `${API.base}/images`,
     REGISTER: `${API.base}/company/signup/basic`,
-    COMPANY: `${API.base}/company`,
-    STAFF: `${API.base}/company/staff`,
+    COMPANY: `${API.base}/company`
 };

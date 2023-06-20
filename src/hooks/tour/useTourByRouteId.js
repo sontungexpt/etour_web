@@ -3,10 +3,9 @@ import useSocket from '../useSocket';
 import { STATUS } from '@/constant/status';
 import useCallAPIToast from '../useCallAPIToast';
 import SocketContext from '@/contexts/SocketContext';
-import usePersistentState from '../usePersistentState';
 
 export default function useTourByRouteId(id) {
-    const [data, setData] = usePersistentState(`tour-of-route-${id}`, []);
+    const [data, setData] = useState([]);
     const [status, setStatus] = useState();
     const [error, setError] = useState(null);
     const { socket: globalSocket } = useContext(SocketContext);

@@ -9,6 +9,7 @@ const ENDPOINT = {
     VALIDATE_COMPANY: '/validate-company',
     CHAT: '/chat',
     REPORT: '/report',
+    UPDATE_REGISTER: '/update-register',
 };
 
 export default ENDPOINT;

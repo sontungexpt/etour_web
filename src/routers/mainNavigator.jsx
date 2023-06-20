@@ -15,6 +15,7 @@ import ChatPage from '@/pages/ChatPage/ChatPage';
 import DetailChatPage from '@/pages/DetailChatPage/DetailChatPage';
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import ReportIssuePage from '@/pages/ReportIssuePage/ReportIssuePage';
+import UpdateRegisterPage from '@/pages/UpdateRegisterPage/UpdateRegisterPage';
 
 export default createBrowserRouter([
     {
@@ -29,6 +30,10 @@ export default createBrowserRouter([
             {
                 path: ENDPOINT.REGISTER,
                 element: <RegisterPage />,
+            },
+            {
+                path: ENDPOINT.UPDATE_REGISTER,
+                element: <UpdateRegisterPage />,
             },
             {
                 path: ENDPOINT.HOME,
