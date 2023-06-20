@@ -26,6 +26,7 @@ import useVoucherList from '../../hooks/useVoucherList';
 import { VOUCHER_COLUMN } from '@/constant/dataGridColumns';
 import { DataGrid } from '@mui/x-data-grid';
 import ImageButton from '@/components/ImageButton/ImageButton';
+import ExportButton from '@/components/ExportButton/ExportButton';
 
 export default function VoucherManagementPage() {
     const navigate = useNavigate();
@@ -92,9 +93,12 @@ export default function VoucherManagementPage() {
         <>
             <div className={styles.container}>
                 <h1>Manage voucher</h1>
-                <ImageButton onClick={() => setIsOpenCreateBox(true)}>
-                    Create new voucher
-                </ImageButton>
+                <div style={{ display: 'flex', gap: 20 }}>
+                    <ImageButton onClick={() => setIsOpenCreateBox(true)}>
+                        Create new voucher
+                    </ImageButton>
+                    <ExportButton data={data} columns={VOUCHER_COLUMN} fileName={`Voucher data`} />
+                </div>
                 <div className={styles.data}>
                     <DataGrid
                         rows={data || []}

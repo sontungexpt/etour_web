@@ -14,6 +14,7 @@ import EditTourModal, { useEditTourModalState } from '@/components/EditTourModal
 import { TOUR_COLUMN } from '@/constant/dataGridColumns';
 import useDeleteTour from '@/hooks/tour/useDeleteTour';
 import useGetAPI from '@/hooks/useCallAPI';
+import ExportButton from '@/components/ExportButton/ExportButton';
 
 export default function TourManagementPage() {
     const dispatch = useDispatch();
@@ -57,6 +58,7 @@ export default function TourManagementPage() {
                     >
                         Delete
                     </ImageButton>
+                    <ExportButton data={data} columns={TOUR_COLUMN} fileName={`Tour data`} />
                 </div>
                 <div className={styles.data}>
                     <DataGrid

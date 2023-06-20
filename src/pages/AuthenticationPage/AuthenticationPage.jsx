@@ -77,9 +77,6 @@ export default function AuthenticationPage() {
                     }}
                     noValidate
                     autoComplete="off"
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') handleSignIn();
-                    }}
                 >
                     <TextField
                         value={username}
