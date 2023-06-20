@@ -30,7 +30,7 @@ export const TOURIST_ROUTE_DEFAULT_VALUE = {
 export function useEditCompanyModalState(companyData) {
     const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
-    const [data, _setData] = useState(companyData);
+    const [data, _setData] = useState(companyData || {});
 
     function updateData(newData) {
         _setData(newData);
@@ -71,7 +71,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
     useCallAPIToast({
         status,
         message: {
-            pending: 'Uploading data...',
+            pending: 'Uploading data?...',
             success: 'Update company profile',
             fail: 'Fail to update company profile',
         },
@@ -95,7 +95,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
         });
         if (res.status == 200) {
             setStatus(STATUS.SUCCESS);
-            setData(res.data.data);
+            setData(res.data?.data);
         } else {
             setStatus(STATUS.FAIL);
         }
@@ -188,8 +188,8 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
                                     key={data?.previewImages[i]?.name || data?.previewImages[i]}
                                     src={
                                         data?.previewImages[i]?.name
-                                            ? URL.createObjectURL(data.previewImages[i])
-                                            : `${API_ENDPOINT.IMAGE}/${data.previewImages[i]}`
+                                            ? URL.createObjectURL(data?.previewImages[i])
+                                            : `${API_ENDPOINT.IMAGE}/${data?.previewImages[i]}`
                                     }
                                 />
                             ))}
@@ -231,7 +231,7 @@ export default function EditCompanyModal({ isOpen, onClose, data, setData, compa
                     >
                         Submit
                     </ImageButton>
-                    {data._id ? (
+                    {data?._id ? (
                         <ImageButton
                             icon={DELETE_ICON}
                             color={COLORS.delete}

@@ -1,7 +1,7 @@
 .container {
     width: 100%;
     display: grid;
-    grid-template-rows: max-content max-content max-content;
+    grid-template-rows: max-content max-content max-content max-content;
     grid-template-columns: 5fr 5fr;
     flex-direction: column;
     gap: 50px;
@@ -17,9 +17,7 @@
     }
 
     .header {
-        grid-column: 1;
-        grid-row-start: 2;
-        grid-row-end: 3;
+        grid-area: 2 / 1 / span 2;
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -146,7 +144,29 @@
 
             display: flex;
             flex-direction: column;
-            gap: 10px;
+        }
+    }
+
+    .ticketList {
+        grid-area: 3 / 2 / span 2;
+
+        h1 {
+            margin-bottom: 40px;
+        }
+
+        .ticketInfo {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .field {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+
+                .content {
+                }
+            }
         }
     }
 }

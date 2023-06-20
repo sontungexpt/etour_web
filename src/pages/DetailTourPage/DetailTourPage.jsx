@@ -17,10 +17,13 @@ import EditNotificationModal, {
     useEditNotificationState,
 } from '@/components/EditNotificationModal/EditNotificationModal';
 import Loading from '@/components/Loading/Loading';
+import useGetAPI from '@/hooks/useCallAPI';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function DetailTourPage() {
     const { id } = useParams();
+
+    const { data: ticketList } = useGetAPI('filter-ticket', 'filter-ticket-result', { tourId: id });
 
     const { data, error } = useTourById(id);
     const { data: notifications } = useTourNotification(id);
@@ -92,6 +95,57 @@ export default function DetailTourPage() {
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Typography>{notification?.content}</Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        ))}
+                    </div>
+                </div>
+                <div className={styles.ticketList}>
+                    <h1>Ticket list</h1>
+                    <div>
+                        {ticketList.map((ticket) => (
+                            <Accordion fullWidth>
+                                <AccordionSummary
+                                    expandIcon={<EXPAND_ICON />}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                >
+                                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                                        {ticket?.fullName}
+                                    </Typography>
+                                    <Typography sx={{ color: 'text.secondary' }}>
+                                        {moment(ticket?.createdAt).format(
+                                            'DD MMMM YYYY, h:mm:ss a'
+                                        )}
+                                    </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <div className={styles.ticketInfo}>
+                                        <div className={styles.field}>
+                                            <p className={styles.title}>Full name</p>
+                                            <p className={styles.content}>{ticket?.fullName}</p>
+                                        </div>
+                                        <div className={styles.field}>
+                                            <p className={styles.title}>Phone number</p>
+                                            <p className={styles.content}>{ticket?.phoneNumber}</p>
+                                        </div>
+                                        <div className={styles.field}>
+                                            <p className={styles.title}>Email</p>
+                                            <p className={styles.content}>{ticket?.email}</p>
+                                        </div>
+                                        <div className={styles.field}>
+                                            <p className={styles.title}>Special requirement</p>
+                                            <p className={styles.content}>
+                                                {ticket?.specialRequirement}
+                                            </p>
+                                        </div>
+                                        <div className={styles.field}>
+                                            <p className={styles.title}>Pickup location</p>
+                                            <p className={styles.content}>
+                                                {ticket?.pickupLocation}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </AccordionDetails>
                             </Accordion>
                         ))}
