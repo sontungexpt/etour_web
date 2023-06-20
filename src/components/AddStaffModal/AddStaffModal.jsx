@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
@@ -35,7 +35,7 @@ import apiInstance from '@/api/instance';
 import useCallAPIToast from '@/hooks/useCallAPIToast';
 import { STATUS } from '@/constant/status';
 
-export function useAddStaffState() {
+export function useAddStaffState({ onUpdate }) {
     const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
     const [data, _setData] = useState({ permissions: [] });
@@ -46,19 +46,22 @@ export function useAddStaffState() {
             onClose: () => setIsOpenCreateBox(false),
             data,
             setData: _setData,
+            onUpdate,
         },
         data,
         setData: _setData,
-        openModal: () => {
+        openModal: (data) => {
             setIsOpenCreateBox(true);
+            _setData(data);
         },
         closeModal: () => setIsOpenCreateBox(false),
     };
 }
 
-export default function AddStaffModal({ isOpen, onClose, data, setData }) {
+export default function AddStaffModal({ isOpen, onClose, data, setData, onUpdate }) {
     const {
         register,
+        unregister,
         handleSubmit,
         formState: { errors },
     } = useForm();
@@ -75,22 +78,43 @@ export default function AddStaffModal({ isOpen, onClose, data, setData }) {
         },
     });
 
+    useEffect(() => {
+        if (data?._id) {
+            unregister('username');
+            unregister('password');
+        }
+    }, [data]);
+
     async function onSubmit() {
         onClose();
 
-        const submitData = {
-            ..._.pick(data, ['fullName', 'role', 'image', 'permissions', 'username', 'password']),
-        };
+        const submitData = new FormData();
+        submitData.append('fullName', data.fullName);
+        submitData.append('role', data.role);
+        submitData.append('image', data.image);
+        submitData.append('permissions', data.permissions);
+        if (!data._id) {
+            submitData.append('username', data.username);
+            submitData.append('password', data.password);
+        }
 
         setStatus(STATUS.PENDING);
 
-        const res = await apiInstance.post(`${API_ENDPOINT.STAFF}`, submitData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const res = data?._id
+            ? await apiInstance.put(`${API_ENDPOINT.STAFF}/${data?._id}`, submitData, {
+                  headers: {
+                      'Content-Type': 'multipart/form-data',
+                  },
+              })
+            : await apiInstance.post(`${API_ENDPOINT.STAFF}`, submitData, {
+                  headers: {
+                      'Content-Type': 'multipart/form-data',
+                  },
+              });
+
         if (res.status == 200) {
             setStatus(STATUS.SUCCESS);
+            onUpdate?.(res.data.data);
         } else {
             setStatus(STATUS.FAIL);
         }
@@ -99,36 +123,48 @@ export default function AddStaffModal({ isOpen, onClose, data, setData }) {
     return (
         <CenteredModal isOpen={isOpen} onClose={onClose}>
             <div className={styles.createBox}>
-                <h1>Create new staff</h1>
+                <h1>{data?._id ? 'Change staff information' : 'Create new staff'}</h1>
                 <div className={styles.form}>
-                    <p className={styles.title}>Staff credential</p>
-                    <TextField
-                        value={data.username}
-                        color={errors.username ? 'error' : 'primary'}
-                        onChange={(e) => setData((prev) => ({ ...prev, username: e.target.value }))}
-                        label="Username"
-                        variant="standard"
-                        required
-                        inputProps={register('username', {
-                            required: 'Staff username is required',
-                            min: 6,
-                        })}
-                    />
-                    {errors.username && <p className={styles.error}>{errors.username.message}</p>}
-                    <TextField
-                        value={data.password}
-                        color={errors.password ? 'error' : 'primary'}
-                        onChange={(e) => setData((prev) => ({ ...prev, password: e.target.value }))}
-                        label="Password"
-                        type="password"
-                        variant="standard"
-                        required
-                        inputProps={register('password', {
-                            required: 'Staff password is required',
-                            min: 6,
-                        })}
-                    />
-                    {errors.password && <p className={styles.error}>{errors.password.message}</p>}
+                    {data?._id ? null : (
+                        <>
+                            <p className={styles.title}>Staff credential</p>
+                            <TextField
+                                value={data.username}
+                                color={errors.username ? 'error' : 'primary'}
+                                onChange={(e) =>
+                                    setData((prev) => ({ ...prev, username: e.target.value }))
+                                }
+                                label="Username"
+                                variant="standard"
+                                required
+                                inputProps={register('username', {
+                                    required: 'Staff username is required',
+                                    min: 6,
+                                })}
+                            />
+                            {errors.username && (
+                                <p className={styles.error}>{errors.username.message}</p>
+                            )}
+                            <TextField
+                                value={data.password}
+                                color={errors.password ? 'error' : 'primary'}
+                                onChange={(e) =>
+                                    setData((prev) => ({ ...prev, password: e.target.value }))
+                                }
+                                label="Password"
+                                type="password"
+                                variant="standard"
+                                required
+                                inputProps={register('password', {
+                                    required: 'Staff password is required',
+                                    min: 6,
+                                })}
+                            />
+                            {errors.password && (
+                                <p className={styles.error}>{errors.password.message}</p>
+                            )}
+                        </>
+                    )}
                     <p className={styles.title}>Staff basic information</p>
                     <TextField
                         value={data.fullName}
