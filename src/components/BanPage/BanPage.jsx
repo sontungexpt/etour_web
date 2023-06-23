@@ -4,7 +4,7 @@ import styles from './BanPage.module.scss';
 const BanPage = () => {
     return (
         <div className={styles.container}>
-            <h1>Your company is being ban.</h1>
+            <h1>Your company is being banned.</h1>
             <p>Please contact our support center to get help.</p>
             <p>
                 Email to{' '}
