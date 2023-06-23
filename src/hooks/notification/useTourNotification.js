@@ -3,9 +3,10 @@ import useSocket from '../useSocket';
 import { STATUS } from '@/constant/status';
 import useCallAPIToast from '../useCallAPIToast';
 import SocketContext from '@/contexts/SocketContext';
+import usePersistentState from '../usePersistentState';
 
 export default function useTourNotification(id) {
-    const [data, setData] = useState([]);
+    const [data, setData] = usePersistentState(`tour-notification-${id}`, []);
     const [status, setStatus] = useState();
     const [error, setError] = useState(null);
     const { socket: globalSocket } = useContext(SocketContext);
