@@ -74,6 +74,9 @@ const ChatItem = ({ room, param }) => {
                     <p
                         style={{
                             maxWidth: '240px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
                         }}
                     >
                         {whoseMessage} {lastMessage?.content || 'No message yet'}
