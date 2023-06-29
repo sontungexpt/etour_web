@@ -1946,28 +1946,6 @@ export default function AddStaffModal({ isOpen, onClose, data, setData, onUpdate
                     </FormControl>
                     {errors.type && <p className={styles.error}>{errors.type.message}</p>}
                 </div>
-                <div style={{ display: 'flex', gap: 10 }}>
-                    <ImageButton
-                        backgroundColor={COLORS.submit}
-                        color={COLORS.submitBackground}
-                        fullWidth={true}
-                        icon={CHECK_ICON}
-                        onClick={handleSubmit(onSubmit)}
-                        style={{ padding: '15px 0' }}
-                    >
-                        Submit
-                    </ImageButton>
-                    <ImageButton
-                        backgroundColor={COLORS.deleteBackground}
-                        color={COLORS.delete}
-                        // fullWidth={true}
-                        icon={DELETE_ICON}
-                        onClick={handleDeleteStaff}
-                        style={{ padding: '15px 20px' }}
-                    >
-                        Delete
-                    </ImageButton>
-                </div>
             </div>
         </CenteredModal>
     );
