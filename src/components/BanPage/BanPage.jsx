@@ -7,7 +7,7 @@ const BanPage = () => {
             <h1>Your company is being banned.</h1>
             <p>Please contact our support center to get help.</p>
             <p>
-                Email to{' '}
+                Email to
                 <a
                     style={{
                         textDecoration: 'underline',
