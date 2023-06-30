@@ -17,6 +17,7 @@ import useCompanyInformation from '@/hooks/useCompanyInformation';
 import { useSelector } from 'react-redux';
 import { isPathNameInNeedToAuthPage } from '../../constant/need-to-auth-page';
 import styles from './BasePage.module.scss';
+import BanPage from '@/components/BanPage/BanPage';
 
 export default function BasePage() {
     const location = useLocation();
@@ -92,6 +93,7 @@ export default function BasePage() {
             pathname: location.pathname,
         })
     ) {
+        if (companyData.profileState === 'rejected') return <BanPage />;
         return <RegisteringCompany />;
     }
 

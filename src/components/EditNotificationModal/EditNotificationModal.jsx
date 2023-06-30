@@ -122,7 +122,7 @@ export default function EditNotificationModal({ isOpen, onClose, data, tourId, s
                         onChange={(e) =>
                             setData((prev) => ({
                                 ...prev,
-                                price: parseInt(e.target.value),
+                                content: e.target.value,
                             }))
                         }
                         label="Content"

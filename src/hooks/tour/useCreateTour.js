@@ -19,8 +19,13 @@ export default function useCreateTour() {
 
     const socket = useSocket((socket) => {
         socket.on('create-tour-result', (data) => {
-            setStatus(STATUS.SUCCESS);
             setData(data.data);
+            if (data.status != 200) {
+                setError(data);
+                setStatus(STATUS.FAIL);
+            } else {
+                setStatus(STATUS.SUCCESS);
+            }
         });
         socket.on('error', (error) => {
             setStatus(STATUS.FAIL);
