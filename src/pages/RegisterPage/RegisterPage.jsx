@@ -1,13 +1,15 @@
-import { registerAdminFromCompany } from '@/api/company';
+import React, { useEffect, useRef } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import styles from './RegisterPage.module.scss';
 import Camera from '@/assets/camera.svg';
 import Logo from '@/assets/logo.svg';
-import ENDPOINT from '@/constant/endponint';
-import { Button, Input } from '@mui/material';
-import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Button, Input, TextareaAutosize } from '@mui/material';
 import { toast } from 'react-toastify';
-import styles from './RegisterPage.module.scss';
+import { useNavigate } from 'react-router-dom';
+import ENDPOINT from '@/constant/endponint';
+import { registerAdminFromCompany } from '@/api/company';
+import useCallAPIToast from '@/hooks/useCallAPIToast';
+import { STATUS } from '@/constant/status';
 
 const RegisterPage = () => {
     const {

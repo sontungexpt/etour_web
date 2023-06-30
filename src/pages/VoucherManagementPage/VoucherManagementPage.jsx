@@ -37,14 +37,29 @@ export default function VoucherManagementPage() {
     const searchRef = useRef();
     const [searchValue, setSearchValue] = usePersistentState('tour-route-search', '');
 
-    const [expiredAt, setExpiredAt] = useState(new Date());
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [usingCondition, setUsingCondition] = useState('');
-    const [type, setType] = useState('');
-    const [image, setImage] = useState();
-    const [value, setValue] = useState(0);
-    const [num, setNum] = useState();
+    const [form, setForm] = useState({
+        name: '',
+        description: '',
+        usingCondition: '',
+        type: '',
+        image: '',
+        value: 1,
+        num: 1,
+        expiredAt: new Date(),
+    });
+
+    const onInputChange = (e) => {
+        if (!e.target) {
+            setForm((prev) => ({ ...prev, expiredAt: new Date(e.$d) }));
+            return;
+        }
+        const { name, value, label } = e.target;
+        if (name === 'image') {
+            setForm((prev) => ({ ...prev, image: e.target.files[0] }));
+            return;
+        }
+        setForm((prev) => ({ ...prev, [name]: value }));
+    };
 
     const [isOpenCreateBox, setIsOpenCreateBox] = useState(false);
 
@@ -69,18 +84,18 @@ export default function VoucherManagementPage() {
 
         const data = {
             companyId: companyInfo.companyId,
-            name,
-            value: value / 100,
-            num,
-            description,
-            usingCondition,
-            expiredAt,
-            type,
-            ...(image
+            name: form.name,
+            value: form.value / 100,
+            num: form.num,
+            description: form.description,
+            usingCondition: form.usingCondition,
+            expiredAt: form.expiredAt,
+            type: form.type,
+            ...(form.image
                 ? {
                       image: {
-                          originalname: image.name,
-                          buffer: await image.arrayBuffer(),
+                          originalname: form.image.name,
+                          buffer: await form.image.arrayBuffer(),
                       },
                   }
                 : {}),
@@ -155,56 +170,65 @@ export default function VoucherManagementPage() {
                     <h1>Create new route</h1>
                     <div className={styles.form}>
                         <TextField
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={form.name}
+                            onChange={onInputChange}
                             label="Voucher name"
                             variant="standard"
+                            name="name"
                         />
                         <TextField
-                            value={value}
-                            onChange={(e) => setValue(e.target.value)}
+                            value={form.value}
+                            onChange={onInputChange}
                             type="range"
                             min="0"
                             max="100"
-                            label={`Voucher value (${value}%)`}
+                            label={`Voucher value (${form.value}%)`}
                             helperText="%"
                             variant="standard"
+                            name="value"
                         />
                         <TextField
-                            value={num}
-                            onChange={(e) => setNum(e.target.value)}
+                            value={form.num}
+                            name="num"
+                            onChange={onInputChange}
                             type="number"
                             label="Voucher quantity"
                             helperText="Number of voucher"
                             variant="standard"
                         />
                         <TextField
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            value={form.description}
+                            onChange={onInputChange}
                             label="Description"
                             multiline
                             variant="standard"
+                            name="description"
                         />
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label="Expired at"
-                                onChange={(d) => setExpiredAt(new Date(d.$d))}
+                                name="expiredAt"
+                                onChange={onInputChange}
+                                closeOnSelect
+                                disablePast
                             />
                         </LocalizationProvider>
                         <TextField
-                            value={usingCondition}
-                            onChange={(e) => setUsingCondition(e.target.value)}
+                            value={form.usingCondition}
+                            onChange={onInputChange}
                             label="Using condition"
                             multiline
                             variant="standard"
+                            name="usingCondition"
                         />
                         <div className={styles.imagePreview}>
-                            {image ? <img src={URL.createObjectURL(image)} /> : null}
+                            {form.image ? <img src={URL.createObjectURL(form.image)} /> : null}
                         </div>
                         <Input
                             type="file"
+                            name="image"
                             inputProps={{ multiple: false }}
-                            onChange={(e) => setImage(e.target.files[0])}
+                            onChange={onInputChange}
                         />
                         <FormControl sx={{ mt: 2, minWidth: 120 }}>
                             <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
@@ -212,8 +236,9 @@ export default function VoucherManagementPage() {
                                 labelId="demo-simple-select-helper-label"
                                 id="demo-simple-select-helper"
                                 label="Age"
-                                value={type}
-                                onChange={(e) => setType(e.target.value)}
+                                value={form.type}
+                                name="type"
+                                onChange={onInputChange}
                             >
                                 <MenuItem value={'discount'}>Discount</MenuItem>
                                 <MenuItem value={'free'}>Free</MenuItem>
