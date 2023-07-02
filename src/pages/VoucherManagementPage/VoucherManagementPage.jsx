@@ -92,7 +92,7 @@ export default function VoucherManagementPage() {
         const data = {
             companyId: companyInfo.companyId,
             name: form.name,
-            value: form.value / 100,
+            value: form.type == 'percent' ? form.value / 100 : form.value,
             num: form.num,
             min: form.min,
             max: form.max,
