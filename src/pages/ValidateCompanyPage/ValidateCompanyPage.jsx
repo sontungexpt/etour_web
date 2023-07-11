@@ -7,7 +7,6 @@ import ENDPOINT from '@/constant/endponint';
 const ValidateCompanyPage = () => {
     const { state } = useLocation();
     const data = state?.resData;
-    console.log(data);
     const navigate = useNavigate();
 
     useEffect(() => {

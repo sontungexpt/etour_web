@@ -9,7 +9,6 @@ export default function useChangeRoute() {
 
     const socket = useSocket((socket) => {
         socket.on('edit-route-result', (data) => {
-            console.log({ data });
             setData(data.data);
             setStatus(STATUS.SUCCESS);
         });

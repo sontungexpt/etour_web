@@ -87,7 +87,6 @@ export default function AddStaffModal({ isOpen, onClose, data, setData, onUpdate
         submitData.append('role', data.role);
         submitData.append('image', data.image);
         data.permissions.forEach((p) => submitData.append('permissions', p));
-        console.log({ permissions: data.permissions });
         if (!data._id) {
             submitData.append('username', data.username);
             submitData.append('password', data.password);

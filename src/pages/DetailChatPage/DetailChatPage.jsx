@@ -23,8 +23,6 @@ const DetailChatPage = () => {
             });
 
             socket.on('new-chat-message', (data) => {
-                console.log('new-chat-message', data);
-                console.log({ data });
                 const { chatRoomId } = data;
                 if (chatRoomId !== id) return;
                 setMessagesState((messages) => {
@@ -62,15 +60,15 @@ const DetailChatPage = () => {
 
     const handleSendMessage = useCallback(() => {
         setMessage('');
-        setMessagesState((prev) => [
-            ...prev,
-            {
-                _id: randomUUID(),
-                content: message,
-                uid: staff._id,
-                createdAt: new Date(),
-            },
-        ]);
+        // setMessagesState((prev) => [
+        //     ...prev,
+        //     {
+        //         _id: randomUUID(),
+        //         content: message,
+        //         uid: staff._id,
+        //         createdAt: new Date(),
+        //     },
+        // ]);
         sendMessage({
             chatRoomId: id,
             content: message,

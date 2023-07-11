@@ -31,7 +31,6 @@ const RegisterPage = () => {
 
     const onSubmit = async (data) => {
         const { password, confirmPassword } = data;
-        console.log(data);
         if (password !== confirmPassword) {
             toast.error('Password and confirm password must be the same');
             return;
@@ -54,7 +53,6 @@ const RegisterPage = () => {
             });
 
             const res = await registerAdminFromCompany(formData);
-            console.log(res);
             const resData = res.data;
             toast.dismiss();
             toast.success('Register successfully');
@@ -65,7 +63,6 @@ const RegisterPage = () => {
                 },
             });
         } catch (err) {
-            console.log(err);
             toast.dismiss();
             toast.error(err.response.data.message ?? 'Register failed');
         } finally {

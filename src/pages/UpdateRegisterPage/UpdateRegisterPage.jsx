@@ -78,7 +78,6 @@ const UpdateRegisterPage = () => {
             reset();
             navigate(ENDPOINT.HOME);
         } catch (err) {
-            console.log(err);
             toast.dismiss();
             toast.error('Update failed');
         } finally {
