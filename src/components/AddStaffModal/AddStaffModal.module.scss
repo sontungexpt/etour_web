@@ -59,4 +59,39 @@
     .buttonText {
         color: white;
     }
+
+    .specialButton {
+        display: grid;
+        gap: 20px;
+
+        textarea {
+            height: 100px;
+        }
+
+        .title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #003459;
+            margin-top: 25px;
+            margin-left: -15px;
+            margin-bottom: -5px;
+        }
+
+        .imagePreview {
+            border-radius: 10px;
+            img {
+                border-radius: 15px;
+                width: 100%;
+            }
+        }
+
+        .select {
+            color: black;
+        }
+
+        .error {
+            margin-top: -10px;
+            color: rgb(227, 43, 43);
+        }
+    }
 }
