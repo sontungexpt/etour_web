@@ -41,7 +41,7 @@ export default function VoucherManagementPage() {
         name: '',
         description: '',
         usingCondition: '',
-        type: 'percent',
+        type: '',
         image: '',
         value: 1,
         num: 1,
@@ -54,15 +54,8 @@ export default function VoucherManagementPage() {
             return;
         }
         const { name, value, label } = e.target;
-        if (name === 'type') {
-            setForm((prev) => ({ ...prev, value }));
-        }
         if (name === 'image') {
             setForm((prev) => ({ ...prev, image: e.target.files[0] }));
-            return;
-        }
-        if (name === 'backgroundImage') {
-            setForm((prev) => ({ ...prev, backgroundImage: e.target.files[0] }));
             return;
         }
         setForm((prev) => ({ ...prev, [name]: value }));
@@ -92,10 +85,8 @@ export default function VoucherManagementPage() {
         const data = {
             companyId: companyInfo.companyId,
             name: form.name,
-            value: form.type == 'percent' ? form.value / 100 : form.value,
+            value: form.value / 100,
             num: form.num,
-            min: form.min,
-            max: form.max,
             description: form.description,
             usingCondition: form.usingCondition,
             expiredAt: form.expiredAt,
@@ -105,14 +96,6 @@ export default function VoucherManagementPage() {
                       image: {
                           originalname: form.image.name,
                           buffer: await form.image.arrayBuffer(),
-                      },
-                  }
-                : {}),
-            ...(form.backgroundImage
-                ? {
-                      backgroundImage: {
-                          originalname: form.backgroundImage.name,
-                          buffer: await form.backgroundImage.arrayBuffer(),
                       },
                   }
                 : {}),
@@ -193,61 +176,16 @@ export default function VoucherManagementPage() {
                             variant="standard"
                             name="name"
                         />
-                        <FormControl sx={{ mt: 2, minWidth: 120 }}>
-                            <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-helper-label"
-                                id="demo-simple-select-helper"
-                                label="Age"
-                                value={form.type}
-                                name="type"
-                                onChange={onInputChange}
-                            >
-                                <MenuItem value={'money'}>Money</MenuItem>
-                                <MenuItem value={'percent'}>Percent</MenuItem>
-                            </Select>
-                        </FormControl>
-                        {form.type === 'money' && (
-                            <TextField
-                                value={form.value}
-                                onChange={onInputChange}
-                                type="number"
-                                label="Voucher value"
-                                helperText="Unit: VND"
-                                variant="standard"
-                                name="value"
-                            />
-                        )}
-                        {form.type === 'percent' && (
-                            <TextField
-                                value={form.value}
-                                onChange={onInputChange}
-                                type="range"
-                                min="0"
-                                max="100"
-                                label={`Voucher value (${form.value}%)`}
-                                helperText="%"
-                                variant="standard"
-                                name="value"
-                            />
-                        )}
                         <TextField
-                            value={form.min}
-                            name="min"
+                            value={form.value}
                             onChange={onInputChange}
-                            type="number"
-                            label="Min applied value"
-                            helperText="Min applied value"
+                            type="range"
+                            min="0"
+                            max="100"
+                            label={`Voucher value (${form.value}%)`}
+                            helperText="%"
                             variant="standard"
-                        />
-                        <TextField
-                            value={form.max}
-                            name="max"
-                            onChange={onInputChange}
-                            type="number"
-                            label="Max applied value"
-                            helperText="Max applied value"
-                            variant="standard"
+                            name="value"
                         />
                         <TextField
                             value={form.num}
@@ -283,7 +221,6 @@ export default function VoucherManagementPage() {
                             variant="standard"
                             name="usingCondition"
                         />
-                        <p className={styles.title}>Image</p>
                         <div className={styles.imagePreview}>
                             {form.image ? <img src={URL.createObjectURL(form.image)} /> : null}
                         </div>
@@ -293,18 +230,20 @@ export default function VoucherManagementPage() {
                             inputProps={{ multiple: false }}
                             onChange={onInputChange}
                         />
-                        <p className={styles.title}>Background image</p>
-                        <div className={styles.imagePreview}>
-                            {form.backgroundImage ? (
-                                <img src={URL.createObjectURL(form.backgroundImage)} />
-                            ) : null}
-                        </div>
-                        <Input
-                            type="file"
-                            name="backgroundImage"
-                            inputProps={{ multiple: false }}
-                            onChange={onInputChange}
-                        />
+                        <FormControl sx={{ mt: 2, minWidth: 120 }}>
+                            <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-helper-label"
+                                id="demo-simple-select-helper"
+                                label="Age"
+                                value={form.type}
+                                name="type"
+                                onChange={onInputChange}
+                            >
+                                <MenuItem value={'discount'}>Discount</MenuItem>
+                                <MenuItem value={'free'}>Free</MenuItem>
+                            </Select>
+                        </FormControl>
                     </div>
                     <Button
                         onClick={handleSubmit}
